@@ -1,14 +1,26 @@
 import rx7 as rx
-import hashlib
+import hashlib,sys,os
 
 dichash={'1':'md5','2':'sha1','3':'sha224','4':'sha256','5':'sha384','6':'sha512'}
-# Reading Word Files
-ENGLISH= rx.read('english.txt')
-ENGLISH= ENGLISH.split('\n')
-###
-TenK_MCP= rx.read('10k mcp.txt')
-TenK_MCP= TenK_MCP.split('\n')
-###
+try:
+    ENGLISH= rx.read('./HASH/HD Dictionary/english.txt').split('\n')
+    HaDe= '/HASH'
+except:
+    ENGLISH= rx.read('./HD Dictionary/english.txt').split('\n')
+    HaDe= ''
+
+print('Preparing Databases...')
+ENGLISH_MORE= rx.read(f'.{HaDe}/HD Dictionary/english_more.txt').split('\n')
+TENKMCP= rx.read(f'.{HaDe}/HD Dictionary/english_more.txt').split('\n')
+
+ALL= ENGLISH+ENGLISH_MORE+TENKMCP
+
+MD5=[hashlib.md5(bytes(word, encoding='utf-8')).hexdigest() for word in ALL]  
+
+
+sa={'md5':hashlib.md5, 'sha1':hashlib.sha1, 'sha224':hashlib.sha224,'sha256':hashlib.sha256,
+    'sha384':hashlib.sha384,'sha512':hashlib.sha512,'sha3_224':hashlib.sha3_224,
+    'sha3_256':hashlib.sha3_256, 'sha3_384':hashlib.sha3_384,'sha3_512':hashlib.sha3_512}
 
 
 def HASH_DECRYPT():
@@ -27,18 +39,27 @@ def HASH_DECRYPT():
      8888Y"  888888  YboodP 88  Yb    d8b    88       88    YbodP  88  Yb
      ''','gold_3b')
 
-    global HASHES
-    FILE= input('Enter Filename:  ')
+    
+    FILE= input('Enter Filename:  ') if len(sys.argv)==1 else sys.argv[1]
     if FILE in ('x','99'):
-        exit()
-    if rx.files.isfile(FILE):
+        hdr=False
+        #exit()
+    print(f'Analysing {os.path.basename(FILE)}...')
+    if rx.files.isfile(FILE):# and rx.files.size(FILE)//10**6<75:
         HASHES= rx.read(FILE).split('\n')
-    #CHECK=0
+        rx.style.print('Completed.','green')
+    else:
+        rx.style.print("Operation Failed.",'red')
+        os.system('pause')
+        return False
+    print('============================')
+
+    BL=0
     global FOUND
     FOUND=[]
+
     for HASH in HASHES:
-        #if CHECK<len(HASHES): CHECK+=1
-        #else: raise ValueError
+        print(HASH)
         if len(HASH) in (40,56,64,96,128,32):
             if len(HASH) == 32:
                 mi='1'
@@ -56,73 +77,80 @@ def HASH_DECRYPT():
             rx.style.print(str(dichash[mi]),'green',end='')
             print(')')
         else:
-            print("Couldn't Recognize Hash Type",end='')
-
-        '''def CSS(*ss):
-            print('Choose Sample Space:')
-            lst=[]
-            for item in ss:
-                lst.append(bool(input(item+': ')))
-            return lst
-        SS= CSS('ENGLISH DICTIONARY','10K MOST COMMON PASSWORDS','NUMBERS')'''
-        SS=[True,True,True]
-        rang=10000
-
+            if len(HASH) and HASH != ' ':
+                print("Couldn't Recognize Hash Type",end='')
+            else:
+                pass
 
         if mi=='1':
-            find=False
-            if SS[0]:
-                WORD=rx.read(f'./ENG/eh_md5.txt')
-                WORDS= WORD.split('\n')
-                try:
-                    word=ENGLISH[WORDS.index(HASH)]
-                    print('Decrypted String is:  ',end='')
-                    rx.style.print(word,color='green')
-                    find=True
-                    FOUND.append('x')
-                except:
-                    pass
-
-            if SS[1] and not find:
-                WORD=rx.read(f'./10kmcp/10kmcp_md5.txt')
-                WORDS= WORD.split('\n')
-                try:
-                    word=TenK_MCP[WORDS.index(HASH)]
-                    print('Decrypted String is:  ',end='')
-                    rx.style.print(word,color='green')
-                    find=True
-                    FOUND.append('x')
-                except:
-                    print()
-
-
-            if SS[2] and not find:
-                for word in range(int(rang)):
-                    result = hashlib.md5(str(word).encode()) 
+            find=False         
+            try:
+                DEC=ALL[MD5.index(HASH)]
+                print('Decrypted String is:  ',end='')
+                rx.style.print(DEC,color='green')
+                find=True
+                FOUND.append('x')                    
+            except:
+                pass
+            rang=10000
+            if not find:
+                for nom in range(int(rang)):
+                    result = hashlib.md5(str(nom).encode()) 
                     rh=result.hexdigest()
                     if rh==HASH:
                         find=True
                         FOUND.append('x')
                         print('Decrypted String is:  ',end='')
-                        rx.style.print(word,color='green')
+                        rx.style.print(nom,color='green')
 
             if not find:
-                rx.style.print('Not Found','light_red')
+                if len(HASH) and HASH != ' ':
+                    rx.style.print('Not Found','light_red')
+                else:
+                    rx.style.print('Line Found With No Character','light_red')
+                    BL+=1
+
 
         if int(mi) in range(2,7):
-            def decsha(nom,File):
+
+           try:
+                crypt= sa[dichash[mi]]
+                WORDS= [crypt(bytes(word, encoding='utf-8')).hexdigest() for word in ALL]
+                DEC= ALL[WORDS.index(HASH)]
+                print('Decrypted String is:  ',end='')
+                rx.style.print(str(DEC),color='green')
+                FOUND.append('x')
+                find=True                
+
+           except:
+                try:
+                    crypt= sa['sha3_'+dichash[mi][-3:]]   
+                    WORDS= [crypt(bytes(word, encoding='utf-8')).hexdigest() for word in ALL]                    
+                    DEC= ALL[WORDS.index(HASH)]
+                    print('Decrypted String is:  ',end='')
+                    rx.style.print(str(DEC),color='green')
+                    FOUND.append('x')
+                    find=True
+                except:
+                    if len(HASH) and HASH != ' ':
+                        rx.style.print('Not Found','light_red')
+                    else:
+                        rx.style.print('Line Found With No Character','light_red')
+                        BL+=1
+
+           """def decsha(nom,File):
                 if File== 'ENG':
                     if not nom:  
-                        WORD=rx.read(f'./ENG/eh_{dichash[mi]}.txt')
+                        WORD=rx.read(f'.{HaDe}/HD Dictionary/ENG/eh_{dichash[mi]}.txt')
                     else:
                         if len(mi)==6:
-                            WORD=rx.read(f'./ENG/eh_sha3-{dichash[mi][-3:]}.txt')
+                            WORD=rx.read(f'.{HaDe}/HD Dictionary/ENG/eh_sha3-{dichash[mi][-3:]}.txt')
                         else: return False
                 if File== '10K MCP':
                     if not nom:  
-                        WORD=rx.read(f'./10kmcp/10kmcp_{dichash[mi]}.txt')
+                        WORDS=rx.read(f'.{HaDe}/HD Dictionary/10kmcp/10kmcp_{dichash[mi]}.txt')
                     else:    
-                        WORD=rx.read(f'./10kmcp/10kmcp_sha3-{dichash[mi][-3:]}.txt')
+                        WORD=rx.read(f'.{HaDe}/HD Dictionary/10kmcp/10kmcp_sha3-{dichash[mi][-3:]}.txt')
                 WORDS= WORD.split('\n')
                 try:
                     word=ENGLISH[WORDS.index(HASH)] if File=='ENG' else TenK_MCP[WORDS.index(HASH)]
@@ -167,22 +195,24 @@ def HASH_DECRYPT():
                         rx.style.print(word,color='green')
                         x=True
                         FOUND.append('x')
-                        break
-            if not x:
-                rx.style.print('Not Found','light_red')
+                        break"""
+            
+
         print(40*'―')
     rx.style.switch('dodger_blue_2')
     print(f'Finnished At {round(TIME.lap(),3)}')
-    print(f'Decrypted {len(FOUND)} from {len(HASHES)}')
-    print(f'Success Rate: {round(len(FOUND)/len(HASHES)*100,2)}%')
+    print(f'Decrypted {len(FOUND)} from {len(HASHES)-BL}')
+    print(f'Success Rate: {round(len(FOUND)/(len(HASHES)-BL)*100,2)}%')
     rx.style.switch_default()
     rx.p()
     os.system('pause')
 
-import os
-while True:
+
+hdr=True
+while hdr:
     try:
         HASH_DECRYPT()
     except EOFError:          exit()
-    except KeyboardInterrupt: exit()
+    except KeyboardInterrupt: hdr=False
     except:                   pass
+#HASH_DECRYPT()

@@ -1,8 +1,8 @@
-import hashlib,rx7,sys
+import hashlib,rx7,sys,os
 
 # Names of files
-words_file_name = "english_more.txt" if not sys.argv[1] else sys.argv[1] #input file name
-hashed_words_file_name = "ehm" if not sys.argv[2] else sys.argv[2] #output file name
+words_file_name = ".txt" if not sys.argv[1] else sys.argv[1] #input file name
+hashed_words_file_name = "" if not sys.argv[2] else sys.argv[2] #output file name
 
 md5,sha1,sha224,sha256,sha384,sha512,sha3_224,sha3_256,sha3_384,sha3_512=[],[],[],[],[],[],[],[],[],[]
 def create_hash_md5_text_file(input_list, output_file_name):
@@ -24,9 +24,14 @@ def create_hash_md5_text_file(input_list, output_file_name):
     if not sys.argv[1]:
         print("Creating hash text file: {} ...".format(output_file_name))
 
-    pre= './ENG/MORE/' if not sys.argv[3] else sys.argv[3]
+    pre= './' if not sys.argv[3] else sys.argv[3]
 	# Creating the output file
-    rx7.write( pre + output_file_name + '_md5.txt'     , '\n'.join(md5)      )
+    try:
+        rx7.write( pre + output_file_name + '_md5.txt'     , '\n'.join(md5)  )
+    except FileNotFoundError:
+        os.mkdir(pre) 
+        rx7.write( pre + output_file_name + '_md5.txt' , '\n'.join(md5)      )
+
     rx7.write( pre + output_file_name + '_sha1.txt'    , '\n'.join(sha1)     )
     rx7.write( pre + output_file_name + '_sha224.txt'  , '\n'.join(sha224)   )
     rx7.write( pre + output_file_name + '_sha256.txt'  , '\n'.join(sha256)   )
@@ -52,8 +57,6 @@ def get_list_of_words_from_file(filename):
 
 # get words from file
 words_list = get_list_of_words_from_file(words_file_name)
-
-
 # create the hash
 create_hash_md5_text_file(words_list, hashed_words_file_name)
 

@@ -1,5 +1,6 @@
+import hashlib,getpass,os
 import rx7 as rx
-import hashlib, getpass
+
 """print('''
                         ¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶¶                   
                     ¶¶¶¶¶¶¶             ¶¶¶¶¶¶¶                
@@ -53,11 +54,6 @@ COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
          'Classic':['grey_46','default']}
 COLORS_NESBAT= ['Yellow', 'Yellow', 'Blue', 'Red','Red', 'Classic','Classic']
 
-'''# Reading Word Files
-ENGLISH= rx.read('english.txt').split('\n')
-###
-TenK_MCP= rx.read('10k mcp.txt').split('\n')'''
-
 
 def ce(msg='Wrong Command',color='default'):
     if msg:
@@ -74,7 +70,8 @@ def MAIN():
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Decryptor
-       {2}--Create Dictionary
+       {2}--Hash Generator
+       {3}--Create Dictionary
 
        {3}--Password Attacks
        {4}--Wireless Testing
@@ -91,6 +88,8 @@ def MAIN():
     if   MAIN_INP== '1':
         HASH_DECRYPT()
     elif MAIN_INP=='2':
+        HASH_GENERATE()
+    elif MAIN_INP=='3':
         CREATE_DIC()
     elif MAIN_INP in ('99','x'):
         exit()
@@ -99,17 +98,19 @@ def MAIN():
 
 
 def HASH_DECRYPT():
-    import os
-    os.system('python ".\\Hash Decryptor\\HD.py"')
+    os.system('python ".\\HASH\\HD.py"')
 
 
 def CREATE_DIC():
-    import os
-    os.system('python ".\\Dictionary Creator\\DC.py"')
+    os.system('python ".\\HASH\\DC.py"')
 
 
-
-
+def HASH_GENERATE():
+    inp= input('Enter String to Create Hashes:  ')
+    if not inp or inp=='99':
+        return False
+    else:
+        os.system('python ".\\HASH\\HG.py" '+inp)
 
 
 

@@ -34,11 +34,14 @@ def CSS(*ss):
         return False
     try:
         LENGTH= int(LENGTH)
-        if LENGTH > 4:
+        if 11>LENGTH > 4:
             print(f'{LENGTH} is High Number. It Can Cause Big Problem to Your Device.')
             CI= input('Type CONFIRM to start operation: ')
             if CI != 'CONFIRM':
                 return True
+        if LENGTH>10:
+            style.print('YOU ARE NOT NASA!')
+            os.system('pause')
     except:
         #global EX
         #EX=False 
