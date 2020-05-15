@@ -58,14 +58,17 @@ COLORS_NESBAT= ['Yellow', 'Yellow', 'Blue', 'Red','Red', 'Classic','Classic']
 def ce(msg='Wrong Command',color='default'):
     if msg:
      rx.style.print(msg,color)
-    import os
-    os.system('pause')     
+     print('Press Enter to Continue...',end='')
+     import getpass
+     getpass.getpass('')
+     os.system('clear')
     #getpass.getpass('Press Enter to Continue')
     #rx.cls()
     #MAIN()
 
 def MAIN():
-    rx.cls()
+    #rx.cls()
+    os.system('clear')
     COLOR= COLORS[rx.rand.choice(COLORS_NESBAT)] #list(COLORS.keys())
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''

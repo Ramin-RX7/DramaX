@@ -20,7 +20,8 @@ def HASH_DECRYPT():
     TenK_MCP= rx.read(f'./HD Dictionary/10k mcp.txt').split('\n')
     ###########
 
-    rx.cls()
+    #rx.cls()
+    os.system('clear')
     rx.style.print('''
                         88  88    db    .dP"Y8 88  88
                         88  88   dPYb   `Ybo." 88  88
@@ -267,4 +268,8 @@ EX= True
 while EX:
     HASH_DECRYPT()
     if EX:
-        os.system('pause')
+        print('Press Enter to Continue...',end='')
+        import getpass
+        getpass.getpass('')
+
+        #os.system('pause')
