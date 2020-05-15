@@ -58,7 +58,7 @@ COLORS_NESBAT= ['Yellow', 'Yellow', 'Blue', 'Red','Red', 'Classic','Classic']
 def ce(msg='Wrong Command',color='default'):
     if msg:
      rx.style.print(msg,color)
-     print('Press Enter to Continue...',end='')
+     print('Press Enter to Continue...')
      import getpass
      getpass.getpass('')
      os.system('clear')

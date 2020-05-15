@@ -268,7 +268,7 @@ EX= True
 while EX:
     HASH_DECRYPT()
     if EX:
-        print('Press Enter to Continue...',end='')
+        print('Press Enter to Continue...')
         import getpass
         getpass.getpass('')
 

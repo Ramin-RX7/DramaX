@@ -21,8 +21,13 @@ if len(sys.argv)!=2:
         elif inp:
             inp=bytes(inp, encoding='utf-8')
             print_hashes(inp)
-            os.system('pause')
+            print('Press Enter to Continue...')
+            import getpass
+            getpass.getpass('')
             os.system('clear')
 else:
     print_hashes(bytes(sys.argv[1], encoding='utf-8'))
-    os.system('pause')
+    #os.system('pause')
+    print('Press Enter to Continue...')
+    import getpass
+    getpass.getpass('')
