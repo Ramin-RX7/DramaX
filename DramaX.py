@@ -50,11 +50,21 @@ def MAIN():
     
     MAIN_INP= input('$ ')
     if   MAIN_INP== '1':
+        #rx.cls()
+        os.system('clear')
         print('''
+            dMP dMP .aMMMb  .dMMMb  dMP dMP 
+           dMP dMP dMP"dMP dMP" VP dMP dMP  
+          dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
+         dMP dMP dMP dMP dP .dMP dMP dMP    
+        dMP dMP dMP dMP  VMMMP" dMP dMP     
+        
+
          {1}--Hash Decryptor
          {2}--File Hash Decryptor
          {3}--Hash Generator
         ''')
+
         hinp= input('HASH>  ')
         if   hinp == '1':
             os.system('python ".\\HASH\\HD.py"')
@@ -68,7 +78,7 @@ def MAIN():
                 os.system('python ".\\HASH\\HG.py" '+inp)       
 
     elif MAIN_INP=='2':
-        os.system('python ".\\HASH\\DC.py"')
+        os.system('python ".\\Dictionary Creator\\DC.py"')
     elif MAIN_INP in ('99','x'):
         exit()
     else:

@@ -14,10 +14,13 @@ sa={'md5':hashlib.md5, 'sha1':hashlib.sha1, 'sha224':hashlib.sha224,'sha256':has
     'sha3_256':hashlib.sha3_256, 'sha3_384':hashlib.sha3_384,'sha3_512':hashlib.sha3_512}
 
 def HASH_DECRYPT():
-    # Reading Word Files
-    ENGLISH= rx.read('./HD Dictionary/english.txt').split('\n')
-    ENGLISH_MORE= rx.read(f'./HD Dictionary/english_more.txt').split('\n') 
-    TenK_MCP= rx.read(f'./HD Dictionary/10k mcp.txt').split('\n')
+    try:
+        # Reading Word Files
+        ENGLISH= rx.read('./HD Dictionary/english.txt').split('\n')
+        ENGLISH_MORE= rx.read(f'./HD Dictionary/english_more.txt').split('\n') 
+        TenK_MCP= rx.read(f'./HD Dictionary/10k mcp.txt').split('\n')
+    except:
+        pass
     ###########
 
     #rx.cls()

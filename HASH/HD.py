@@ -2,6 +2,13 @@ import hashlib,os
 import rx7 as rx
 
 
+import winsound    
+def BEEP():
+    winsound.Beep(1000, 400)
+    winsound.Beep(1000, 400)
+    winsound.Beep(1000, 400)    
+
+
 def HD_SETTING():
     pass
 
@@ -39,7 +46,7 @@ def HASH_DECRYPT():
      ''','gold_3b')
 
     HASH= input('Enter Hashed String:  ')
-    
+
     if HASH in ('99','x'):
         #MAIN()
         global EX
@@ -124,6 +131,7 @@ def HASH_DECRYPT():
                 rx.style.print(word,color='green',end='\n\n')
                 find=True
                 ce('')
+                BEEP()
                 return True
             except:
                 rx.style.print('Word Not Found in English Dictionary!',color='light_red')

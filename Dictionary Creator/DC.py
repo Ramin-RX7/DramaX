@@ -1,4 +1,4 @@
-from rx7 import write,cls,style
+from rx7 import write,cls,style,p
 import subprocess
 
 
@@ -9,9 +9,14 @@ def CREATE(SS,LENGTH,FILE):
         for y in range(current):
             a = [x+i for i in SS for x in a]
         complete_list = complete_list+a
-    #print(complete_list)
-    print(len(complete_list))
-    write(str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
+    p()
+    print('Number of Generated Words:  '+str(len(complete_list)))
+    try:
+        write('./Dictionary Creator/'+str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
+    except:
+        write(str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
+    print('Dictionary File Has Been Created Successfully.')
+    print(f'(Address:  ./Dictionary Creator/{str(LENGTH)+"-"+FILE}.txt)')
 
 
 def CSS(*ss):
@@ -35,7 +40,7 @@ def CSS(*ss):
     try:
         LENGTH= int(LENGTH)
         if 11>LENGTH > 4:
-            print(f'{LENGTH} is High Number. It Can Cause Big Problem to Your Device.')
+            print(f'{LENGTH} is High Number. It Can Cause Big Problems to Your Device.')
             CI= input('Type CONFIRM to start operation: ')
             if CI != 'CONFIRM':
                 return True
