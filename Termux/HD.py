@@ -37,7 +37,7 @@ def HASH_DECRYPT():
      8888Y"  888888  YboodP 88  Yb    d8b    88       88    YbodP  88  Yb
      ''','gold_3b')
 
-    HASH= input('Enter Hashed String:  ')
+    HASH= input(' Enter Hashed String:  ')
     
     if HASH in ('99','x'):
         #MAIN()
@@ -61,11 +61,11 @@ def HASH_DECRYPT():
             mi='5'
         if len(HASH) == 128:
            mi='6'
-        print('Found.  (',end='')
+        print(' Found.  (',end='')
         rx.style.print(str(dichash[mi]),'green',end='')
         print(')\n')
     else:
-       ce('Couldnt Recognize the Hash Type.\n','light_red')
+       ce(' Couldnt Recognize the Hash Type.\n','light_red')
        return True
 
     #SS= input('Choose Sample Space: \n1- ENGLISH DICTIONARY\n2- NUMBERS\n>')
@@ -85,7 +85,7 @@ def HASH_DECRYPT():
             _stdin.WriteConsoleInput(keys)
             return input(prompt)
 
-        print('Choose Sample Space:')
+        print(' Choose Sample Space:')
         lst=[]
         for item in ss:
             #lst.append(bool(input_def(item+': ')))
@@ -99,9 +99,9 @@ def HASH_DECRYPT():
     WORDS=[]
     if SS[3]:
         try:     
-            rang= int(input('Type Last Number: '))
+            rang= int(input(' Type Last Number: '))
         except:  
-            ce('Number Should be Integer')
+            ce(' Number Should be Integer')
             return True
             
     #find=False
@@ -119,13 +119,13 @@ def HASH_DECRYPT():
             try:
                 word=ENGLISH_LST[WORDS.index(HASH)]
                 rx.style.print('Found',color='green')
-                print('Decrypted String is:  ',end='')
+                print(' Decrypted String is:  ',end='')
                 rx.style.print(word,color='green',end='\n\n')
                 find=True
                 ce('')
                 return True
             except:
-                rx.style.print('Word Not Found in English Dictionary!',color='light_red')
+                rx.style.print(' Word Not Found in English Dictionary!',color='light_red')
 
         if SS[2].lower() in ('t','true') and not find:
             WORDS=[]
@@ -133,15 +133,14 @@ def HASH_DECRYPT():
                 WORDS.append(hashlib.md5(bytes(word, encoding='utf-8')).hexdigest())            
             try:
                 word=TenK_MCP[WORDS.index(HASH)]
-                rx.style.print('Found',color='green')
-                print('Decrypted String is:  ',end='')
+                rx.style.print(' Found',color='green')
+                print(' Decrypted String is:  ',end='')
                 rx.style.print(word,color='green',end='\n\n')
                 find=True
                 #ce('')
                 return False
             except:
-                #raise
-                rx.style.print('Word Not Found in 10K MOST COMMON PASSWORDS!',color='light_red')
+                rx.style.print(' Word Not Found in 10K MOST COMMON PASSWORDS!',color='light_red')
 
         if SS[3].lower() in ('t','true') and not find:
             for word in range(int(rang)):
@@ -150,13 +149,13 @@ def HASH_DECRYPT():
                 if rh==HASH:
                     find=True
                     rx.style.print('Done.',color='green')
-                    print('Decrypted String is:  ',end='')
+                    print(' Decrypted String is:  ',end='')
                     rx.style.print(word,color='green',end='\n\n')
                     ce('')
                     return True
 
         if not find:
-            ce('Not Found',color='red')
+            ce(' Not Found',color='red')
             return False
             
 
@@ -201,8 +200,8 @@ def HASH_DECRYPT():
 
             try:
                 word=ENGLISH_LST[WORDS.index(HASH)] if File=='ENG' else TenK_MCP[WORDS.index(HASH)]
-                rx.style.print('Found','green')
-                print('Decrypted String is:  ',end='')
+                rx.style.print(' Found','green')
+                print(' Decrypted String is:  ',end='')
                 rx.style.print(str(word),color='green',end='')
                 if len(dichash[mi])==6:
                     typee= f'sha2-{dichash[mi][-3:]}' if not nom else f'sha3-{dichash[mi][-3:]}'
@@ -215,17 +214,17 @@ def HASH_DECRYPT():
         if SS[0]:
             x= decsha(0,'ENG')
             if not x:
-                rx.style.print('Word Not Found in 1st Try in English Dictionary','light_red')
+                rx.style.print(' Word Not Found in 1st Try in English Dictionary','light_red')
                 x= decsha(1,'ENG')
             if not x:
-                rx.style.print('Word Not Found in 2nd Try in English Dictionary','light_red')
+                rx.style.print(' Word Not Found in 2nd Try in English Dictionary','light_red')
         if SS[2] and not x:
             x= decsha(0,'10K MCP')
             if not x:
-                rx.style.print('Word Not Found in 1st Try in 10K MCP','light_red')
+                rx.style.print(' Word Not Found in 1st Try in 10K MCP','light_red')
                 x= decsha(1,'10K MCP')
             if not x:
-                rx.style.print('Word Not Found in 2nd Try in 10K MCP','light_red')
+                rx.style.print(' Word Not Found in 2nd Try in 10K MCP','light_red')
         if SS[3] and not x:
             if mi=='2':
                 enc=hashlib.sha1
@@ -252,18 +251,18 @@ def HASH_DECRYPT():
                 except: rh2=''
                 #print(rh)
                 if rh==HASH or rh2==HASH:
-                    rx.style.print('Found','green')
-                    print('Decrypted String is:  ',end='')
+                    rx.style.print(' Found','green')
+                    print(' Decrypted String is:  ',end='')
                     rx.style.print(word,color='green',end='')
                     if len(dichash[mi])==6:
-                        typee= f'sha2-{dichash[mi][-3:]}' if rh==HASH else f'sha3-{dichash[mi][-3:]}'
+                        typee= f' sha2-{dichash[mi][-3:]}' if rh==HASH else f'sha3-{dichash[mi][-3:]}'
                         rx.style.print(f'  ({typee})','dodger_blue_2',end='\n\n')
                     x=True
                     ce('')
             if not x:
-                rx.style.print('Word Not Found in Numbers')
+                rx.style.print(' Word Not Found in Numbers')
         if not x:
-            ce('Not Found',color='red')
+            ce(' Not Found',color='red')
     #ce('')
 
 
@@ -271,8 +270,6 @@ EX= True
 while EX:
     HASH_DECRYPT()
     if EX:
-        print('Press Enter to Continue...')
+        print(' Press Enter to Continue...')
         import getpass
         getpass.getpass('')
-
-        #os.system('pause')

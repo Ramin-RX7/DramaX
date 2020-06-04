@@ -55,10 +55,10 @@ COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
 COLORS_NESBAT= ['Yellow', 'Yellow', 'Blue', 'Red','Red', 'Classic','Classic']
 
 
-def ce(msg='Wrong Command',color='default'):
+def ce(msg=' Wrong Command',color='default'):
     if msg:
      rx.style.print(msg,color)
-     print('Press Enter to Continue...')
+     print(' Press Enter to Continue...')
      import getpass
      getpass.getpass('')
      os.system('clear')
@@ -93,11 +93,11 @@ def MAIN():
        {2}--File Hash Decryptor
        {3}--Hash Generator        
         ''')
-        hinp= input('HASH>  ')
+        hinp= input(' DramaX:HASH>  ')
         if   hinp == '1':
             os.system('python "HD.py"')
         elif hinp == '2':
-            ce("File Hash Decryptor isn't supported in Termux",'light_red')
+            ce(" File Hash Decryptor isn't supported in Termux",'light_red')
             os.system('clear')            
         elif hinp=='3':
             inp= input('Enter String to Create Hashes:  ')
@@ -107,7 +107,7 @@ def MAIN():
                 os.system('python "HG.py" '+inp)
     elif MAIN_INP=='3':
         #os.system('python "DC.py"')
-        ce("Dictionary Creator isn't supported in Termux",'light_red')
+        ce(" Dictionary Creator isn't supported in Termux",'light_red')
         os.system('clear')
     elif MAIN_INP in ('99','x'):
         exit()
