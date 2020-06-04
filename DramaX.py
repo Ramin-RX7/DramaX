@@ -28,14 +28,16 @@ def ce(msg='Wrong Command',color='default'):
     #getpass.getpass('Press Enter to Continue')
     #rx.cls()
     #MAIN()
-
+ 
 def MAIN():
     rx.cls()
-    COLOR= COLORS[rx.rand.choice(COLORS_NESBAT)] #list(COLORS.keys())
+    COLOR= COLORS[rx.rand.choose(COLORS_NESBAT)] #list(COLORS.keys())
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Actions
        {2}--Create Dictionary
+       {3}--Ciphers
+       {6}--Web Hacking (Comming Soon)
 
        {3}--Password Attacks
        {4}--Wireless Testing
@@ -48,45 +50,98 @@ def MAIN():
       {12}--CONTRIBUTORS
       {99}--EXIT\n''',COLOR[1])
     
-    MAIN_INP= input('$ ')
+    MAIN_INP= input(' DramaX> ')
     if   MAIN_INP== '1':
         #rx.cls()
-        os.system('clear')
-        print('''
-            dMP dMP .aMMMb  .dMMMb  dMP dMP 
-           dMP dMP dMP"dMP dMP" VP dMP dMP  
-          dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
-         dMP dMP dMP dMP dP .dMP dMP dMP    
-        dMP dMP dMP dMP  VMMMP" dMP dMP     
-        
+        HASH_EX=False
+        while not HASH_EX:
+            os.system('clear')
+            print('''
+             dMP dMP .aMMMb  .dMMMb  dMP dMP 
+            dMP dMP dMP"dMP dMP" VP dMP dMP  
+           dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
+          dMP dMP dMP dMP dP .dMP dMP dMP    
+         dMP dMP dMP dMP  VMMMP" dMP dMP         
 
-         {1}--Hash Decryptor
-         {2}--File Hash Decryptor
-         {3}--Hash Generator
-        ''')
+           {1}--Hash Decryptor
+           {2}--File Hash Decryptor
+           {3}--Hash Generator
+           ''')
 
-        hinp= input('HASH>  ')
-        if   hinp == '1':
-            os.system('python ".\\HASH\\HD.py"')
-        elif hinp == '2':
-            os.system('python ".\\HASH\\HD file.py"')            
-        elif hinp=='3':
-            inp= input('Enter String to Create Hashes:  ')
-            if not inp or inp=='99':
-                return False
-            else:
-                os.system('python ".\\HASH\\HG.py" '+inp)       
+            hinp= input('HASH>  ')
+            if hinp=='99':
+                HASH_EX=True
+            elif   hinp == '1':
+                os.system('python ".\\HASH\\HD.py"')
+            elif hinp == '2':
+                os.system('python ".\\HASH\\HD file.py"')
+            elif hinp=='3':
+                inp= input('Enter String to Create Hashes:  ')
+                if not inp or inp=='99':
+                    return False
+                else:
+                    os.system('python ".\\HASH\\HG.py" '+inp)
 
     elif MAIN_INP=='2':
         os.system('python ".\\Dictionary Creator\\DC.py"')
+    
+    elif MAIN_INP=='3':
+        CIPHER_EX=False
+        while not CIPHER_EX:
+            CIPHER_EX=CIPHERS()
+
+    elif MAIN_INP=='6':
+        os.system('clear')
+        print('Under Maintaince...')
+        print('Comming Soon...')
+        ce('')
+        #os.system('python ".\\Web-Attack\\WPHF.py"')
+
     elif MAIN_INP in ('99','x'):
         exit()
     else:
         MAIN()
 
 
-    
+def CIPHERS():
+    os.system('clear')
+    print('''
+      ██████╗ ██╗ ██████╗  ██╗  ██╗ ███████╗ ██████╗  ███████╗
+     ██╔════╝ ██║ ██╔══██╗ ██║  ██║ ██╔════╝ ██╔══██╗ ██╔════╝
+     ██║      ██║ ██████╔╝ ███████║ █████╗   ██████╔╝ ███████╗
+     ██║      ██║ ██╔═══╝  ██╔══██║ ██╔══╝   ██╔══██╗ ╚════██║
+     ╚██████╗ ██║ ██║      ██║  ██║ ███████╗ ██║  ██║ ███████║
+      ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
+     ''')
+    print('''
+        1)  Affine
+        2)  Atbash
+        3)  Baconian
+        4)  Caesar
+        5)  Four Square
+        6)  Porta
+        7)  Rail Fence  (Zig-Zag)
+        8)  Rot13
+        9)  Straddling Checkerboard  (Under Maintaince)
+       10)  Transpose                (Under Maintaince)
+       11)  Vigenere
+       12)  Xor 
+     ''')
+    CIPHERS_LST= ['Affine','Atbash','Baconian','Caesar','Four Square','Porta','Rail Fence','Rot13','Straddling Checkerboard',
+                  'Transpose','Vigenere','Xor',]
+    CIPHERS_DIC= {str(x):y for x,y in enumerate(CIPHERS_LST,1)}
+    cinp= input(' DramaX:Ciphers> ')
+    if cinp in CIPHERS_DIC.keys():
+        if rx.files.exists(f'Encryptions/{CIPHERS_DIC[cinp].replace(" ","_")}.py'):
+            os.system(f'python Encryptions/{CIPHERS_DIC[cinp].replace(" ","_")}.py')
+        else:
+            print('THIS CIPHER IS UNDER MAINTAINCE.')
+            print('COMMING SOON...')
+    if cinp=='99':
+        return True
 
+    os.system('pause')
+ 
 
 while True:
     MAIN()

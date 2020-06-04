@@ -11,12 +11,12 @@ def create_hash_md5_text_file(input_list, output_file_name):
     # loop through the words in the input list
     for word in input_list:
         word=bytes(word, encoding='utf-8')
-        md5.append(hashlib.md5(word).hexdigest())
-        sha1.append(hashlib.sha1(word).hexdigest())
-        sha224.append(hashlib.sha224(word).hexdigest())
-        sha256.append(hashlib.sha256(word).hexdigest())
-        sha384.append(hashlib.sha384(word).hexdigest())
-        sha512.append(hashlib.sha512(word).hexdigest())
+        md5.append(     hashlib.md5(word).hexdigest()     )
+        sha1.append(    hashlib.sha1(word).hexdigest()    )
+        sha224.append(  hashlib.sha224(word).hexdigest()  )
+        sha256.append(  hashlib.sha256(word).hexdigest()  )
+        sha384.append(  hashlib.sha384(word).hexdigest()  )
+        sha512.append(  hashlib.sha512(word).hexdigest()  )
         sha3_224.append(hashlib.sha3_224(word).hexdigest())
         sha3_256.append(hashlib.sha3_256(word).hexdigest())
         sha3_384.append(hashlib.sha3_384(word).hexdigest())

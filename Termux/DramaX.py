@@ -69,7 +69,7 @@ def ce(msg='Wrong Command',color='default'):
 def MAIN():
     #rx.cls()
     os.system('clear')
-    COLOR= COLORS[rx.rand.choice(COLORS_NESBAT)] #list(COLORS.keys())
+    COLOR= COLORS[rx.rand.choose(COLORS_NESBAT)] #list(COLORS.keys())
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Actions

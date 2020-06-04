@@ -11,12 +11,14 @@ def CREATE(SS,LENGTH,FILE):
         complete_list = complete_list+a
     p()
     print('Number of Generated Words:  '+str(len(complete_list)))
-    try:
-        write('./Dictionary Creator/'+str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
-    except:
-        write(str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
-    print('Dictionary File Has Been Created Successfully.')
-    print(f'(Address:  ./Dictionary Creator/{str(LENGTH)+"-"+FILE}.txt)')
+    if len(complete_list):
+        try:
+            write('./Dictionary Creator/'+str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
+        except:
+            write(str(LENGTH)+'-'+FILE+'.txt','\n'.join(complete_list))
+        print('Dictionary File Has Been Created Successfully.')
+        print(f'(Address:  ./Dictionary Creator/{str(LENGTH)+"-"+FILE}.txt)')
+    print('Nothing to Create.')
 
 
 def CSS(*ss):
