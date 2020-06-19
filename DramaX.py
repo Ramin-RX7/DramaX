@@ -72,9 +72,9 @@ def MAIN():
             if hinp=='99':
                 HASH_EX=True
             elif   hinp == '1':
-                os.system('python ".\\HASH\\HD.py"')
+                os.system('python3 ".\\HASH\\HD.py"')
             elif hinp == '2':
-                os.system('python ".\\HASH\\HD file.py"')
+                os.system('python3 ".\\HASH\\HD file.py"')
             elif hinp=='3':
                 inp= input('Enter String to Create Hashes:  ')
                 if not inp or inp=='99':
@@ -83,7 +83,7 @@ def MAIN():
                     os.system('python ".\\HASH\\HG.py" '+inp)
 
     elif MAIN_INP=='2':
-        os.system('python ".\\Dictionary Creator\\DC.py"')
+        os.system('python3 ".\\Dictionary Creator\\DC.py"')
     
     elif MAIN_INP=='3':
         CIPHER_EX=False
