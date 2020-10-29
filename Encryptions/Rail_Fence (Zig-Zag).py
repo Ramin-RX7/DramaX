@@ -1,7 +1,7 @@
 '''
 Case Sensetive.
 Support Numbers and Symbols.
-Key Must be Lower Than Word Length and Higher than 1.
+Key Must be an Integer Lower Than Word Length and Higher than 1.
 '''
 
 

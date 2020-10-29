@@ -20,7 +20,7 @@ print('START SEARCHING')
 try:browser = webdriver.Chrome();browser.get(URL)
 except:
     class ChromeDriverError(Exception):
-        def __init__(self, message='Recording Has Been Finnished. Can Not Add a Lap.'):
+        def __init__(self, message):
             super().__init__(message)
     raise ChromeDriverError('Make Sure That "CHROME DRIVER" (Compatible With Your Chrome Version) is in ./Web-Attack/')
 SOURCE = browser.page_source;ttl= browser.title
@@ -53,8 +53,8 @@ for h in hashes:
     x[0]=x[21]
     nw.append(''.join(x))
 for item in nw[:random.randint(3,len(nw))]:
-    x=''
-    for char in item: x+=char;sys.stdout.write("\rSearching:  " + ''.join(x));rx.wait(0.0051)
+    X:str = ''
+    for char in item: X+=char;sys.stdout.write("\rSearching:  " + ''.join(X));rx.wait(0.0051)
     sys.stdout.write("\r"+' '*76)    
 HH= int(str(len(SOURCE)-(sum(noms)/len(noms)))[-1])
 if HH>6: print('No Weakness Found At the Momment.') ;os.system('pause') ;exit()    

@@ -1,5 +1,14 @@
-import hashlib,os#,getpass
-import rx7 as rx
+import hashlib
+import os
+
+try:
+    import rx7 as rx
+    import xxhash
+    import pymmh3
+except ModuleNotFoundError:
+    rx.style.print('Module Not Found Error','red',style='bold')
+    print('Install the requirements modules first: ')
+    print('rx7\nxxhash\npymmh3')
 
 
 PC_LOGO='''
@@ -31,7 +40,7 @@ def ce(msg='Wrong Command',color='default'):
  
 def MAIN():
     rx.cls()
-    COLOR= COLORS[rx.rand.choose(COLORS_NESBAT)] #list(COLORS.keys())
+    COLOR= COLORS[rx.random.choose(COLORS_NESBAT)] #list(COLORS.keys())
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Actions
@@ -39,6 +48,9 @@ def MAIN():
        {3}--Ciphers
        {6}--Web Hacking (Comming Soon)
 
+      {99}--EXIT\n''',COLOR[1])
+    
+    '''
        {3}--Password Attacks
        {4}--Wireless Testing
        {5}--Exploitation Tools
@@ -47,9 +59,9 @@ def MAIN():
        {8}--Private Web Hacking
        {0}--Post Exploitation
       {11}--INSTALL & UPDATE
-      {12}--CONTRIBUTORS
-      {99}--EXIT\n''',COLOR[1])
-    
+      {12}--CONTRIBUTORS    
+    '''
+
     MAIN_INP= input(' DramaX> ')
     if   MAIN_INP== '1':
         #rx.cls()
@@ -63,18 +75,19 @@ def MAIN():
           dMP dMP dMP dMP dP .dMP dMP dMP    
          dMP dMP dMP dMP  VMMMP" dMP dMP         
 
-           {1}--Hash Decryptor
-           {2}--File Hash Decryptor
+           {1}--Hash Decrypter
+           {2}--File Hash Decrypter
            {3}--Hash Generator
+           {3}--Hash Dictionary Creator
            ''')
-
+       
             hinp= input('HASH>  ')
             if hinp=='99':
                 HASH_EX=True
             elif   hinp == '1':
-                os.system('python3 ".\\HASH\\HD.py"')
+                os.system('python ".\\HASH\\HD.py"')
             elif hinp == '2':
-                os.system('python3 ".\\HASH\\HD file.py"')
+                os.system('python ".\\HASH\\HD file.py"')
             elif hinp=='3':
                 inp= input('Enter String to Create Hashes:  ')
                 if not inp or inp=='99':
@@ -83,7 +96,7 @@ def MAIN():
                     os.system('python ".\\HASH\\HG.py" '+inp)
 
     elif MAIN_INP=='2':
-        os.system('python3 ".\\Dictionary Creator\\DC.py"')
+        os.system('python ".\\Dictionary Creator\\DC.py"')
     
     elif MAIN_INP=='3':
         CIPHER_EX=False

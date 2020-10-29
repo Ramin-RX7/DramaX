@@ -24,7 +24,7 @@ def Decrypt(cipher):
         out = [(cipher[i:i+2]) for i in range(0, len(cipher), 2)] 
     else:
         return 'Wrong Cipher Text Was Given.'
-    #return out
+        
     #4211322433
     for rc in out:
         row,col= rc[0],rc[1]
