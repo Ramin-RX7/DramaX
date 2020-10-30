@@ -15,8 +15,12 @@ def wait_for_input(prompt):
     Prompt  input(prompt)  until sth is given
     '''
     answer= ''
-    while not answer:
-        answer = input(prompt)
+    try:
+        while not answer:
+            answer = input(prompt)
+    except (EOFError,KeyboardInterrupt):
+        print('EXITING...','red')
+        exit()
     return answer
 
 

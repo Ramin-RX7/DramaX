@@ -1,10 +1,11 @@
 import sys
 import argparse
 
-from LIB import Dictionary
-from LIB.Functions import cls, wait_for_input, get_files, pause
-
 import rx7.lite as rx
+
+from LIB import Dictionary
+from LIB.Functions import wait_for_input, get_files, pause
+
 
 # TODO: add write to file directly
 
@@ -17,18 +18,18 @@ BANNER = '''
      MM      MM  MM           
      MM     ,MP  MM.          
      MM    ,dP'  `Mb.      ,' 
-    .JMMmmmdP'     `"bmmmd'   
-                             
+    .JMMmmmdP'     `"bmmmd'      
+
     '''
 
 
 
 while True:
     
-    cls()
+    rx.cls()
 
     print(BANNER,'gold_3b')
-    
+    exit()
     print('BECAREFULL WHEN USING THIS PROGRAM TO CREATE LARGE DICTIONARIES (MORE THAN 50M WORDS)!', 'red', style='bold')
     print('DO NOT TRY THIS FOR LARGE NUMBER OF WORDS (MORE THAN 100M WORDS)!\n', 'red', style='bold')
 
@@ -51,7 +52,13 @@ while True:
         parser.add_argument('path',metavar='PATH',
                             help='Path to a file to save dictionary')
 
-        parser.add_argument('-I','--Ignore', action='store_true')
+        parser.add_argument('-I','--Ignore-Memory', action='store_true',
+                            help='Ignore Memory Warnings and Errors',default=False)
+
+        '''
+        parser.add_argument('-s','--save-memory', action='store_true',
+                            help='Save memory (Lower Speed)')
+        '''
 
         args = parser.parse_args()
 
@@ -59,7 +66,8 @@ while True:
         SS = args.characters
         LENGTH = args.length
         FILE = args.path
-        ignore_memory = args.Ignore
+        ignore_memory = args.Ignore_Memory
+        #save_memory = args.save_memory
 
 
     
@@ -83,7 +91,10 @@ while True:
             if not replace.lower() in ('y','yes'):
                 print('[-] Operation Cancelled By User.', 'red')
                 sys.exit()
+        
         ignore_memory = False
+
+        #save_memory = wait_for_input('Save Memory? [Yes/No]  ')
 
     TOTAL = 0
     ALL_CHARS = 0
@@ -104,7 +115,7 @@ while True:
             print('[-] Operation Cancelled By User.', 'red')
             sys.exit()
 
-    cls()
+    rx.cls()
 
     print(BANNER,'gold_3b')
 
@@ -113,19 +124,27 @@ while True:
 
     print('Words Max Length:   ', end='')
     print(LENGTH, 'dodger_blue_1')
-    
+
+    #if not save_memory:
     print('Required Memory:    ', end='')
     print(rx.convert_bytes(ALL_CHARS*10+(ALL_CHARS*10)/2.5), 'dodger_blue_1')
+
+    print()
 
     START = rx.record()
     DICT = []
     i = 1
+    Progress = TOTAL//100#int(str(TOTAL//100)[:2]+'00')
     for word in Dictionary.dict_creator_generator(SS, LENGTH):
         DICT.append(word)
         i += 1
-        if not i % 1000:
+        if  i % Progress  ==  0:
             print('\r'+'[*] Generating Words:  '+str(i)+'/'+str(TOTAL),'dodger_blue_1', end='')
-            
+            '''
+            if save_memory:
+                rx.write(FILE,'\n'.join(DICT),'a','\n')
+                DICT = []
+            '''
     print('\r[*] Number of Generated Words:  '+str(TOTAL), 'dodger_blue_1')
     print(f'[*] Operation finnished in {START.lap(Round=4)} seconds', 'dodger_blue_1')
     rx.write(FILE, '\n'.join(DICT))
