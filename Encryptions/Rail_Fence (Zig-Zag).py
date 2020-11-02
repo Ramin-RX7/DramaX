@@ -29,7 +29,7 @@ def encryptRailFence(text, key):
 
 
 def decryptRailFence(cipher, key): 
-    rail = [['\n' for i in range(len(cipher))]  
+    rail = [['\n' for i in range(len(cipher))] 
                   for j in range(key)]
     dir_down = None
     row, col = 0, 0

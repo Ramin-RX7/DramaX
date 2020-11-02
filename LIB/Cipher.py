@@ -282,7 +282,7 @@ class _ADFGX:
                 ind += keysize
 
         return ans2
-class ADFGX:
+class ADFGX(_Cipher):
     @staticmethod
     def decrypt(text, key, alphabet):
         """
@@ -315,7 +315,7 @@ class ADFGX:
         :rtype: string
         """
         return _ADFGX.encrypt(text, key, alphabet, 'ADFGX')
-class ADFGVX:
+class ADFGVX(_Cipher):
     @staticmethod
     def decrypt(text, key, alphabet):
         """
@@ -359,6 +359,43 @@ class Affine(_Cipher):
     - key2 will be converted to  range(0,len(alphabet))
 
     """
+
+    '''
+    def hackAffine(message):
+        print()
+        print('Hacking...')
+        print('(Press Ctrl-C or Ctrl-D to quit at any time.)')
+        # brute-force by looping through every possible key
+        for key in range(len(SYMBOLS) ** 2):
+            keyA = getKeyParts(key)[0]
+            if cryptomath.gcd(keyA, len(SYMBOLS)) != 1:
+                continue
+            decryptedText = decryptMessage(key, message)
+            #if not SILENT_MODE:
+            #    print('Tried Key %s... (%s)' % (key, decryptedText[:40]))
+            if detectEnglish.isEnglish(decryptedText):
+                print()
+                print(' Possible encryption hack:')
+                print(' Key1: %s  |  Key2: %s' % (str(key)[:2],str(key)[2:]))
+                print(f' Decrypted Message:  {rx7.style(decryptedText[:200],BG="dark_green")}')
+
+                print()
+                print(' Enter D for done, or just press Enter to continue hacking:')
+                response = input('> ')
+                if response.strip().upper() in ('DONE','D'):
+                    return decryptedText
+        return None
+
+    def HACK(myMessage):
+        hackedMessage = hackAffine(myMessage)
+        if hackedMessage != None:
+            print(f' Copying hacked message to clipboard:  {hackedMessage}')
+            pyperclip.copy(hackedMessage)
+        else:
+            print(' Failed to hack encryption.')
+    '''
+
+
     class Tools:
         @staticmethod
         def getInverse(key1, alphabet):
@@ -369,6 +406,26 @@ class Affine(_Cipher):
 
         @staticmethod
         def _EncDec(text, keys, alphabet, Enc):
+            '''
+            enc:
+            for symbol in message:
+                if symbol in SYMBOLS:
+                    symIndex = SYMBOLS.find(symbol)
+                    ciphertext += SYMBOLS[(symIndex * keyA + keyB) % len(SYMBOLS)]
+                else:
+                    ciphertext += symbol
+            return ciphertext
+
+            dec:
+            modInverseOfKeyA = cryptomath.findModInverse(keyA, len(SYMBOLS))
+            for symbol in message:
+                if symbol in SYMBOLS:
+                    symIndex = SYMBOLS.find(symbol)
+                    plaintext += SYMBOLS[(symIndex - keyB) * modInverseOfKeyA % len(SYMBOLS)]
+                else:
+                    plaintext += symbol
+            return plaintext            
+            '''
             key1 = keys[0]
             key2 = keys[1]
             ans = ""
@@ -552,7 +609,7 @@ class Baconian(_Cipher):
                 break
         return decipher
 
-class Bazeries:
+class Bazeries(_Cipher):
     """
     The Bazeries Cipher
     """
@@ -687,7 +744,7 @@ class Beaufort(_Cipher):
         """
         return beaufort(text, key, alphabet)
 
-class Bifid:
+class Bifid(_Cipher):
     """
     The Bifid Cipher
     """
@@ -751,7 +808,7 @@ class Bifid:
             code += even[i] + odd[i]
         return Polybius.decrypt(code, alphabet=alphabet)
 
-class Caesar:
+class Caesar(_Cipher):
     """
     The Caesar Cipher
     """
@@ -872,7 +929,7 @@ class Chao(_Cipher):
         """
         return Chao.Tools._EncDec(text, key, alphabet, False)
 
-class ColumnarTransposition:
+class ColumnarTransposition(_Cipher):
     """
     The Columnar Transposition Cipher
     """
@@ -947,7 +1004,7 @@ class ColumnarTransposition:
                 ret += cols[i][j]
         return ret
 
-class FourSquare:
+class FourSquare(_Cipher):
     """
     The Four-Square Cipher
     """
@@ -1025,7 +1082,7 @@ class FourSquare:
         """
         return FourSquare.Tools.__enc(text, key, alphabet, False)
 
-class Gronsfeld:
+class Gronsfeld(_Cipher):
     """
     The Gronsfeld Cipher
     """
@@ -1079,7 +1136,7 @@ class Gronsfeld:
         """
         return Gronsfeld.Tools._EncDec(text, key, alphabet, -1)
 
-class Keyword:
+class Keyword(_Cipher):
     """
     The Keyword Cipher
     """
@@ -1257,7 +1314,7 @@ class Myszkowski(_Cipher):
             ret += ret_arr[i][row]
         return ret
 
-class Nihilist:
+class Nihilist(_Cipher):
     """
     The Nihilist Cipher
     """
@@ -1310,7 +1367,7 @@ class Nihilist:
             dec += Polybius.decrypt(pair, alphabet=alphabet)
         return dec
 
-class Playfair:
+class Playfair(_Cipher):
     """
     The Playfair Cipher
     """
@@ -1438,7 +1495,6 @@ class Playfair:
             dec = dec[:-1]
         return dec
 
-# no tot
 class Porta(_Cipher):
     '''
     Supports All Characters (BUT ONLY LETTERS WILL BE ENCRYPTED)
@@ -1449,7 +1505,7 @@ class Porta(_Cipher):
     class Tools:
         @staticmethod
         def generate_table(key):
-            return [Porta._Porta_Dict[char] for char in key.upper()]
+            return [Porta.Tools.Porta_Dict[char] for char in key.upper()]
 
         @staticmethod
         def get_position(table, char):
@@ -1467,34 +1523,34 @@ class Porta(_Cipher):
             else:
                 return table[1][col] if row == 0 else char
 
-    _Porta_Dict = {
-        "A": ("ABCDEFGHIJKLM", "NOPQRSTUVWXYZ"),
-        "B": ("ABCDEFGHIJKLM", "NOPQRSTUVWXYZ"),
-        "C": ("ABCDEFGHIJKLM", "ZNOPQRSTUVWXY"),
-        "D": ("ABCDEFGHIJKLM", "ZNOPQRSTUVWXY"),
-        "E": ("ABCDEFGHIJKLM", "YZNOPQRSTUVWX"),
-        "F": ("ABCDEFGHIJKLM", "YZNOPQRSTUVWX"),
-        "G": ("ABCDEFGHIJKLM", "XYZNOPQRSTUVW"),
-        "H": ("ABCDEFGHIJKLM", "XYZNOPQRSTUVW"),
-        "I": ("ABCDEFGHIJKLM", "WXYZNOPQRSTUV"),
-        "J": ("ABCDEFGHIJKLM", "WXYZNOPQRSTUV"),
-        "K": ("ABCDEFGHIJKLM", "VWXYZNOPQRSTU"),
-        "L": ("ABCDEFGHIJKLM", "VWXYZNOPQRSTU"),
-        "M": ("ABCDEFGHIJKLM", "UVWXYZNOPQRST"),
-        "N": ("ABCDEFGHIJKLM", "UVWXYZNOPQRST"),
-        "O": ("ABCDEFGHIJKLM", "TUVWXYZNOPQRS"),
-        "P": ("ABCDEFGHIJKLM", "TUVWXYZNOPQRS"),
-        "Q": ("ABCDEFGHIJKLM", "STUVWXYZNOPQR"),
-        "R": ("ABCDEFGHIJKLM", "STUVWXYZNOPQR"),
-        "S": ("ABCDEFGHIJKLM", "RSTUVWXYZNOPQ"),
-        "T": ("ABCDEFGHIJKLM", "RSTUVWXYZNOPQ"),
-        "U": ("ABCDEFGHIJKLM", "QRSTUVWXYZNOP"),
-        "V": ("ABCDEFGHIJKLM", "QRSTUVWXYZNOP"),
-        "W": ("ABCDEFGHIJKLM", "PQRSTUVWXYZNO"),
-        "X": ("ABCDEFGHIJKLM", "PQRSTUVWXYZNO"),
-        "Y": ("ABCDEFGHIJKLM", "OPQRSTUVWXYZN"),
-        "Z": ("ABCDEFGHIJKLM", "OPQRSTUVWXYZN"),
-    }
+        Porta_Dict = {
+            "A": ("ABCDEFGHIJKLM", "NOPQRSTUVWXYZ"),
+            "B": ("ABCDEFGHIJKLM", "NOPQRSTUVWXYZ"),
+            "C": ("ABCDEFGHIJKLM", "ZNOPQRSTUVWXY"),
+            "D": ("ABCDEFGHIJKLM", "ZNOPQRSTUVWXY"),
+            "E": ("ABCDEFGHIJKLM", "YZNOPQRSTUVWX"),
+            "F": ("ABCDEFGHIJKLM", "YZNOPQRSTUVWX"),
+            "G": ("ABCDEFGHIJKLM", "XYZNOPQRSTUVW"),
+            "H": ("ABCDEFGHIJKLM", "XYZNOPQRSTUVW"),
+            "I": ("ABCDEFGHIJKLM", "WXYZNOPQRSTUV"),
+            "J": ("ABCDEFGHIJKLM", "WXYZNOPQRSTUV"),
+            "K": ("ABCDEFGHIJKLM", "VWXYZNOPQRSTU"),
+            "L": ("ABCDEFGHIJKLM", "VWXYZNOPQRSTU"),
+            "M": ("ABCDEFGHIJKLM", "UVWXYZNOPQRST"),
+            "N": ("ABCDEFGHIJKLM", "UVWXYZNOPQRST"),
+            "O": ("ABCDEFGHIJKLM", "TUVWXYZNOPQRS"),
+            "P": ("ABCDEFGHIJKLM", "TUVWXYZNOPQRS"),
+            "Q": ("ABCDEFGHIJKLM", "STUVWXYZNOPQR"),
+            "R": ("ABCDEFGHIJKLM", "STUVWXYZNOPQR"),
+            "S": ("ABCDEFGHIJKLM", "RSTUVWXYZNOPQ"),
+            "T": ("ABCDEFGHIJKLM", "RSTUVWXYZNOPQ"),
+            "U": ("ABCDEFGHIJKLM", "QRSTUVWXYZNOP"),
+            "V": ("ABCDEFGHIJKLM", "QRSTUVWXYZNOP"),
+            "W": ("ABCDEFGHIJKLM", "PQRSTUVWXYZNO"),
+            "X": ("ABCDEFGHIJKLM", "PQRSTUVWXYZNO"),
+            "Y": ("ABCDEFGHIJKLM", "OPQRSTUVWXYZN"),
+            "Z": ("ABCDEFGHIJKLM", "OPQRSTUVWXYZN"),
+        }
 
     @staticmethod
     def encrypt(word, key):
@@ -1613,7 +1669,7 @@ class Rot13(_Cipher):
     def decrypt(word, key=None):
         return rot13(word)
 
-class SimpleSubstitution:
+class SimpleSubstitution(_Cipher):
     """
     The Simple Substitution Cipher
     """
@@ -1672,7 +1728,7 @@ class SimpleSubstitution:
         """
         return SimpleSubstitution.Tools.__encDec(text, key, alphabet, -1)
 
-class ThreeSquare:
+class ThreeSquare(_Cipher):
     """
     The Three Square Cipher
     """
@@ -1911,7 +1967,7 @@ def two_square(text, key, alphabet):
             enc += square1.get_char(row1, column2)
             enc += square2.get_char(row2, column1)
     return enc
-class TwoSquare:
+class TwoSquare(_Cipher):
     """
     The Two-Square Cipher
     """
