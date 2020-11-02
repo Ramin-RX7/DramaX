@@ -5,11 +5,11 @@ from typing import Union, Tuple, Callable, Generator, Iterable
 
 import rx7 as rx
 
-from Functions import list_lines
+from .Functions import list_lines
 
 import xxhash
-from NEW_HASHES import pymmh3   # Because of some errors in installing pymmh3
-from NEW_HASHES import siphash  # and siphash from pip, I copy them in ./encryptions/
+from .NEW_HASHES import pymmh3   # Because of some errors in installing pymmh3
+from .NEW_HASHES import siphash  # and siphash from pip, I copy them in ./encryptions/
 
 
 HashType = str
@@ -42,31 +42,37 @@ def hash_dict_creator_all(input_list: Iterable, output_file_name: str) -> None:
     Create All Types of Hashes
     '''
 
+    try:
+        output_file_name = output_file_name.split('.')[0]
+        ext = output_file_name.split('.')[1]
+    except IndexError:
+        ext = 'txt'
+
     for word in input_list:
         word = bytes(word, encoding='utf-8')
         # To save memory I did not save the hashes in seprate lists.
         # Instead, I directly add them to their files
         # But you can add them to specifiec list ( like hash_file_creator() )
         # and then write them to files
-        rx.write(output_file_name + '_md5.txt',
+        rx.write(output_file_name + '_md5.'+ext,
                  str(hashlib.md5(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha1.txt',
+        rx.write(output_file_name + '_sha1.'+ext,
                  str(hashlib.sha1(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha224.txt',
+        rx.write(output_file_name + '_sha224.'+ext,
                  str(hashlib.sha224(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha256.txt',
+        rx.write(output_file_name + '_sha256.'+ext,
                  str(hashlib.sha256(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha384.txt',
+        rx.write(output_file_name + '_sha384.'+ext,
                  str(hashlib.sha384(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha512.txt',
+        rx.write(output_file_name + '_sha512.'+ext,
                  str(hashlib.sha512(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha3-224.txt',
+        rx.write(output_file_name + '_sha3-224.'+ext,
                  str(hashlib.sha3_224(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha3-256.txt',
+        rx.write(output_file_name + '_sha3-256.'+ext,
                  str(hashlib.sha3_256(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha3-384.txt',
+        rx.write(output_file_name + '_sha3-384.'+ext,
                  str(hashlib.sha3_384(word).hexdigest()) + '\n', 'continue')
-        rx.write(output_file_name + '_sha3-512.txt',
+        rx.write(output_file_name + '_sha3-512.'+ext,
                  str(hashlib.sha3_512(word).hexdigest()) + '\n', 'continue')
 
 def Recognize_Hash(HASH:str) -> Union[HashType, None]:

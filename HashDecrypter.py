@@ -6,7 +6,7 @@ import sys
 
 import rx7.lite as rx
 
-from LIB.Functions import *
+from LIB.Functions import wait_for_input,get_files
 from LIB.Hash import Hash_Decrypt, Recognize_Hash
 
 
@@ -37,20 +37,20 @@ if __name__ == "__main__":
             allow_abbrev=False,
             )
 
-        parser.add_argument('-w','--hashed-word',
-                            required=True, metavar='HASHED',
+        parser.add_argument('hash',#'-w','--hashed-word',
+                            metavar='HASHED',
                             help='Hashed Word to Decrypt'
                             )
-        parser.add_argument('path',metavar='FILES', nargs='+',
+        parser.add_argument('-f','--files',metavar='FILES', nargs='+',
                             help='Path to files for searching words')
         parser.add_argument('-q','--quiet',
                             action='store_false'
                             )
         args = parser.parse_args()
 
-        Hash = args.hashed_word
+        Hash = args.hash
         Type = Recognize_Hash(Hash)
-        files = args.path
+        files = args.files
         quiet = args.quiet
 
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     print(f'Hash: ', end='') ; print(Hash,'green')
     print(f'Type: ', end='') ; print(Type,'green')
     print()
-    print(f'Operation started at:  "{datetime.datetime.now()}"')
+    print(f'[*] Operation started at:  "{datetime.datetime.now()}"', 'dodger_blue_1')
     print()
 
     T= rx.record()
@@ -85,6 +85,6 @@ if __name__ == "__main__":
         print('Decrypted String is:  ', end='')
         print(DECRYPTED, 'green')
         #print(DECRYPTED[1])
-        print(f'[*] Operation Finnished in {round(T.lap(),3)} seconds  ({datetime.datetime.now()})', 'dodger_blue_1')
+        print(f'[*] Operation Finnished Successfully in {round(T.lap(),3)} seconds  ({datetime.datetime.now()})', 'dodger_blue_1')
     else:
         print(f'[-] Could not find any words from given list that matches to "{Hash}"','red')

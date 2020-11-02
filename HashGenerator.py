@@ -2,16 +2,13 @@ import hashlib
 import sys
 import getpass
 import argparse
-from LIB.Functions import pause, cls
-from LIB.Hash import sa
+
 import rx7 as rx
 
+from LIB.Functions import pause, cls
+from LIB.Hash import sa
 
 
-sa={'md5':hashlib.md5, 'sha1':hashlib.sha1, 'sha224':hashlib.sha224,'sha256':hashlib.sha256,
-    'sha384':hashlib.sha384,'sha512':hashlib.sha512,'sha3_224':hashlib.sha3_224,
-    'sha3_256':hashlib.sha3_256, 'sha3_384':hashlib.sha3_384,'sha3_512':hashlib.sha3_512,
-    'all':'all'}
 
 
 def print_hashes(word, file=None, Print=True):
@@ -31,11 +28,7 @@ def print_hashes(word, file=None, Print=True):
         rx.write(str(file),'\n'.join(result))
 
 
-
-
-if __name__ == "__main__":
-    cls()
-    rx.style.print('''
+BANNER = '''
                      88  88    db    .dP"Y8 88  88
                      88  88   dPYb   `Ybo." 88  88
                      888888  dP__Yb  o.`Y8b 888888
@@ -45,9 +38,12 @@ if __name__ == "__main__":
     dP   `" 88__   88Yb88 88__   88__dP   dPYb    88  dP   Yb 88__dP
     Yb  "88 88""   88 Y88 88""   88"Yb   dP__Yb   88  Yb   dP 88"Yb 
      YboodP 888888 88  Y8 888888 88  Yb dP""""Yb  88   YbodP  88  Yb
-    ''', 'gold_3b')
+    '''
+
+if __name__ == "__main__":
 
     if len(sys.argv) > 1:
+
         parser = argparse.ArgumentParser(
             'Hash Generator',
             description='Generate Hash of a word in all hash types',
@@ -71,12 +67,20 @@ if __name__ == "__main__":
         word = args.HASH
         quiet = args.quiet
 
+
+        cls()
+        rx.style.print(BANNER, 'gold_3b')
+
+        print(word+':')
+
         print_hashes(word, hashed_file_name, quiet)
 
 
     else:
         while True:
-            print('Use:  "HASH||FILE"  to save output to FILE')
+            cls()
+            rx.style.print(BANNER, 'gold_3b')
+            print('Use:  "HASH||FILE"  to save output to FILE \n')
             inp= input('Enter String to Create Hashes:  ')
             if inp=='exit':
                 break

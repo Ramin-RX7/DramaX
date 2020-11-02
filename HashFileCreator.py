@@ -9,10 +9,10 @@ if __name__ == "__main__":
 
     rx.cls()
     rx.style.print('''
-      88  88    db    .dP"Y8 88  88    8888b.  88  dP""b8 888888 
-      88  88   dPYb   `Ybo." 88  88     8I  Yb 88 dP   `"   88   
-      888888  dP__Yb  o.`Y8b 888888     8I  dY 88 Yb        88   
-      88  88 dP""""Yb 8bodP' 88  88    8888Y"  88  YboodP   88   
+      88  88    db    .dP"Y8 88  88    888888 88 88     888888
+      88  88   dPYb   `Ybo." 88  88    88__   88 88     88__  
+      888888  dP__Yb  o.`Y8b 888888    88""   88 88  .o 88""  
+      88  88 dP""""Yb 8bodP' 88  88    88     88 88ood8 888888
 
           dP""b8 88""Yb 888888    db   888888 dP"Yb  88""Yb
          dP   `" 88__dP 88__     dPYb    88  dP   Yb 88__dP
@@ -64,3 +64,5 @@ if __name__ == "__main__":
         hash_dict_creator(words_list, hashed_file_name,encryption_type)
     else:
         hash_dict_creator_all(words_list, hashed_file_name)
+
+    rx.style.print(f'[+] Hash File{"s" if not encryption_type else ""} are Created Successfully', 'dodger_blue_1')

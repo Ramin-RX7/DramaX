@@ -1,7 +1,7 @@
 __pycache__/
 .vscode/
-test.py
+.mypy_cache/
+#test.py
 mydict.txt
 s
-vscode/
 x.txt
