@@ -1,7 +1,7 @@
 import sys
 import argparse
 
-import rx7.lite as rx
+import rx7 as rx
 
 from LIB import Dictionary
 from LIB.Functions import wait_for_input, get_files, pause
@@ -29,7 +29,6 @@ while True:
     rx.cls()
 
     print(BANNER,'gold_3b')
-    exit()
     print('BECAREFULL WHEN USING THIS PROGRAM TO CREATE LARGE DICTIONARIES (MORE THAN 50M WORDS)!', 'red', style='bold')
     print('DO NOT TRY THIS FOR LARGE NUMBER OF WORDS (MORE THAN 100M WORDS)!\n', 'red', style='bold')
 

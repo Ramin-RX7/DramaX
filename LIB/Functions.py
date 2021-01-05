@@ -1,5 +1,7 @@
 import getpass, hashlib, os
-import rx7.lite as rx
+import rx7 as rx
+
+print = rx.style.print
 
 def list_lines(filename):
     '''

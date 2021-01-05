@@ -67,7 +67,7 @@ def MAIN():
         #rx.cls()
         HASH_EX=False
         while not HASH_EX:
-            os.system('clear')
+            rx.cls()
             print('''
              dMP dMP .aMMMb  .dMMMb  dMP dMP 
             dMP dMP dMP"dMP dMP" VP dMP dMP  
