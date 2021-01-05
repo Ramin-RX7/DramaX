@@ -21,8 +21,6 @@ PC_LOGO='''
         888  .d88P 888    888  888 888  888  888 888  888  d88P Y88b 
         8888888P"  888    "Y888888 888  888  888 "Y888888 d88P   Y88b
 '''
-
-dichash={'1':'md5','2':'sha1','3':'sha224','4':'sha256','5':'sha384','6':'sha512'}
 COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
          'Red':['red','red_1'],        'Green':['green','green_3a'],
          'Classic':['grey_46','default']}
@@ -80,23 +78,19 @@ def MAIN():
            {3}--Hash Generator
            {3}--Hash Dictionary Creator
            ''')
-       
+
             hinp= input('HASH>  ')
-            if hinp=='99':
+            if   hinp == '99':
                 HASH_EX=True
-            elif   hinp == '1':
-                os.system('python ".\\HASH\\HD.py"')
+            elif hinp == '1':
+                os.system('python ".\\HashDecrypter.py"')
             elif hinp == '2':
-                os.system('python ".\\HASH\\HD file.py"')
-            elif hinp=='3':
-                inp= input('Enter String to Create Hashes:  ')
-                if not inp or inp=='99':
-                    return False
-                else:
-                    os.system('python ".\\HASH\\HG.py" '+inp)
+                os.system('python ".\\HashDecrypterFile.py"')
+            elif hinp == '3':
+                os.system('python ".\\HashGenerator.py"')
 
     elif MAIN_INP=='2':
-        os.system('python ".\\Dictionary Creator\\DC.py"')
+        os.system('python ".\\DictionaryCreator.py"')
     
     elif MAIN_INP=='3':
         CIPHER_EX=False

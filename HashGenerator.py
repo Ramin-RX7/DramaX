@@ -9,8 +9,6 @@ from LIB.Functions import pause, cls
 from LIB.Hash import sa
 
 
-
-
 def print_hashes(word, file=None, Print=True):
     word=bytes(word, encoding='utf-8')
 
@@ -39,6 +37,7 @@ BANNER = '''
     Yb  "88 88""   88 Y88 88""   88"Yb   dP__Yb   88  Yb   dP 88"Yb 
      YboodP 888888 88  Y8 888888 88  Yb dP""""Yb  88   YbodP  88  Yb
     '''
+
 
 if __name__ == "__main__":
 
