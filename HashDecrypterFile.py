@@ -22,8 +22,7 @@ if __name__ == "__main__":
      8888Y"  888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
      ''','gold_3b')
     print('UNDER MAINTAINCE...')
-    import sys
-    sys.exit()
+    exit()
 
     filename= wait_for_input('Enter Hashed File Name:  ')
     print('Enter word list files path below. Type "end" to finnish adding files')

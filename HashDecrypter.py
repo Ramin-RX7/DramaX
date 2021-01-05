@@ -24,11 +24,12 @@ banner= '''
         '''
 
 if __name__ == "__main__":
+    First_Round = True
     while True:
         rx.cls()        
         print(banner,'gold_3b')
 
-        if len(sys.argv) > 1:
+        if len(sys.argv) > 1  and  First_Round:
             parser = argparse.ArgumentParser(
                 'Dictionary Creator',
                 description='Use this app to create dictionaries',
@@ -62,7 +63,7 @@ if __name__ == "__main__":
             print('Enter word list files path below. (Type "end" to finnish adding files)')
             files = get_files()
             quiet = True
-
+        First_Round = False
 
         rx.cls()
         print(banner,'gold_3b')
@@ -74,7 +75,6 @@ if __name__ == "__main__":
         print()
 
         T= rx.record()
-
         DECRYPTED= Hash_Decrypt(Hash, files, quiet)
         if DECRYPTED:
             print('[+] Found','green')
