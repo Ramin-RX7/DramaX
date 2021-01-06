@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod#, abstractstaticmethod
 from typing import Union
 from collections import OrderedDict
 
+
 ALL_CHARS = r""" 0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""   # note the space at the front
 LOWERS   = 'abcdefghijklmnopqrstuvwxyz'
 UPPERS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -13,8 +14,12 @@ SYMBOLS  = r"""!@$%^&*()-=_+[]{};'\:"|,./<>?`~"""
 SPACE    = ' '
 
 TEXT_LENGTH = 0
-#< ! >#
 
+CIPHERS_LIST = ('Polybius','ADFGX','ADFGVX','Atbash','ColumnarTransposition'
+                'Bazeries','Beaufort','Bifid','Caesar','Chao','Autokey','Baconian',
+                'FourSquare','Gronsfeld','Keyword','Myszkowski','Nihilist',
+                'Playfair','RailFence','rot13','Porta','Transpose','ThreeSquare',
+                'SimpleSubstitution','XOR','Vigenere','TwoSquare','Trifid',)
 
 
 class CryptoMath:
@@ -2172,11 +2177,3 @@ class Xor(_Cipher):
         return XOR(word, key)
 
 ZigZag = RailFence
-
-
-
-
-
-
-
-
