@@ -10,6 +10,10 @@ except ModuleNotFoundError:
     print('Install the requirements modules first: ')
     print('rx7\nxxhash\npymmh3')
 
+from LIB.Cipher import CIPHERS_LIST,CIPHERS_DICT
+from LIB.Functions import pause
+
+print = rx.style.print
 
 PC_LOGO='''
         8888888b.                                         Y88b   d88P
@@ -98,7 +102,7 @@ def MAIN():
             CIPHER_EX=CIPHERS()
 
     elif MAIN_INP=='6':
-        os.system('clear')
+        rx.cls()
         print('Under Maintaince...')
         print('Comming Soon...')
         ce('')
@@ -111,7 +115,7 @@ def MAIN():
 
 
 def CIPHERS():
-    os.system('clear')
+    rx.cls()
     print('''
       ██████╗ ██╗ ██████╗  ██╗  ██╗ ███████╗ ██████╗  ███████╗
      ██╔════╝ ██║ ██╔══██╗ ██║  ██║ ██╔════╝ ██╔══██╗ ██╔════╝
@@ -120,34 +124,28 @@ def CIPHERS():
      ╚██████╗ ██║ ██║      ██║  ██║ ███████╗ ██║  ██║ ███████║
       ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
      ''')
-    print('''
-        1)  Affine
-        2)  Atbash
-        3)  Baconian
-        4)  Caesar
-        5)  Four Square
-        6)  Porta
-        7)  Rail Fence  (Zig-Zag)
-        8)  Rot13
-        9)  Straddling Checkerboard  (Under Maintaince)
-       10)  Transpose                (Under Maintaince)
-       11)  Vigenere
-       12)  Xor 
-     ''')
-    CIPHERS_LST= ['Affine','Atbash','Baconian','Caesar','Four Square','Porta','Rail Fence','Rot13','Straddling Checkerboard',
-                  'Transpose','Vigenere','Xor',]
-    CIPHERS_DIC= {str(x):y for x,y in enumerate(CIPHERS_LST,1)}
-    cinp= input(' DramaX:Ciphers> ')
-    if cinp in CIPHERS_DIC.keys():
-        if rx.files.exists(f'Encryptions/{CIPHERS_DIC[cinp].replace(" ","_")}.py'):
-            os.system(f'python Encryptions/{CIPHERS_DIC[cinp].replace(" ","_")}.py')
-        else:
-            print('THIS CIPHER IS UNDER MAINTAINCE.')
-            print('COMMING SOON...')
+    print('UNDER MAINTAINCE...','red')
+    exit()
+    cipher_options = ""
+    i = 1
+    for cipher in CIPHERS_LIST:
+        option = f"{i}-{cipher}"
+        white_space = (30-len(option))*' '
+        cipher_options += option+white_space
+        i += 1
+        if i%3==1:
+            cipher_options += '\n'
+    print(cipher_options)
+    cinp= rx.io.selective_input(' DramaX:Ciphers> ',list(str(i) for i in range(1,len(CIPHERS_LIST)+1))+['99'],error=True)
     if cinp=='99':
         return True
-
-    os.system('pause')
+    elif cinp:
+        edt = rx.io.selective_input('Type [ENCRYPT/decrypt]:  ',['encrypt','decrypt','e','n','1','2'],error=True)
+        word = 'Encrypted String'  if edt in ('d','2','decrypt')  else 'Word to Encrypt'
+        inp = rx.io.wait_for_input(f'Enter {word}:')
+        pause()
+    else:
+        CIPHERS()
  
 
 while True:

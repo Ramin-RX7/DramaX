@@ -1,9 +1,9 @@
 import Cipher
 
-cipher = Cipher.Autokey
-key = 'rxishsadf'
-enc = cipher.encrypt('ramin',key, 'abcdefghijklmnopqrstuvwxyz')
+cipher = Cipher.SimpleSubstitution
+key = 'qwertyuioplkjhgfdsazxcvb'
+enc = cipher.encrypt('ramin',key,Cipher.LOWERS)
 print(enc)
-print(cipher.decrypt(enc,key,'abcdefghijklmnopqrstuvwxyz'))
+print(cipher.decrypt(enc,key,Cipher.LOWERS))
 
 

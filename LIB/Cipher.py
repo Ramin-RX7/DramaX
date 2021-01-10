@@ -1,22 +1,23 @@
 import sys
 import math
 import random
+
 from abc import ABC, abstractmethod#, abstractstaticmethod
 from typing import Union
 from collections import OrderedDict
 
 
-ALL_CHARS = r""" 0123456789@ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""   # note the space at the front
+ALL_CHARS = r"""abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""   # note the space
 LOWERS   = 'abcdefghijklmnopqrstuvwxyz'
 UPPERS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 DIGITS   = '0123456789'
-SYMBOLS  = r"""!@$%^&*()-=_+[]{};'\:"|,./<>?`~"""
+SYMBOLS  = r"""!@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""
 SPACE    = ' '
 
 TEXT_LENGTH = 0
 
-CIPHERS_LIST = ('Polybius','ADFGX','ADFGVX','Atbash','ColumnarTransposition'
-                'Bazeries','Beaufort','Bifid','Caesar','Chao','Autokey','Baconian',
+CIPHERS_LIST = ('ADFGX','ADFGVX','Atbash','ColumnarTransposition','Autokey',
+                'Bazeries','Beaufort','Bifid','Caesar','Chao','Baconian',#'Polybius',
                 'FourSquare','Gronsfeld','Keyword','Myszkowski','Nihilist',
                 'Playfair','RailFence','rot13','Porta','Transpose','ThreeSquare',
                 'SimpleSubstitution','XOR','Vigenere','TwoSquare','Trifid',)
@@ -133,7 +134,7 @@ class Polybius:
     """
     class Tools:
         @staticmethod
-        def __encDec(self, alphabet, text, key, isEncrypt=True):
+        def _encDec(text, key, alphabet, isEncrypt=True):
             square = _PolybiusSquare(alphabet, key)
             res = ""
             header = range(1, square.get_columns() + 1)
@@ -160,7 +161,7 @@ class Polybius:
             return res
 
     @staticmethod
-    def encrypt(text, alphabet, key=""):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -174,10 +175,10 @@ class Polybius:
         :return: text
         :rtype: string
         """
-        return Polybius.Tools.__encDec(alphabet, text, key, True)
+        return Polybius.Tools._encDec(text, key, alphabet, True)
 
     @staticmethod
-    def decrypt(text, alphabet, key=""):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -191,8 +192,9 @@ class Polybius:
         :return: text
         :rtype: string
         """
-        return Polybius.Tools.__encDec(alphabet, text, key, False)
+        return Polybius.Tools._encDec(text, key, alphabet, False)
 
+# FIXME
 class _ADFGX:
     @staticmethod
     def decrypt(text, key, alphabet, header):
@@ -262,7 +264,7 @@ class _ADFGX:
         :return: text
         :rtype: string
         """
-        ans0 = Polybius.encrypt(text, alphabet=alphabet)
+        ans0 = Polybius.encrypt(text, "",alphabet=alphabet)
         ans = [header[int(char)-1] for char in ans0]
 
         keyword = list(key)
@@ -288,8 +290,11 @@ class _ADFGX:
 
         return ans2
 class ADFGX(_Cipher):
+    '''
+    FIXME
+    '''
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -305,7 +310,7 @@ class ADFGX(_Cipher):
         """
         return _ADFGX.decrypt(text, key, alphabet, 'ADFGX')
     @staticmethod
-    def encrypt(text, key, alphabet, header):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -321,8 +326,11 @@ class ADFGX(_Cipher):
         """
         return _ADFGX.encrypt(text, key, alphabet, 'ADFGX')
 class ADFGVX(_Cipher):
+    '''
+    FIXME
+    '''
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -338,7 +346,7 @@ class ADFGVX(_Cipher):
         """
         return _ADFGX.decrypt(text, key, alphabet, 'ADFGVX')
     @staticmethod
-    def encrypt(text, key, alphabet, header):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -367,39 +375,38 @@ class Affine(_Cipher):
 
     '''
     def hackAffine(message):
-        print()
-        print('Hacking...')
-        print('(Press Ctrl-C or Ctrl-D to quit at any time.)')
-        # brute-force by looping through every possible key
-        for key in range(len(SYMBOLS) ** 2):
-            keyA = getKeyParts(key)[0]
-            if cryptomath.gcd(keyA, len(SYMBOLS)) != 1:
-                continue
-            decryptedText = decryptMessage(key, message)
-            #if not SILENT_MODE:
-            #    print('Tried Key %s... (%s)' % (key, decryptedText[:40]))
-            if detectEnglish.isEnglish(decryptedText):
-                print()
-                print(' Possible encryption hack:')
-                print(' Key1: %s  |  Key2: %s' % (str(key)[:2],str(key)[2:]))
-                print(f' Decrypted Message:  {rx7.style(decryptedText[:200],BG="dark_green")}')
-
-                print()
-                print(' Enter D for done, or just press Enter to continue hacking:')
-                response = input('> ')
-                if response.strip().upper() in ('DONE','D'):
-                    return decryptedText
-        return None
-
-    def HACK(myMessage):
-        hackedMessage = hackAffine(myMessage)
-        if hackedMessage != None:
-            print(f' Copying hacked message to clipboard:  {hackedMessage}')
-            pyperclip.copy(hackedMessage)
-        else:
-            print(' Failed to hack encryption.')
+         print()
+         print('Hacking...')
+         print('(Press Ctrl-C or Ctrl-D to quit at any time.)')
+         # brute-force by looping through every possible key
+         for key in range(len(SYMBOLS) ** 2):
+             keyA = getKeyParts(key)[0]
+             if cryptomath.gcd(keyA, len(SYMBOLS)) != 1:
+                 continue
+             decryptedText = decryptMessage(key, message)
+             #if not SILENT_MODE:
+             #    print('Tried Key %s... (%s)' % (key, decryptedText[:40]))
+             if detectEnglish.isEnglish(decryptedText):
+                 print()
+                 print(' Possible encryption hack:')
+                 print(' Key1: %s  |  Key2: %s' % (str(key)[:2],str(key)[2:]))
+                 print(f' Decrypted Message:  {rx7.style(decryptedText[:200],BG="dark_green")}')
+ 
+                 print()
+                 print(' Enter D for done, or just press Enter to continue hacking:')
+                 response = input('> ')
+                 if response.strip().upper() in ('DONE','D'):
+                     return decryptedText
+         return None
+ 
+     def HACK(myMessage):
+         hackedMessage = hackAffine(myMessage)
+         if hackedMessage != None:
+             print(f' Copying hacked message to clipboard:  {hackedMessage}')
+             pyperclip.copy(hackedMessage)
+         else:
+             print(' Failed to hack encryption.')
     '''
-
 
     class Tools:
         @staticmethod
@@ -465,26 +472,30 @@ class Affine(_Cipher):
         keys:  List of keys to use. ([key1, key2])
          (See Affine help to understand keys of this cipher)\n
         alphabet: a subscriptable iterable which contains all characters  
-        you want to use for Affine Cipher (default= lowers+uppers+digits+symbols)
+        you want to use for Affine Cipher (default= lowers+uppers+digits+space+symbols)
         '''
         return Affine.Tools._EncDec(text, keys, alphabet, False)
 
 def atbash(text):
-    
+
     cipher = ''
     for letter in text:
         if letter.lower() in LOWERS:
-            cipher +=  LOWERS[25-LOWERS.index(letter)]
+            cipher +=  LOWERS[25-LOWERS.index(letter.lower())]
         else:
             cipher += letter
 
     return cipher
 class Atbash(_Cipher):
+    '''
+    It ignores case
+    It ignores all characters but english
+    '''
     @staticmethod
-    def encrypt(text):
+    def encrypt(text,*args,**kwargs):
         return atbash(text)
     @staticmethod
-    def decrypt(text):
+    def decrypt(text,*args,**kwargs):
         return atbash(text)
 
 class Autokey(_Cipher):
@@ -523,7 +534,7 @@ class Autokey(_Cipher):
             return ans
 
     @staticmethod
-    def encrypt(text, key, alphabet=u"abcdefghijklmnopqrstuvwxyz"):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -540,7 +551,7 @@ class Autokey(_Cipher):
         return Autokey.Tools._EncDec(text, key, alphabet, 1)
 
     @staticmethod
-    def decrypt(text, key, alphabet=u"abcdefghijklmnopqrstuvwxyz"):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -580,7 +591,7 @@ class Baconian(_Cipher):
 
 
     @staticmethod
-    def encrypt(text, all_letters=True):
+    def encrypt(text, all_letters=True, **kwargs):
         Dict = Baconian._baconian_dict
         if not all_letters:
             Dict = Baconian._baconian_dict_24
@@ -594,7 +605,7 @@ class Baconian(_Cipher):
         return cipher 
 
     @staticmethod
-    def decrypt(text, all_letters=True):
+    def decrypt(text, all_letters=True, **kwargs):
         Dict = Baconian._baconian_dict
         if not all_letters:
             Dict = Baconian._baconian_dict_24
@@ -617,10 +628,13 @@ class Baconian(_Cipher):
 class Bazeries(_Cipher):
     """
     The Bazeries Cipher
+    Keys:
+        Key1: integer in [1,len(text)]
+        Key2: string
     """
     class Tools:
         @staticmethod
-        def __encDec(text, key, alphabet, isEncrypt):
+        def _encDec(text, key, alphabet, isEncrypt):
             square1 = _PolybiusSquare(alphabet)
 
             # key is a number, make it a string
@@ -660,7 +674,7 @@ class Bazeries(_Cipher):
             return ret
 
     @staticmethod
-    def encrypt(text, key=None, alphabet=ALL_CHARS):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -674,10 +688,10 @@ class Bazeries(_Cipher):
         :return: text
         :rtype: string
         """
-        return Bazeries.Tools.__encDec(alphabet, text, key, True)
+        return Bazeries.Tools._encDec(text, key, alphabet, True)
 
     @staticmethod
-    def decrypt(text, key=None, alphabet=ALL_CHARS):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -691,9 +705,9 @@ class Bazeries(_Cipher):
         :return: text
         :rtype: string
         """
-        return Bazeries.Tools.__encDec(alphabet, text, key, False)
+        return Bazeries.Tools._encDec(text, key, alphabet, False)
 
-def beaufort(text, key, alphabet):
+def beaufort(text, key, alphabet=ALL_CHARS):
     ans = ""
     for i in range(len(text)):
         char = text[i]
@@ -714,6 +728,7 @@ def beaufort(text, key, alphabet):
 class Beaufort(_Cipher):
     """
     The Beaufort Cipher
+    Key: string
     """
     @staticmethod
     def encrypt(text, key, alphabet=ALL_CHARS):
@@ -752,10 +767,11 @@ class Beaufort(_Cipher):
 class Bifid(_Cipher):
     """
     The Bifid Cipher
+    Key: integer in [1,len(text)]. out of this will be same as each other
     """
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -771,16 +787,16 @@ class Bifid(_Cipher):
         """
         if not key > 0:
             key = len(text)
-        code = Polybius.encrypt(text, alphabet=alphabet)
+        code = Polybius.encrypt(text,"", alphabet=alphabet)
         even = code[::2]
         odd = code[1::2]
         ret = ""
         for i in range(0, len(even), key):
             ret += even[i:i+key] + odd[i:i+key]
-        return Polybius.decrypt(ret, alphabet=alphabet)
+        return Polybius.decrypt(ret,"",alphabet=alphabet)
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -796,7 +812,7 @@ class Bifid(_Cipher):
         """
         if not key > 0:
             key = len(text)
-        code = Polybius.encrypt(text, alphabet=alphabet)
+        code = Polybius.encrypt(text,"",alphabet=alphabet)
         even = ""
         odd = ""
         rem = len(code) % (key << 1)
@@ -811,7 +827,7 @@ class Bifid(_Cipher):
         code = ""
         for i in range(len(even)):
             code += even[i] + odd[i]
-        return Polybius.decrypt(code, alphabet=alphabet)
+        return Polybius.decrypt(code,"",alphabet=alphabet)
 
 class Caesar(_Cipher):
     """
@@ -820,20 +836,19 @@ class Caesar(_Cipher):
 
     class Tools:
         @staticmethod
-        def __encDec(text, key, alphabet, isEncrypt):
+        def _encDec(text, key, alphabet, isEncrypt):
             ans = ""
             for char in text:
                 try:
                     alphIndex = alphabet.index(char)
                 except ValueError:
-                    wrchar = char.encode('utf-8')
-                    raise Exception("Can't find char '" + wrchar + "' of text in alphabet!")
+                    raise Exception("Can't find char '" + char + "' of text in alphabet!")
                 alphIndex = (alphIndex + isEncrypt * key) % len(alphabet)
                 ans += alphabet[alphIndex]
             return ans
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=LOWERS):
         """
         Encryption method
 
@@ -847,10 +862,10 @@ class Caesar(_Cipher):
         :return: encrypted text
         :rtype: string
         """
-        return Caesar.Tools.__encDec(text, key, alphabet, 1)
+        return Caesar.Tools._encDec(text, key, alphabet, 1)
 
     @staticmethod
-    def decrypt(text, key, alphabet=None):
+    def decrypt(text, key, alphabet=LOWERS):
         """
         Decryption method
 
@@ -864,11 +879,12 @@ class Caesar(_Cipher):
         :return: decrypted text
         :rtype: string
         """
-        return Caesar.Tools.__encDec(text, key, alphabet, -1)
+        return Caesar.Tools._encDec(text, key, alphabet, -1)
 
 class Chao(_Cipher):
     """
     The Chaocipher
+    key: Shuffled string of alphabet
     """
     class Tools:
         @staticmethod
@@ -901,7 +917,7 @@ class Chao(_Cipher):
             return ret 
 
     @staticmethod
-    def encrypt(text, key, alphabet=None):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -918,7 +934,7 @@ class Chao(_Cipher):
         return Chao.Tools._EncDec(text, key, alphabet, True)
 
     @staticmethod
-    def decrypt(text, key, alphabet=None):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -937,6 +953,10 @@ class Chao(_Cipher):
 class ColumnarTransposition(_Cipher):
     """
     The Columnar Transposition Cipher
+    (As I understood:)
+    Key length is important (not content)
+    Text length will be KMM of Text and Key length (fulled by #)
+        ( So its better that len(Text)%len(Key)==0 )
     """
     class Tools:
         @staticmethod
@@ -950,7 +970,7 @@ class ColumnarTransposition(_Cipher):
             return j
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -980,7 +1000,7 @@ class ColumnarTransposition(_Cipher):
         return ret
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1009,6 +1029,7 @@ class ColumnarTransposition(_Cipher):
                 ret += cols[i][j]
         return ret
 
+# KEY=???
 class FourSquare(_Cipher):
     """
     The Four-Square Cipher
@@ -1016,7 +1037,7 @@ class FourSquare(_Cipher):
 
     class Tools:
         @staticmethod
-        def __enc(text, key, alphabet, isEncrypt):
+        def _enc(text, key, alphabet, isEncrypt):
             square01 = _PolybiusSquare(alphabet, key[0])
             square10 = _PolybiusSquare(alphabet, key[1])
             square = _PolybiusSquare(alphabet, "")
@@ -1054,7 +1075,7 @@ class FourSquare(_Cipher):
             return enc
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1068,10 +1089,10 @@ class FourSquare(_Cipher):
         :return: text
         :rtype: string
         """
-        return FourSquare.Tools.__enc(text, key, alphabet, True)
+        return FourSquare.Tools._enc(text, key, alphabet, True)
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1085,11 +1106,13 @@ class FourSquare(_Cipher):
         :return: text
         :rtype: string
         """
-        return FourSquare.Tools.__enc(text, key, alphabet, False)
+        return FourSquare.Tools._enc(text, key, alphabet, False)
 
+#FIXME:!!!
 class Gronsfeld(_Cipher):
     """
     The Gronsfeld Cipher
+    FIXME:!!!
     """
     class Tools:
         @staticmethod
@@ -1108,7 +1131,7 @@ class Gronsfeld(_Cipher):
             return ans
 
     @staticmethod
-    def encrypt(text, key, alphabet=u"abcdefghijklmnopqrstuvwxyz"):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1125,7 +1148,7 @@ class Gronsfeld(_Cipher):
         return Gronsfeld.Tools._EncDec(alphabet, key, text, 1)
 
     @staticmethod
-    def decrypt(text, key, alphabet=u"abcdefghijklmnopqrstuvwxyz"):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1144,6 +1167,7 @@ class Gronsfeld(_Cipher):
 class Keyword(_Cipher):
     """
     The Keyword Cipher
+    Key should be shuffled of alphabet
     """
     class Tools:
         '''
@@ -1158,7 +1182,7 @@ class Keyword(_Cipher):
             return newstring
         '''
         @staticmethod
-        def __encDec(alphabet, key, text, isEncrypt):
+        def _encDec(alphabet, key, text, isEncrypt):
             # remove repeats of letters in the key
             newkey = "".join(OrderedDict.fromkeys(key))
             # create the substitution string
@@ -1175,13 +1199,12 @@ class Keyword(_Cipher):
                         index = longkey.index(m)
                         enc = alphabet[index]
                 except ValueError:
-                    wrchar = m.encode('utf-8')
-                    raise Exception("Can't find char '" + wrchar + "' of text in alphabet!")
+                    raise Exception("Can't find char '" + m + "' of text in alphabet!")
                 ans += enc
             return ans
     
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1195,10 +1218,10 @@ class Keyword(_Cipher):
         :return: text
         :rtype: string
         """
-        return Keyword.Tools.__encDec(alphabet, key, text, 1)
+        return Keyword.Tools._encDec(alphabet, key, text, 1)
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1212,8 +1235,9 @@ class Keyword(_Cipher):
         :return: text
         :rtype: string
         """
-        return Keyword.Tools.__encDec(alphabet, key, text, -1)
+        return Keyword.Tools._encDec(alphabet, key, text, -1)
 
+#KEY=??? (ye dafe mosavi ye dafe motefavet!)
 class Myszkowski(_Cipher):
     """
     -> Transposition
@@ -1322,10 +1346,11 @@ class Myszkowski(_Cipher):
 class Nihilist(_Cipher):
     """
     The Nihilist Cipher
+    Key should be string with length <= len(text)
     """
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1339,16 +1364,16 @@ class Nihilist(_Cipher):
         :return: text
         :rtype: string
         """
-        code = Polybius.encrypt(text, alphabet=alphabet)
+        code = Polybius.encrypt(text,'', alphabet=alphabet)
         enc = ""
         for i in range(0, len(code), 2):
-            char = Polybius.encrypt(key[(i >> 1) % len(key)],
+            char = Polybius.encrypt(key[(i >> 1) % len(key)],'',
                                         alphabet=alphabet)
             enc += str(int(code[i:i+2]) + int(char)) + " "
         return enc.rstrip()
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1366,19 +1391,20 @@ class Nihilist(_Cipher):
         code = list(map(int, code))
         dec = ""
         for i in range(0, len(code)):
-            char = Polybius.encrypt(key[i % len(key)],
+            char = Polybius.encrypt(key[i % len(key)],'',
                                         alphabet=alphabet)
             pair = str(code[i] - int(char))
-            dec += Polybius.decrypt(pair, alphabet=alphabet)
+            dec += Polybius.decrypt(pair,'', alphabet=alphabet)
         return dec
 
 class Playfair(_Cipher):
     """
     The Playfair Cipher
+    Key: string with less or equal characters with text
     """
     class Tools:
         @staticmethod
-        def __dec_two_letters(a, b, square):
+        def _dec_two_letters(a, b, square):
             cols = square.get_columns()
             rows = square.get_rows()
 
@@ -1409,7 +1435,7 @@ class Playfair(_Cipher):
             return a + b
 
         @staticmethod
-        def __enc_two_letters(a, b, square):
+        def _enc_two_letters(a, b, square):
             cols = square.get_columns()
             rows = square.get_rows()
 
@@ -1439,7 +1465,7 @@ class Playfair(_Cipher):
             return a + b
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1461,16 +1487,16 @@ class Playfair(_Cipher):
         while i < len(text):
             if text[i-1] == text[i]:
                 text = text[:i] + insert_char + text[i:]
-            enc += Playfair.Tools.__enc_two_letters(text[i-1], text[i], square)
+            enc += Playfair.Tools._enc_two_letters(text[i-1], text[i], square)
             i += 2
 
         if len(text) & 1:
-            enc += Playfair.Tools.__enc_two_letters(text[-1], insert_char, square)
+            enc += Playfair.Tools._enc_two_letters(text[-1], insert_char, square)
 
         return enc
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1490,22 +1516,30 @@ class Playfair(_Cipher):
         square = _PolybiusSquare(alphabet, key)
 
         for i in range(1, len(text), 2):
-            pair = Playfair.Tools.__dec_two_letters(text[i-1], text[i], square)
+            pair = Playfair.Tools._dec_two_letters(text[i-1], text[i], square)
             if len(dec) > 1 and dec[-1] == insert_char and pair[0] == dec[-2]:
                 dec = dec[:-1] + pair[0]
                 dec += pair[1]
             else:
-                dec += Playfair.Tools.__dec_two_letters(text[i-1], text[i], square)
+                dec += Playfair.Tools._dec_two_letters(text[i-1], text[i], square)
         if dec[-1] == insert_char:
             dec = dec[:-1]
         return dec
 
+def porta(text, key, **kwargs):
+    cipher = ""
+    count = 0
+    table = Porta.Tools.generate_table(key)
+    for char in text.upper():
+        cipher += Porta.Tools.get_opponent(table[count], char)
+        count = (count + 1) % len(table)
+    return cipher
 class Porta(_Cipher):
     '''
     Supports All Characters (BUT ONLY LETTERS WILL BE ENCRYPTED)
     Case Insensetive
     Key Insensetive
-    Key must be string with 1<word<len(word) length which only cntains letters
+    Key must be string with 1<=word<=len(word) length which only cntains letters
     '''
     class Tools:
         @staticmethod
@@ -1558,19 +1592,11 @@ class Porta(_Cipher):
         }
 
     @staticmethod
-    def encrypt(word, key):
-        porta(word,key)    
+    def encrypt(word, key, **kwargs):
+        return porta(word,key)    
     @staticmethod
-    def decrypt(word, key):
+    def decrypt(word, key, **kwargs):
         return porta(word, key)
-def porta(text, key):
-    cipher = ""
-    count = 0
-    table = Porta.Tools.generate_table(key)
-    for char in text.upper():
-        cipher += Porta.Tools.get_opponent(table[count], char)
-        count = (count + 1) % len(table)
-    return cipher
 
 class RailFence(_Cipher):
     '''
@@ -1580,7 +1606,7 @@ class RailFence(_Cipher):
     Key Must be an Integer Lower Than Word Length and Higher than 1.
     '''
     @staticmethod
-    def encrypt(text, key):  
+    def encrypt(text, key, **kwargs):  
         rail = [ ['\n' for _2 in range(len(text))] for _ in range(key)]
         dir_down = False
         row, col = 0, 0
@@ -1604,7 +1630,7 @@ class RailFence(_Cipher):
         return "".join(result)
 
     @staticmethod
-    def decrypt(text, key): 
+    def decrypt(text, key, **kwargs): 
         rail = [['\n' for i in range(len(text))]  
                     for j in range(key)]
         dir_down = None
@@ -1646,7 +1672,7 @@ class RailFence(_Cipher):
 
         return "".join(result)
 
-def rot13(word):
+def rot13(word, **kwargs):
     '''
     Case Sensetive
     Support Numbers and Symbols But Not Work on Them (Under Maintaince)
@@ -1668,21 +1694,22 @@ def rot13(word):
     return result
 class Rot13(_Cipher):
     @staticmethod
-    def encrypt(word, key=None):
+    def encrypt(word, **kwargs):
         return rot13(word)
     @staticmethod
-    def decrypt(word, key=None):
+    def decrypt(word, **kwargs):
         return rot13(word)
 
 class SimpleSubstitution(_Cipher):
     """
     The Simple Substitution Cipher
+    Key: characters are not important but length should be equal to alphabet length
     """
     class Tools:
         @staticmethod
-        def __encDec(text, key, alphabet, isEncrypt):
+        def _encDec(text, key, alphabet, isEncrypt):
             if len(alphabet) != len(key):
-                return
+                raise ValueError("'key' and 'alphabet' must have the same length")
 
             ans = ""
             for i in range(len(text)):
@@ -1700,7 +1727,7 @@ class SimpleSubstitution(_Cipher):
             return ans
 
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1714,10 +1741,10 @@ class SimpleSubstitution(_Cipher):
         :return: text
         :rtype: string
         """
-        return SimpleSubstitution.Tools.__encDec(text, key, alphabet, 1)
+        return SimpleSubstitution.Tools._encDec(text, key, alphabet, 1)
 
     @staticmethod
-    def decrypt(text, key, alphabet=u"abcdefghijklmnopqrstuvwxyz"):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1731,15 +1758,16 @@ class SimpleSubstitution(_Cipher):
         :return: text
         :rtype: string
         """
-        return SimpleSubstitution.Tools.__encDec(text, key, alphabet, -1)
+        return SimpleSubstitution.Tools._encDec(text, key, alphabet, -1)
 
 class ThreeSquare(_Cipher):
     """
     The Three Square Cipher
+    Key: characters are not important but length should be equal to alphabet length
     """
     class Tools:
         @staticmethod
-        def __encDec(text, key, alphabet, isEncrypt):
+        def _encDec(text, key, alphabet, isEncrypt):
             square1 = _PolybiusSquare(alphabet, key[0])
             square2 = _PolybiusSquare(alphabet, key[1])
             square3 = _PolybiusSquare(alphabet, key[2])
@@ -1783,7 +1811,7 @@ class ThreeSquare(_Cipher):
             return enc
 
     @staticmethod
-    def encrypt(text, key=None, alphabet=None):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1797,10 +1825,10 @@ class ThreeSquare(_Cipher):
         :return: text
         :rtype: string
         """
-        return ThreeSquare.Tools.__encDec(text, key, alphabet, True)
+        return ThreeSquare.Tools._encDec(text, key, alphabet, True)
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -1814,14 +1842,14 @@ class ThreeSquare(_Cipher):
         :return: text
         :rtype: string
         """
-        return ThreeSquare.Tools.__encDec(text, key, alphabet, False)
+        return ThreeSquare.Tools._encDec(text, key, alphabet, False)
 
 class Transpose(_Cipher):
     '''
-    len(word)>len(key)>1
+    len(word)>key>1
     '''
     @staticmethod
-    def encrypt(text, key):
+    def encrypt(text, key, **kwargs):
         ciphertext = [''] * key
         for col in range(key):
             pointer = col
@@ -1831,7 +1859,7 @@ class Transpose(_Cipher):
         return ''.join(ciphertext)
 
     @staticmethod
-    def decrypt(text, key):
+    def decrypt(text, key, **kwargs):
         import math
         numOfColumns = math.ceil(len(text) / key)
         numOfRows = key
@@ -1847,8 +1875,10 @@ class Transpose(_Cipher):
                 row += 1
         return ''.join(plaintext)
 
-class Trifid(_Cipher):
+# FIXME
+class Trifid(_Cipher): 
     """
+    #FIXME: WRONG DECRYPT/ENCRYPT
     The Trifid Cipher
     Key: integer <= len(text)
     """
@@ -1881,9 +1911,8 @@ class Trifid(_Cipher):
                 code += alphabet[index][0]
             return code
 
-
     @staticmethod
-    def encrypt(text, key, alphabet=ALL_CHARS):
+    def encrypt(text, key=TEXT_LENGTH, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1945,7 +1974,8 @@ class Trifid(_Cipher):
         code = Trifid.Tools._decode(code0, alphabet)
         return code
 
-def two_square(text, key, alphabet):
+#FIXME:!!!
+def two_square(text, key, alphabet=ALL_CHARS):
     square1 = _PolybiusSquare(alphabet, key[0])
     square2 = _PolybiusSquare(alphabet, key[1])
 
@@ -1977,7 +2007,7 @@ class TwoSquare(_Cipher):
     The Two-Square Cipher
     """
     @staticmethod
-    def encrypt(text, key, alphabet):
+    def encrypt(text, key, alphabet=ALL_CHARS):
         """
         Encryption method
 
@@ -1994,7 +2024,7 @@ class TwoSquare(_Cipher):
         return two_square(alphabet, text, key)
 
     @staticmethod
-    def decrypt(text, key, alphabet):
+    def decrypt(text, key, alphabet=ALL_CHARS):
         """
         Decryption method
 
@@ -2010,6 +2040,7 @@ class TwoSquare(_Cipher):
         """
         return two_square(alphabet, text, key)
 
+#FIXME:!!!
 class Vic(_Cipher):
     """
     -> Polybius square
@@ -2101,6 +2132,7 @@ class Vic(_Cipher):
         """
         return Vic.Tools._EncDec(text, key, alphabet, False)
 
+
 class Vigenere(_Cipher):
     '''
     Case Sensetive
@@ -2169,11 +2201,17 @@ def XOR(word, key):
         word = (word[:i] + chr(ord(word[i]) ^ ord(key)) + word[i + 1:])
     return word
 class Xor(_Cipher):
+    '''
+    key:  1 char (better an uppercase)
+    '''
     @staticmethod
-    def encrypt(word, key):
+    def encrypt(word, key, *args,**kwargs):
         return XOR(word, key)
     @staticmethod
-    def decrypt(word, key):
+    def decrypt(word, key, *args,**kwargs):
         return XOR(word, key)
 
 ZigZag = RailFence
+
+
+CIPHERS_DICT = {name:eval(name) for name in CIPHERS_LIST}
