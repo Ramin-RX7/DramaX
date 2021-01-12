@@ -22,7 +22,6 @@ CIPHERS_LIST = ('ADFGX','ADFGVX','Atbash','ColumnarTransposition','Autokey',
                 'Playfair','RailFence','rot13','Porta','Transpose','ThreeSquare',
                 'SimpleSubstitution','XOR','Vigenere','TwoSquare','Trifid',)
 
-
 class CryptoMath:
 
     @staticmethod
@@ -48,10 +47,10 @@ class CryptoMath:
             v1, v2, v3, u1, u2, u3 = (u1 - q * v1), (u2 - q * v2), (u3 - q * v3), v1, v2, v3
         return u1 % m
 
-
+'''
 class Present:
     pass
-
+'''
 
 class _Cipher(ABC):
     
@@ -80,7 +79,7 @@ class _PolybiusSquare:
         keyi = []
         if key:
             for char in key:
-                index = self.__find_index_in_alphabet(char, alphabet)
+                index = self._find_index_in_alphabet(char, alphabet)
                 keyi.append(index)
             # remove duplicates
             keyi = OrderedDict.fromkeys(keyi)
@@ -96,7 +95,7 @@ class _PolybiusSquare:
         self.__alphabet = alph_out
         self.__side = int(math.ceil(math.sqrt(len(alphabet))))
 
-    def __find_index_in_alphabet(self, char, alphabet):
+    def _find_index_in_alphabet(self, char, alphabet):
         for j in range(len(alphabet)):
             try:
                 alphabet[j].index(char)
@@ -1541,6 +1540,7 @@ class Porta(_Cipher):
     Key Insensetive
     Key must be string with 1<=word<=len(word) length which only cntains letters
     '''
+
     class Tools:
         @staticmethod
         def generate_table(key):

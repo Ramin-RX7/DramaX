@@ -70,7 +70,7 @@ if __name__ == "__main__":
         cls()
         rx.style.print(BANNER, 'gold_3b')
 
-        print(word+':')
+        print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{word}{rx.attr(0)}:"''')
 
         print_hashes(word, hashed_file_name, quiet)
 
@@ -86,7 +86,9 @@ if __name__ == "__main__":
             elif inp:
                 if '||' in inp:
                     inp = inp.split('||')
+                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp[0]}{rx.attr(0)}:"''')
                     print_hashes(inp[0],inp[1])
                 else:
+                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp}{rx.attr(0)}"''')
                     print_hashes(inp)
                 pause()
