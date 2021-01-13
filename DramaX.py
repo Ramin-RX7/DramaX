@@ -125,7 +125,8 @@ def CIPHERS():
       ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
      ''')
     print('UNDER MAINTAINCE...','red')
-    exit()
+    pause()
+    return True
     cipher_options = ""
     i = 1
     for cipher in CIPHERS_LIST:

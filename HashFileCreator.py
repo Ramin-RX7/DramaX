@@ -17,8 +17,8 @@ if __name__ == "__main__":
         88  88 dP""""Yb 8bodP' 88  88    88     88 88ood8 888888
 
             dP""b8 88""Yb 888888    db   888888 dP"Yb  88""Yb
-            dP   `" 88__dP 88__     dPYb    88  dP   Yb 88__dP
-            Yb      88"Yb  88""    dP__Yb   88  Yb   dP 88"Yb 
+           dP   `" 88__dP 88__     dPYb    88  dP   Yb 88__dP
+           Yb      88"Yb  88""    dP__Yb   88  Yb   dP 88"Yb 
             YboodP 88  Yb 888888 dP""""Yb  88   YbodP  88  Yb
         ''', 'gold_3b')
 

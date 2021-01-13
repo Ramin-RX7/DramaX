@@ -12,13 +12,13 @@ from LIB.Functions import wait_for_input, get_files, pause
 print = rx.style.print
 
 BANNER = '''
-    `7MM"""Yb.     .g8"""bgd  
-     MM    `Yb.  .dP'     `M  
-     MM     `Mb  dM'       `  
-     MM      MM  MM           
-     MM     ,MP  MM.          
-     MM    ,dP'  `Mb.      ,' 
-    .JMMmmmdP'     `"bmmmd'      
+    `7MM"""Yb.              .g8"""bgd  
+     MM    `Yb.           .dP'     `M  
+     MM     `Mb           dM'       `  
+     MM      MM           MM           
+     MM     ,MP           MM.          
+     MM    ,dP'           `Mb.     ,' 
+    .JMMmmmdP' ictionary   `"bmmmd' reator
 
     '''
 

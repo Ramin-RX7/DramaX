@@ -30,7 +30,7 @@ BANNER = '''
                      88  88    db    .dP"Y8 88  88
                      88  88   dPYb   `Ybo." 88  88
                      888888  dP__Yb  o.`Y8b 888888
-                     88  88 dP""""Yb 8bodP' 88  88
+                     88  88 dP""""Yb 8bodP' 88  88                  
 
      dP""b8 888888 88b 88 888888 88""Yb    db   888888 dP"Yb  88""Yb
     dP   `" 88__   88Yb88 88__   88__dP   dPYb    88  dP   Yb 88__dP
@@ -86,9 +86,9 @@ if __name__ == "__main__":
             elif inp:
                 if '||' in inp:
                     inp = inp.split('||')
-                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp[0]}{rx.attr(0)}:"''')
+                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp[0]}{rx.attr(0)}":''')
                     print_hashes(inp[0],inp[1])
                 else:
-                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp}{rx.attr(0)}"''')
+                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp}{rx.attr(0)}":''')
                     print_hashes(inp)
                 pause()
