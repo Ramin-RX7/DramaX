@@ -1,7 +1,15 @@
 import getpass, hashlib, os
 import rx7 as rx
 
+
+
 print = rx.style.print
+
+def pause():
+    print()  
+    rx.io.getpass('Press Enter to Continue')
+
+
 
 def list_lines(filename):
     '''
@@ -10,28 +18,6 @@ def list_lines(filename):
     #list_of_words = open(filename).readlines()
     list_of_words= rx.read(filename).splitlines()
     return list_of_words
-
-
-def wait_for_input(prompt):
-    '''
-    Prompt  input(prompt)  until sth is given
-    '''
-    answer= ''
-    try:
-        while not answer:
-            answer = input(prompt)
-    except (EOFError,KeyboardInterrupt):
-        print('EXITING...','red')
-        exit()
-    return answer
-
-
-def pause(prompt='Press Enter To Continue ...'):
-    '''
-    Disable terminal echo and wait for 'Enter' button
-    '''
-    print(prompt)#,end='')
-    getpass.getpass('')
 
 
 def get_files(prompt='Enter File Name:  ', check_if_exists=True, sort= False, times=100):
@@ -44,7 +30,7 @@ def get_files(prompt='Enter File Name:  ', check_if_exists=True, sort= False, ti
     List = set()
     i = 1
     while i <= times:
-        filename = wait_for_input(prompt)
+        filename = rx.io.wait_for_input(prompt)
         if filename == 'end':
             break
         pass
@@ -60,15 +46,3 @@ def get_files(prompt='Enter File Name:  ', check_if_exists=True, sort= False, ti
     if sort:
         return sorted(list(List))
     return list(List)
-
-
-def cls():
-    '''
-    You can use this function if you want to clear the environment.
-    '''
-    import platform
-    if platform.system() == "Windows":
-        os.system('cls')
-    else:
-        os.system('clear')
-clear = cls

@@ -1,14 +1,9 @@
 import hashlib
 import os
 
-try:
-    import rx7 as rx
-    import xxhash
-    import pymmh3
-except ModuleNotFoundError:
-    rx.style.print('Module Not Found Error','red',style='bold')
-    print('Install the requirements modules first: ')
-    print('rx7\nxxhash\npymmh3')
+import rx7 as rx
+import xxhash
+import mmh3
 
 from LIB.Cipher import CIPHERS_LIST,CIPHERS_DICT
 from LIB.Functions import pause
@@ -28,21 +23,21 @@ PC_LOGO='''
 COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
          'Red':['red','red_1'],        'Green':['green','green_3a'],
          'Classic':['grey_46','default']}
-COLORS_NESBAT= ['Yellow', 'Yellow', 'Blue', 'Red','Red', 'Classic','Classic']
 
 
 def ce(msg='Wrong Command',color='default'):
     if msg:
-     rx.style.print(msg,color)
-    import os
-    os.system('pause')     
-    #getpass.getpass('Press Enter to Continue')
+      rx.style.print(msg,color)
+    print()  
+    rx.io.getpass('Press Enter to Continue')
     #rx.cls()
-    #MAIN()
  
+
+
+
 def MAIN():
     rx.cls()
-    COLOR= COLORS[rx.random.choose(COLORS_NESBAT)] #list(COLORS.keys())
+    COLOR= rx.random.choose(list(COLORS.values()))
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Actions
@@ -64,34 +59,10 @@ def MAIN():
       {12}--CONTRIBUTORS    
     '''
 
-    MAIN_INP= input(' DramaX> ')
-    if   MAIN_INP== '1':
+    MAIN_INP = rx.io.selective_input(' DramaX> ',["1","2","3","4","99"])
+    if  MAIN_INP=='1':
         #rx.cls()
-        HASH_EX=False
-        while not HASH_EX:
-            rx.cls()
-            print('''
-             dMP dMP .aMMMb  .dMMMb  dMP dMP 
-            dMP dMP dMP"dMP dMP" VP dMP dMP  
-           dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
-          dMP dMP dMP dMP dP .dMP dMP dMP    
-         dMP dMP dMP dMP  VMMMP" dMP dMP         
-
-           {1}--Hash Decrypter
-           {2}--File Hash Decrypter
-           {3}--Hash Generator
-           {3}--Hash Dictionary Creator
-           ''')
-
-            hinp= input('HASH>  ')
-            if   hinp == '99':
-                HASH_EX=True
-            elif hinp == '1':
-                os.system('python ".\\HashDecrypter.py"')
-            elif hinp == '2':
-                os.system('python ".\\HashDecrypterFile.py"')
-            elif hinp == '3':
-                os.system('python ".\\HashGenerator.py"')
+        Hash_Actions()
 
     elif MAIN_INP=='2':
         os.system('python ".\\DictionaryCreator.py"')
@@ -112,6 +83,37 @@ def MAIN():
         exit()
     else:
         MAIN()
+
+
+def Hash_Actions():
+    HASH_EX=False
+    while not HASH_EX:
+        rx.cls()
+        print('''
+         dMP dMP .aMMMb  .dMMMb  dMP dMP 
+        dMP dMP dMP"dMP dMP" VP dMP dMP  
+       dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
+      dMP dMP dMP dMP dP .dMP dMP dMP    
+     dMP dMP dMP dMP  VMMMP" dMP dMP         
+
+       {1}--Hash Decrypter
+       {2}--File Hash Decrypter
+       {3}--Hash Generator
+       {3}--Hash Dictionary Creator
+       ''')
+
+        hinp= rx.io.selective_input('HASH>  ',["1","2","3","99"])
+        if   hinp == '99':
+            HASH_EX=True
+        elif hinp == '1':
+            import HashDecrypter
+        elif hinp == '2':
+            os.system('python ".\\HashDecrypterFile.py"')
+        elif hinp == '3':
+            os.system('python ".\\HashGenerator.py"')
+
+
+
 
 
 def CIPHERS():
