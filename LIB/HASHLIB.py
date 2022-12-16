@@ -22,7 +22,7 @@ sa={'md5':hashlib.md5,
     'sha3_384': hashlib.sha3_384,
     'sha3_512': hashlib.sha3_512,
 
-    'GUESS': None}
+    None: None}
 
 
 def list_lines(filename):
@@ -34,49 +34,56 @@ def list_lines(filename):
     return list_of_words
 
 
+
+
 def decrypt(hash : str,
             type_: str,
-            Files_or_Generator: Union[Iterable, Callable],
+            files:Iterable = None,
+            generator:Callable = None,
             quiet:bool = False
             ):
     
+    if not (files or generator):
+        raise ValueError("Either 'files' or 'generator' parameter should be passed to function")
+    elif files:
+        method = Iterable
+    else:
+        method = Generator
+
     print_status = not quiet
     enc_func = sa[type_]
-
-    method = Iterable
-    if callable(Files_or_Generator):
-        method = Generator
     
 
     if method == Iterable:
-        for File in Files_or_Generator:
+        for File in files:
             i = 0
             lst = list_lines(File)
             ln = len(lst)
+            basename = os.path.basename(File)
             for Word in lst:
                 if print_status:
                     i += 1
                     if i % 100 == 0:
                         sys.stdout.write(
-                            f'\rWorking on words of "{os.path.basename(File)}" :  {i}/{ln}'
+                            f'\rWorking on words of "{basename}" :  {i}/{ln}'
                         )
                 result = enc_func(bytes(Word, 'utf-8')).hexdigest()
                 if result == hash:
                     if print_status:
                         sys.stdout.write(
-                            f'\rWorking on words of "{os.path.basename(File)}" :  {i}/{ln}'
+                            f'\rWorking on words of "{basename}" :  {rx.style(i,"green")}/{ln}'
                         )
                         print()
                     return Word
             if print_status:
                 sys.stdout.write(
-                    f'\rWorking on words of "{os.path.basename(File)}" :  {i}/{ln}'
+                    f'\rWorking on words of "{basename}" :  {i}/{ln}'
                 )
-                rx.style.print(f'\n[*] Not Found in "{os.path.basename(File)}"\n',
+                rx.style.print(f'\n[*] Not Found in "{basename}"\n',
                             'blue')
 
     elif method == Generator:
-        for Word in Files_or_Generator():
+        for Word in generator():
             result = enc_func(bytes(Word, 'utf-8')).hexdigest()
             if result == hash:
                 return Word

@@ -1,9 +1,12 @@
 import argparse
 import hashlib
 import sys
+import os
 
 import rx7 as rx
 
+
+sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 from LIB.Functions import get_files,pause
 
 
@@ -30,35 +33,37 @@ def parse_args():
 
 
 
-
 from LIB import HASHLIB
 
-if __name__ == "__main__":
-    print("No ArgeParse Parser Created","red")
+
+if len(sys.argv) > 1:
+    print("No ArgeParse Parser Has Been Created Yet","red")
     exit()
     Hash,Type,Files,Quiet = parse_args()
-else:
-    Hash = rx.io.wait_for_input("Enter Hashed String:  ")
-    print()
+    rx.cls()
+    print(banner,'gold_3b')
 
-    print("Enter Hash Type from list below")
+else:
+    rx.cls()
+    print(banner,'gold_3b')
+    Hash = rx.io.wait_for_input("Enter Hashed String:  ")
+    # print()
+    print("Enter Hash Type from list below:")
     options = {}
     i = 1
     for hash in HASHLIB.sa.keys():
         options[str(i)] = hash
-        print(f"    {i}) {hash}")
-        i += 1        
+        print(f"    {i}) {hash}",end="")
+        i += 1
+    print()
     Type = rx.io.selective_input("Enter Hash Type: ",options)
-    
     print("Enter your Dictionary files path below.")
-    print('  (enter "end" to finish)\n')
+    print('  (enter "end" to finish)')
     Files = get_files()
     Quiet = False
 
 
 
-rx.cls()
-print(banner,'gold_3b')
 print()
 print(f'Hash: ', end='') ; print(Hash,'green')
 print(f'Type: ', end='') ; print(Type,'green')
@@ -67,13 +72,13 @@ print(f'[*] Operation started at:  "{rx.DateTime.now()}"', 'dodger_blue_1')
 print()
 
 T= rx.record()
-DECRYPTED= HASHLIB.decrypt(Hash,Type, Files, Quiet)
+DECRYPTED= HASHLIB.decrypt(Hash,Type, files=Files, quiet=Quiet)
 if DECRYPTED:
     print('[+] Found','green')
     print('Decrypted String is:  ', end='')
     print(DECRYPTED, 'green')
     #print(DECRYPTED[1])
-    print(f'[*] Operation Finnished Successfully in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', 'dodger_blue_1')
+    print(f'\n[*] Operation Finnished Successfully in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', 'dodger_blue_1')
 else:
     print(f'[-] Could not find any words from given list that matches to "{Hash}"','red')
 print()

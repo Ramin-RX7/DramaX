@@ -2,13 +2,16 @@ import hashlib
 import os
 
 import rx7 as rx
-import xxhash
-import mmh3
+
 
 from LIB.Cipher import CIPHERS_LIST,CIPHERS_DICT
 from LIB.Functions import pause
 
+
+
 print = rx.style.print
+
+
 
 PC_LOGO='''
         8888888b.                                         Y88b   d88P
@@ -41,13 +44,13 @@ def MAIN():
     rx.style.print(PC_LOGO,COLOR[0])
     rx.style.print('''
        {1}--Hash Actions
-       {2}--Create Dictionary
-       {3}--Ciphers
-       {6}--Web Hacking (Comming Soon)
 
       {99}--EXIT\n''',COLOR[1])
     
     '''
+       {2}--Create Dictionary
+       {3}--Ciphers
+       {6}--Web Hacking (Comming Soon)
        {3}--Password Attacks
        {4}--Wireless Testing
        {5}--Exploitation Tools
@@ -66,7 +69,7 @@ def MAIN():
 
     elif MAIN_INP=='2':
         os.system('python ".\\DictionaryCreator.py"')
-    
+
     elif MAIN_INP=='3':
         CIPHER_EX=False
         while not CIPHER_EX:
@@ -77,7 +80,6 @@ def MAIN():
         print('Under Maintaince...')
         print('Comming Soon...')
         ce('')
-        #os.system('python ".\\Web-Attack\\WPHF.py"')
 
     elif MAIN_INP in ('99','x'):
         exit()
@@ -86,8 +88,8 @@ def MAIN():
 
 
 def Hash_Actions():
-    HASH_EX=False
-    while not HASH_EX:
+    HASH_EXIT=False
+    while not HASH_EXIT:
         rx.cls()
         print('''
          dMP dMP .aMMMb  .dMMMb  dMP dMP 
@@ -104,9 +106,9 @@ def Hash_Actions():
 
         hinp= rx.io.selective_input('HASH>  ',["1","2","3","99"])
         if   hinp == '99':
-            HASH_EX=True
+            HASH_EXIT=True
         elif hinp == '1':
-            import HashDecrypter
+            rx.terminal.run('python "./HashDecrypter.py"')
         elif hinp == '2':
             os.system('python ".\\HashDecrypterFile.py"')
         elif hinp == '3':
@@ -149,7 +151,8 @@ def CIPHERS():
         pause()
     else:
         CIPHERS()
- 
+
+
 
 while True:
     MAIN()

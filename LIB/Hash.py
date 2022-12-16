@@ -7,7 +7,7 @@ import rx7 as rx
 
 from .Functions import list_lines
 
-import xxhash
+# import xxhash
 from .NEW_HASHES import pymmh3   # Because of some errors in installing pymmh3
 from .NEW_HASHES import siphash  # and siphash from pip, I copy them in ./encryptions/
 
@@ -133,6 +133,103 @@ def get_hash_func(Type: str) -> Tuple[Function, Function]:
     else:
         raise ValidationError('Invalid Hash Type')
     return enc, enc2
+
+
+
+class Encrypt:
+    #convert = True
+    
+    #< SCRYPT & SIPHASH & md5 >#
+    @staticmethod
+    def scrypt(password, salt, n, r, p, maxmem=0, dklen=64):
+        return hashlib.scrypt(
+            bytes(password),
+            salt=bytes(salt),
+            n=n, r=r, p=p,
+            maxmem=maxmem,
+            dklen=dklen).hex()
+    @staticmethod
+    def sipHash_2_4(password):
+        return siphash.SipHash_2_4(bytes(password)).hexdigest()
+    @staticmethod
+    def md5(password):
+        return hashlib.md5(password).hexdigest()
+
+    #< BLAKE >#
+    @staticmethod
+    def blake2b(password, **kwargs):
+        '''
+        password: bytes,
+        digest_size: int,
+        key: ,
+        salt: bytes,
+        person: ,
+        fanout: int,
+        depth: int,
+        leaf_size: int,
+        node_offset: int,
+        node_depth: int,
+        inner_size: int,
+        last_node: bool
+        '''
+        return hashlib.blake2b(password, **kwargs,).hexdigest()
+    @staticmethod
+    def blake2s(password, **kwargs):
+        '''
+        password: bytes,
+        digest_size: int,
+        key: ,
+        salt: bytes,
+        person: ,
+        fanout: int,
+        depth: int,
+        leaf_size: int,
+        node_offset: int,
+        node_depth: int,
+        inner_size: int,
+        last_node: bool
+        '''
+        return hashlib.blake2s(password, **kwargs,).hexdigest()
+
+    #< XHH3 >#
+    @staticmethod
+    def xxh3_128(password):
+        return xxhash.xxh3_128(password).hexdigest()
+    @staticmethod
+    def xxh3_64(password):
+        return xxhash.xxh3_64(password).hexdigest()
+    @staticmethod
+    def xxh2_32(password):
+        return xxhash.xxh32(password).hexdigest()
+    @staticmethod
+    def xxh2_64(password):
+        return xxhash.xxh64(password).hexdigest()
+
+    #< mmh3 >#
+    @staticmethod
+    def pymmh3_32(password):
+        return pymmh3.hash(password)
+    @staticmethod
+    def pymmh3_64(password):
+        return pymmh3.hash64(password)
+    @staticmethod
+    def pymmh3_128(password):
+        return pymmh3.hash128(password)
+
+    #< Sha2 >#
+
+
+    #< Sha3 >#
+
+
+
+
+
+
+
+
+
+
 
 def Hash_Decrypt(Hash: str,
                  Files_or_Generator: Union[Iterable, Callable],
@@ -260,93 +357,3 @@ def hash_decrypt_file(file_of_hashes, Files_or_Generator) -> Generator:
     if not len(FOUND):
         rx.style.print('We Could Not Find Any Words From Files','red')
         yield None
-
-
-class Encrypt:
-    #convert = True
-    
-    #< SCRYPT & SIPHASH & md5 >#
-    @staticmethod
-    def scrypt(password, salt, n, r, p, maxmem=0, dklen=64):
-        return hashlib.scrypt(
-            bytes(password),
-            salt=bytes(salt),
-            n=n, r=r, p=p,
-            maxmem=maxmem,
-            dklen=dklen).hex()
-    @staticmethod
-    def sipHash_2_4(password):
-        return siphash.SipHash_2_4(bytes(password)).hexdigest()
-    @staticmethod
-    def md5(password):
-        return hashlib.md5(password).hexdigest()
-
-    #< BLAKE >#
-    @staticmethod
-    def blake2b(password, **kwargs):
-        '''
-        password: bytes,
-        digest_size: int,
-        key: ,
-        salt: bytes,
-        person: ,
-        fanout: int,
-        depth: int,
-        leaf_size: int,
-        node_offset: int,
-        node_depth: int,
-        inner_size: int,
-        last_node: bool
-        '''
-        return hashlib.blake2b(password, **kwargs,).hexdigest()
-    @staticmethod
-    def blake2s(password, **kwargs):
-        '''
-        password: bytes,
-        digest_size: int,
-        key: ,
-        salt: bytes,
-        person: ,
-        fanout: int,
-        depth: int,
-        leaf_size: int,
-        node_offset: int,
-        node_depth: int,
-        inner_size: int,
-        last_node: bool
-        '''
-        return hashlib.blake2s(password, **kwargs,).hexdigest()
-
-    #< XHH3 >#
-    @staticmethod
-    def xxh3_128(password):
-        return xxhash.xxh3_128(password).hexdigest()
-    @staticmethod
-    def xxh3_64(password):
-        return xxhash.xxh3_64(password).hexdigest()
-    @staticmethod
-    def xxh2_32(password):
-        return xxhash.xxh32(password).hexdigest()
-    @staticmethod
-    def xxh2_64(password):
-        return xxhash.xxh64(password).hexdigest()
-
-    #< mmh3 >#
-    @staticmethod
-    def pymmh3_32(password):
-        return pymmh3.hash(password)
-    @staticmethod
-    def pymmh3_64(password):
-        return pymmh3.hash64(password)
-    @staticmethod
-    def pymmh3_128(password):
-        return pymmh3.hash128(password)
-
-    #< Sha2 >#
-
-
-    #< Sha3 >#
-
-
-
-

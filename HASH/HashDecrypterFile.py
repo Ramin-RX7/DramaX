@@ -21,20 +21,14 @@ if __name__ == "__main__":
       8I  dY 88""   Yb      88"Yb     l8l    88"""    88   88""   88"Yb 
      8888Y"  888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
      ''','gold_3b')
-    print('UNDER MAINTAINCE...')
+    print('This will run after implementation of "HashDecrypter.py" argument parser')
     exit()
-
     filename= wait_for_input('Enter Hashed File Name:  ')
     print('Enter word list files path below. Type "end" to finnish adding files')
-    files= get_files()
+    hashed_file= get_files(times=1)
 
     hashes= list_lines(filename)
-    print(len(hashes[1]))
-    Type= Recognize_Hash(hashes[1])
-    print(Type)
-    print('')
 
-    for encrypted in hash_decrypt_file(filename,files):
-        if encrypted:
-            print('[+] Found')
-            rx.style.print(str(encrypted[0]) + ' :  ' + str(encrypted[1]), 'green', end='\n\n')
+    for hash in hashes:
+        pass
+        #HashDecrypter.py argparser

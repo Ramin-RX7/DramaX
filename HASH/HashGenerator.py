@@ -2,11 +2,14 @@ import hashlib
 import sys
 import getpass
 import argparse
+import os
 
 import rx7 as rx
 
-from LIB.Functions import pause, cls
-from LIB.Hash import sa
+sys.path.append(os.path.split(os.path.dirname(__file__))[0])
+from LIB.Functions import pause
+from LIB.HASHLIB import sa
+
 
 
 def print_hashes(word, file=None, Print=True):
@@ -67,7 +70,7 @@ if __name__ == "__main__":
         quiet = args.quiet
 
 
-        cls()
+        rx.cls()
         rx.style.print(BANNER, 'gold_3b')
 
         print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{word}{rx.attr(0)}:"''')
@@ -77,7 +80,7 @@ if __name__ == "__main__":
 
     else:
         while True:
-            cls()
+            rx.cls()
             rx.style.print(BANNER, 'gold_3b')
             print('Use:  "HASH||FILE"  to save output to FILE \n')
             inp= input('Enter String to Create Hashes:  ')
@@ -86,9 +89,9 @@ if __name__ == "__main__":
             elif inp:
                 if '||' in inp:
                     inp = inp.split('||')
-                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp[0]}{rx.attr(0)}":''')
+                    print(f'''Here is list of hashes for "{rx.style(inp[0],'dodger_blue_1')}":''')
                     print_hashes(inp[0],inp[1])
                 else:
-                    print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{inp}{rx.attr(0)}":''')
+                    print(f'''Here is list of hashes for "{rx.style(inp,'dodger_blue_1')}":''')
                     print_hashes(inp)
                 pause()
