@@ -8,7 +8,8 @@ import rx7 as rx
 print = rx.style.print
 
 
-sa={'md5':hashlib.md5,
+HASHES_DICT = {
+    'md5':hashlib.md5,
     
     'sha1':hashlib.sha1,
 
@@ -22,7 +23,9 @@ sa={'md5':hashlib.md5,
     'sha3_384': hashlib.sha3_384,
     'sha3_512': hashlib.sha3_512,
 
-    None: None}
+    "auto": None
+}
+
 
 
 def list_lines(filename):
@@ -51,7 +54,7 @@ def decrypt(hash : str,
         method = Generator
 
     print_status = not quiet
-    enc_func = sa[type_]
+    enc_func = HASHES_DICT[type_]
     
 
     if method == Iterable:

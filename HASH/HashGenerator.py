@@ -8,7 +8,7 @@ import rx7 as rx
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 from LIB.Functions import pause
-from LIB.HASHLIB import sa
+from LIB.HASHLIB import HASHES_DICT
 
 
 
@@ -16,7 +16,7 @@ def print_hashes(word, file=None, Print=True):
     word=bytes(word, encoding='utf-8')
 
     LIST = []
-    for name,func in sa.items():
+    for name,func in HASHES_DICT.items():
         try:
             result = func(word).hexdigest()
             LIST.append(result)

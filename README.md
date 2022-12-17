@@ -1,4 +1,3 @@
 # DramaX
  Password Cracing Tools in Python
- 
- Hacking Tools Soon...
+> ### I am currently rebuilding Passafe from scratch. There might be some issues while working with repository
