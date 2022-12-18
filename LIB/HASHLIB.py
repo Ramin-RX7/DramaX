@@ -54,7 +54,16 @@ def decrypt(hash : str,
         method = Generator
 
     print_status = not quiet
+
+    if type_ not in HASHES_DICT.keys():
+        raise ValueError("Could not find given hash type in the list.")
     enc_func = HASHES_DICT[type_]
+    if not enc_func:
+        print("Auto hash detection is not implemented yet",color="red")
+        print('You can use "DramaX::Hash::Detect Hash Type" to see possible result')
+        return None
+
+
     
 
     if method == Iterable:

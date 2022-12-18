@@ -5,11 +5,11 @@ from typing import Union, Tuple, Callable, Generator, Iterable
 
 import rx7 as rx
 
-from .Functions import list_lines
+from ..Functions import list_lines
 
-# import xxhash
-from .NEW_HASHES import pymmh3   # Because of some errors in installing pymmh3
-from .NEW_HASHES import siphash  # and siphash from pip, I copy them in ./encryptions/
+import xxhash
+from . import pymmh3   # Because of some errors in installing pymmh3
+from . import siphash  # and siphash from pip, I copy them in ./encryptions/
 
 
 HashType = str
@@ -20,6 +20,26 @@ sa={'md5':hashlib.md5, 'sha1':hashlib.sha1, 'sha224':hashlib.sha224,'sha256':has
     'sha384':hashlib.sha384,'sha512':hashlib.sha512,'sha3_224':hashlib.sha3_224,
     'sha3_256':hashlib.sha3_256, 'sha3_384':hashlib.sha3_384,'sha3_512':hashlib.sha3_512,
     'all':'all'}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def hash_dict_creator(input_list: Iterable, output_file_name: str,
                       encryption_type: str) -> None:
@@ -75,64 +95,11 @@ def hash_dict_creator_all(input_list: Iterable, output_file_name: str) -> None:
         rx.write(output_file_name + '_sha3-512.'+ext,
                  str(hashlib.sha3_512(word).hexdigest()) + '\n', 'continue')
 
-def Recognize_Hash(HASH:str) -> Union[HashType, None]:
-    lngth= len(HASH)
-    if lngth in (40, 56, 64, 96, 128, 32):
-        if lngth == 32:
-            Type = '1'
-        if lngth == 40:
-            Type = '2'
-        if lngth == 56:
-            Type = '3'
-        if lngth == 64:
-            Type = '4'
-        if lngth == 96:
-            Type = '5'
-        if lngth == 128:
-            Type = '6'
-        return str(dichash[Type])
-    else:
-        return None
 
-class ValidationError(Exception):
-    def __init__(self, message):
-        super().__init__(message)
 
-nothing = hashlib.md5(b'')
-do_nothing = lambda x: nothing
 
-def get_hash_func(Type: str) -> Tuple[Function, Function]:
-    '''
-    Return hashlib function of specifiec Types
-    e.g: 
-    >>> get_hash_func('sha224')
-    (hashlib.sha224, hashlib.sha3_224)
-    '''
-    # the reason I Did This is if the hash is sha type, we need 2
-    # encryption types (sha2 & sha3) but md5 need one (only md5)
-    # so I use 'do_nothing' for second md5 function to decrease
-    # number of codes and don't repeat the same code for md5 and sha
-    if Type == 'md5':
-        enc = hashlib.md5
-        enc2 = do_nothing  
-    elif Type == 'sha1':
-        enc = hashlib.sha1
-        enc2 = do_nothing  
-    elif Type == 'sha224':
-        enc = hashlib.sha224
-        enc2 = hashlib.sha3_224
-    elif Type == 'sha256':
-        enc = hashlib.sha256
-        enc2 = hashlib.sha3_256
-    elif Type == 'sha384':
-        enc = hashlib.sha384
-        enc2 = hashlib.sha3_384
-    elif Type == 'sha512':
-        enc = hashlib.sha512
-        enc2 = hashlib.sha3_512
-    else:
-        raise ValidationError('Invalid Hash Type')
-    return enc, enc2
+
+
 
 
 
@@ -220,6 +187,139 @@ class Encrypt:
 
 
     #< Sha3 >#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def Recognize_Hash(HASH:str) -> Union[HashType, None]:
+    lngth= len(HASH)
+    if lngth in (40, 56, 64, 96, 128, 32):
+        if lngth == 32:
+            Type = '1'
+        if lngth == 40:
+            Type = '2'
+        if lngth == 56:
+            Type = '3'
+        if lngth == 64:
+            Type = '4'
+        if lngth == 96:
+            Type = '5'
+        if lngth == 128:
+            Type = '6'
+        return str(dichash[Type])
+    else:
+        return None
+
+class ValidationError(Exception):
+    def __init__(self, message):
+        super().__init__(message)
+
+nothing = hashlib.md5(b'')
+do_nothing = lambda x: nothing
+
+def get_hash_func(Type: str) -> Tuple[Function, Function]:
+    '''
+    Return hashlib function of specifiec Types
+    e.g: 
+    >>> get_hash_func('sha224')
+    (hashlib.sha224, hashlib.sha3_224)
+    '''
+    # the reason I Did This is if the hash is sha type, we need 2
+    # encryption types (sha2 & sha3) but md5 need one (only md5)
+    # so I use 'do_nothing' for second md5 function to decrease
+    # number of codes and don't repeat the same code for md5 and sha
+    if Type == 'md5':
+        enc = hashlib.md5
+        enc2 = do_nothing  
+    elif Type == 'sha1':
+        enc = hashlib.sha1
+        enc2 = do_nothing  
+    elif Type == 'sha224':
+        enc = hashlib.sha224
+        enc2 = hashlib.sha3_224
+    elif Type == 'sha256':
+        enc = hashlib.sha256
+        enc2 = hashlib.sha3_256
+    elif Type == 'sha384':
+        enc = hashlib.sha384
+        enc2 = hashlib.sha3_384
+    elif Type == 'sha512':
+        enc = hashlib.sha512
+        enc2 = hashlib.sha3_512
+    else:
+        raise ValidationError('Invalid Hash Type')
+    return enc, enc2
+
+
+
+
+
+
+
+
 
 
 

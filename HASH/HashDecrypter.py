@@ -7,7 +7,7 @@ import rx7 as rx
 
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
-from LIB.Functions import get_files,pause
+from LIB.Functions import get_files,pause,print_banner
 from LIB.TAP import Tap
 from LIB import HASHLIB
 
@@ -35,10 +35,11 @@ banner= '''
 
 
 
+rx.cls()
+print_banner(banner)
+
 
 if len(sys.argv) > 1:
-    rx.cls()
-    print(banner,color='gold_3b')
     class SimpleArgumentParser(Tap):
         hash: str              # Hashed Text
         type: str = 'auto'     # Hash Type (see all hash types in LIB/HASHLIB.py::HASHES_DICT)
@@ -49,19 +50,14 @@ if len(sys.argv) > 1:
     Hash,Type,Files,Quiet = (Args.hash,Args.type,Args.files,Args.quiet)
     # rx.cls()
     # print(banner,color='gold_3b')
-
 else:
-    rx.cls()
-    print(banner,color='gold_3b')
     Hash = rx.io.wait_for_input("Enter Hashed String:  ")
     # print()
     print("Enter Hash Type from list below:")
     options = {}
-    i = 1
-    for hash in HASHLIB.HASHES_DICT.keys():
+    for i,hash in enumerate(list(HASHLIB.HASHES_DICT.keys()),1):
         options[str(i)] = hash
         print(f"    {i}) {hash}",end="")
-        i += 1
     print()
     Type = rx.io.selective_input("Enter Hash Type: ",options)
     print("Enter your Dictionary files path below.")
@@ -71,6 +67,9 @@ else:
 
 
 
+rx.cls()
+print_banner(banner)
+# print(banner,color='gold_3b')
 print()
 print(f'Hash: ', end='') ; print(Hash,color='green')
 print(f'Type: ', end='') ; print(Type,color='green')
@@ -89,4 +88,4 @@ if DECRYPTED:
 else:
     print(f'[-] Could not find any words from given list that matches to "{Hash}"',color='red')
 print()
-pause()
+# pause()

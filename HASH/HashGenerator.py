@@ -79,13 +79,13 @@ if __name__ == "__main__":
 
 
     else:
-        while True:
+        # while True:
             rx.cls()
             rx.style.print(BANNER, 'gold_3b')
             print('Use:  "HASH||FILE"  to save output to FILE \n')
             inp= input('Enter String to Create Hashes:  ')
             if inp=='exit':
-                break
+                exit()#break
             elif inp:
                 if '||' in inp:
                     inp = inp.split('||')
@@ -94,4 +94,4 @@ if __name__ == "__main__":
                 else:
                     print(f'''Here is list of hashes for "{rx.style(inp,'dodger_blue_1')}":''')
                     print_hashes(inp)
-                pause()
+                # pause()

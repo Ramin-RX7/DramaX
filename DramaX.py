@@ -5,7 +5,7 @@ import rx7 as rx
 
 
 from LIB.Cipher import CIPHERS_LIST,CIPHERS_DICT
-from LIB.Functions import pause
+from LIB.Functions import pause,print_banner
 
 
 
@@ -13,7 +13,7 @@ print = rx.style.print
 
 
 
-PC_LOGO='''
+DRAMAX_LOGO='''
         8888888b.                                         Y88b   d88P
         888  "Y88b                                         Y88b d88P 
         888    888                                          Y88o88P  
@@ -30,7 +30,7 @@ COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
 
 def ce(msg='Wrong Command',color='default'):
     if msg:
-      rx.style.print(msg,color)
+        print(msg,color=color)
     print()  
     rx.io.getpass('Press Enter to Continue')
     #rx.cls()
@@ -40,12 +40,11 @@ def ce(msg='Wrong Command',color='default'):
 
 def MAIN():
     rx.cls()
-    COLOR= rx.random.choose(list(COLORS.values()))
-    rx.style.print(PC_LOGO,COLOR[0])
-    rx.style.print('''
+    COLOR= print_banner(DRAMAX_LOGO)
+    print('''
        {1}--Hash Actions
 
-      {99}--EXIT\n''',COLOR[1])
+       {0}--EXIT\n''',color=COLOR[1])
     
     '''
        {2}--Create Dictionary
@@ -62,7 +61,7 @@ def MAIN():
       {12}--CONTRIBUTORS    
     '''
 
-    MAIN_INP = rx.io.selective_input(' DramaX> ',["1","2","3","4","99"])
+    MAIN_INP = rx.io.selective_input(' DramaX> ',["1","2","3","4","0","exit"])
     if  MAIN_INP=='1':
         #rx.cls()
         Hash_Actions()
@@ -81,39 +80,62 @@ def MAIN():
         print('Comming Soon...')
         ce('')
 
-    elif MAIN_INP in ('99','x'):
+    elif MAIN_INP in ('0','99',"exit"):
         exit()
     else:
         MAIN()
+
+
+
+
+class Banners:
+    HASH = """
+         dMP dMP .aMMMb  .dMMMb  dMP dMP 
+        dMP dMP dMP"dMP dMP" VP dMP dMP  
+       dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
+      dMP dMP dMP dMP dP .dMP dMP dMP    
+     dMP dMP dMP dMP  VMMMP" dMP dMP     
+    """
+
+
+
+
 
 
 def Hash_Actions():
     HASH_EXIT=False
     while not HASH_EXIT:
         rx.cls()
+        COLORS = print_banner(Banners.HASH)
         print('''
-         dMP dMP .aMMMb  .dMMMb  dMP dMP 
-        dMP dMP dMP"dMP dMP" VP dMP dMP  
-       dMMMMMP dMMMMMP  VMMMb  dMMMMMP   
-      dMP dMP dMP dMP dP .dMP dMP dMP    
-     dMP dMP dMP dMP  VMMMP" dMP dMP         
 
        {1}--Hash Decrypter
-       {2}--File Hash Decrypter
-       {3}--Hash Generator
-       {3}--Hash Dictionary Creator
-       ''')
+       {2}--Hash Generator
+       {3}!--Hash Type Identifier
+       {4}!--Hash Dictionary Creator
 
-        hinp= rx.io.selective_input('HASH>  ',["1","2","3","99"])
-        if   hinp == '99':
+       {A}--Supported Hashes
+       ''', color=COLORS[1])
+
+        hinp= rx.io.selective_input('HASH>  ',["1","2","3","A","99","0"],ignore_case=True)
+        if   hinp in ('99','0',"exit"):
             HASH_EXIT=True
         elif hinp == '1':
-            rx.terminal.run('python "./HashDecrypter.py"')
+            rx.terminal.run('python "./HASH/HashDecrypter.py"')
         elif hinp == '2':
             os.system('python ".\\HashDecrypterFile.py"')
         elif hinp == '3':
-            os.system('python ".\\HashGenerator.py"')
+            os.system('python "./HASH/HashGenerator.py"')
 
+        elif hinp.upper() == "A":
+            print("\nList of supported hashes:")
+            from LIB.HASHLIB import HASHES_DICT
+            for i,hash in enumerate(list(HASHES_DICT.keys()),1):
+                n = str(i)
+                print(f"    {n if len(n)>1 else '0'+n}) {hash}",end="\n")
+            print()
+        
+        pause()
 
 
 
@@ -128,7 +150,7 @@ def CIPHERS():
      ╚██████╗ ██║ ██║      ██║  ██║ ███████╗ ██║  ██║ ███████║
       ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
      ''')
-    print('UNDER MAINTAINCE...','red')
+    print('UNDER MAINTAINCE...',color='red')
     pause()
     return True
     cipher_options = ""

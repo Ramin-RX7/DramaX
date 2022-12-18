@@ -46,3 +46,14 @@ def get_files(prompt='Enter File Name:  ', check_if_exists=True, sort= False, ti
     if sort:
         return sorted(list(List))
     return list(List)
+
+
+def print_banner(banner:str,colors='auto'):
+    if colors == 'auto':
+        colors = {'Yellow' :['yellow','gold_1'],  'Blue' :['blue','dodger_blue_2'],
+                  'Red'    :['red','red_1'    ],  'Green':['green','green_3a'],
+                  'Classic':['grey_46','default']}
+
+    chosen_color_group = rx.random.choose(list(colors.values()))
+    print(banner,color=chosen_color_group[0])
+    return chosen_color_group

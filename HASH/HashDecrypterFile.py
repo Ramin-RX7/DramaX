@@ -1,6 +1,10 @@
+import sys
+import os
+
 import rx7 as rx
-from LIB.Functions import wait_for_input, get_files, list_lines
-from LIB.Hash import hash_decrypt_file, Recognize_Hash
+
+sys.path.append(os.path.split(os.path.dirname(__file__))[0])
+from LIB.Functions import  get_files, list_lines
 
 
 
@@ -8,6 +12,9 @@ from LIB.Hash import hash_decrypt_file, Recognize_Hash
 
 
 if __name__ == "__main__":
+    print("THIS FILE IS NOT CONSIDERED AS ANY PART OF THIS PROJECT IN THE REMAKE")
+    print("IT WILL BE REMOVED FROM THE REPOSITORY IN THE UPCOMING UPDATES")
+    exit()
     TIME= rx.record()
     rx.cls()
     rx.style.print('''
@@ -21,14 +28,11 @@ if __name__ == "__main__":
       8I  dY 88""   Yb      88"Yb     l8l    88"""    88   88""   88"Yb 
      8888Y"  888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
      ''','gold_3b')
-    print('This will run after implementation of "HashDecrypter.py" argument parser')
-    exit()
-    filename= wait_for_input('Enter Hashed File Name:  ')
+    
+    filename= get_files('Enter Hashed File Name:  ',times=1)
     print('Enter word list files path below. Type "end" to finnish adding files')
-    hashed_file= get_files(times=1)
-
-    hashes= list_lines(filename)
-
-    for hash in hashes:
-        pass
+    dict_files= get_files()
+    
+    for hash in list_lines(filename):
+        pass    
         #HashDecrypter.py argparser
