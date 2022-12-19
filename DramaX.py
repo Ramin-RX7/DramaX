@@ -96,6 +96,15 @@ class Banners:
       dMP dMP dMP dMP dP .dMP dMP dMP    
      dMP dMP dMP dMP  VMMMP" dMP dMP     
     """
+    CIPHERS = '''
+      ██████╗ ██╗ ██████╗  ██╗  ██╗ ███████╗ ██████╗  ███████╗
+     ██╔════╝ ██║ ██╔══██╗ ██║  ██║ ██╔════╝ ██╔══██╗ ██╔════╝
+     ██║      ██║ ██████╔╝ ███████║ █████╗   ██████╔╝ ███████╗
+     ██║      ██║ ██╔═══╝  ██╔══██║ ██╔══╝   ██╔══██╗ ╚════██║
+     ╚██████╗ ██║ ██║      ██║  ██║ ███████╗ ██║  ██║ ███████║
+      ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
+     '''
+
 
 
 
@@ -123,8 +132,6 @@ def Hash_Actions():
         elif hinp == '1':
             rx.terminal.run('python "./HASH/HashDecrypter.py"')
         elif hinp == '2':
-            os.system('python ".\\HashDecrypterFile.py"')
-        elif hinp == '3':
             os.system('python "./HASH/HashGenerator.py"')
 
         elif hinp.upper() == "A":
@@ -135,21 +142,15 @@ def Hash_Actions():
                 print(f"    {n if len(n)>1 else '0'+n}) {hash}",end="\n")
             print()
         
-        pause()
+        if not HASH_EXIT:
+            pause()
 
 
 
 
 def CIPHERS():
     rx.cls()
-    print('''
-      ██████╗ ██╗ ██████╗  ██╗  ██╗ ███████╗ ██████╗  ███████╗
-     ██╔════╝ ██║ ██╔══██╗ ██║  ██║ ██╔════╝ ██╔══██╗ ██╔════╝
-     ██║      ██║ ██████╔╝ ███████║ █████╗   ██████╔╝ ███████╗
-     ██║      ██║ ██╔═══╝  ██╔══██║ ██╔══╝   ██╔══██╗ ╚════██║
-     ╚██████╗ ██║ ██║      ██║  ██║ ███████╗ ██║  ██║ ███████║
-      ╚═════╝ ╚═╝ ╚═╝      ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝ ╚══════╝ 
-     ''')
+    COLORS = print_banner(Banners.HASH)
     print('UNDER MAINTAINCE...',color='red')
     pause()
     return True

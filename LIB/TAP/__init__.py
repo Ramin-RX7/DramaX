@@ -293,10 +293,13 @@ class Tap(ArgumentParser):
             name_or_flags = tuple(name_or_flag.replace('_', '-') if name_or_flag.startswith('-') else name_or_flag
                                   for name_or_flag in name_or_flags)
         
-        # rx.style.print(name_or_flags,'red')
-        if name_or_flags != ('-h', '--help'):
-            name_or_flags = rx.force(name_or_flags,  "-"+name_or_flags[0].replace("-","")[0])
-        # rx.style.print(name_or_flags,'red')
+        # rx.style.print(name_or_flags,color='red')
+            # check to not override --help          #check to assure it is not positional arg
+        if (name_or_flags != ('-h', '--help')) and (name_or_flags[0].startswith("-")):
+            # check if shorten version is not the same as the arg
+            if "-"+name_or_flags[0].replace("-","")[0]  != name_or_flags[0]:
+                name_or_flags = rx.force(name_or_flags,  "-"+name_or_flags[0].replace("-","")[0])
+        # rx.style.print(name_or_flags,color='red')
         """
         class newargparser(Tap):
             def __init__(self, *args, **kwargs):

@@ -62,7 +62,7 @@ else:
     Type = rx.io.selective_input("Enter Hash Type: ",options)
     print("Enter your Dictionary files path below.")
     print('  (enter "end" to finish)')
-    Files = get_files()
+    Files = get_files(empty_input_action='end')
     Quiet = False
 
 

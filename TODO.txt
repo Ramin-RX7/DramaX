@@ -1,0 +1,18 @@
+"""
+# TODO:
+ #< HASH >#
+    #> HashGenerator:  More Hashes
+    #> Save decrypted hashes in a file
+    ?> HashGenerator output-file shouldn't be plain text
+
+ #< LIB >#
+    #> Functions:
+        #> Func for y/n inputs
+
+
+
+
+
+# NOTE:
+ #> one space at the beginnig of lines?
+"""

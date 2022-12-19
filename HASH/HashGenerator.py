@@ -7,26 +7,13 @@ import os
 import rx7 as rx
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
-from LIB.Functions import pause
+from LIB.Functions import pause,print_banner
 from LIB.HASHLIB import HASHES_DICT
+from LIB.TAP import Tap
 
 
 
-def print_hashes(word, file=None, Print=True):
-    word=bytes(word, encoding='utf-8')
-
-    LIST = []
-    for name,func in HASHES_DICT.items():
-        try:
-            result = func(word).hexdigest()
-            LIST.append(result)
-            if Print:
-                print(f' {name.upper()}:{" "*(10-len(name))}{result}')
-        except TypeError:
-            pass
-
-    if file:
-        rx.write(str(file),'\n'.join(result))
+print = rx.style.print
 
 
 BANNER = '''
@@ -42,56 +29,51 @@ BANNER = '''
     '''
 
 
-if __name__ == "__main__":
-
-    if len(sys.argv) > 1:
-
-        parser = argparse.ArgumentParser(
-            'Hash Generator',
-            description='Generate Hash of a word in all hash types',
-            allow_abbrev=False,
-            )
-
-        parser.add_argument('HASH',
-                            help="Word which you want to get its hashes"
-                            )
-        parser.add_argument('-f','--output-file',
-                            metavar='FILE',
-                            help='The file to save hashes of HASH to it'
-                            )
-        parser.add_argument('-q','--quiet', action='store_false',
-                            help='Run app in quiet mode (Do not print the hashes)'
-                            )
-
-        args = parser.parse_args()
-        
-        hashed_file_name = args.output_file
-        word = args.HASH
-        quiet = args.quiet
 
 
+def print_hashes(word,file=None, Print=True):
+    word = bytes(word, encoding='utf-8')
+    LIST = []
+    for name,func in HASHES_DICT.items():
+        try:
+            result = func(word).hexdigest()
+            LIST.append(result)
+            if Print:
+                print(f' {name.upper()}:{" "*(10-len(name))}{result}')
+        except TypeError:
+            pass
+    if file:
+        rx.write(str(file),'\n'.join(LIST))
+    return LIST
+
+
+
+
+if len(sys.argv) > 1:
+    class SimpleArgumentParser(Tap):
+        text : str                 # string which you want to get its hashes
+        output_file:str = None     # The file to save hashes of "word" to it
+        quiet: bool     = False    # Run app in quiet mode (Do not print the hashes)
+        def configure(self) -> None:
+            self.add_argument('text')
+    Args = SimpleArgumentParser(epilog=str(rx.Style(
+                                            'Generate Hash of a word in all supported hash types',
+                                            style='underlined')),
+                                conflict_handler='resolve').parse_args()
+    Text,File,Quiet = (Args.text,Args.output_file,Args.quiet)
+
+    if not Quiet:
         rx.cls()
-        rx.style.print(BANNER, 'gold_3b')
-
-        print(f'''Here is list of hashes for "{rx.fg('dodger_blue_1')}{word}{rx.attr(0)}:"''')
-
-        print_hashes(word, hashed_file_name, quiet)
+        print_banner(BANNER)
+        print(f'''\nHere is list of hashes for "{rx._fg('dodger_blue_1')}{Text}{rx._attr(0)}:"''')
+        print_hashes(Text,File, not Quiet)
 
 
-    else:
-        # while True:
-            rx.cls()
-            rx.style.print(BANNER, 'gold_3b')
-            print('Use:  "HASH||FILE"  to save output to FILE \n')
-            inp= input('Enter String to Create Hashes:  ')
-            if inp=='exit':
-                exit()#break
-            elif inp:
-                if '||' in inp:
-                    inp = inp.split('||')
-                    print(f'''Here is list of hashes for "{rx.style(inp[0],'dodger_blue_1')}":''')
-                    print_hashes(inp[0],inp[1])
-                else:
-                    print(f'''Here is list of hashes for "{rx.style(inp,'dodger_blue_1')}":''')
-                    print_hashes(inp)
-                # pause()
+else:
+    rx.cls()
+    print_banner(BANNER)
+    inp= input('Enter String to Create Hashes:  ')
+    if inp=='exit':
+        exit()
+    elif inp:
+        print_hashes(inp)

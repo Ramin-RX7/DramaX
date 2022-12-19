@@ -20,19 +20,23 @@ def list_lines(filename):
     return list_of_words
 
 
-def get_files(prompt='Enter File Name:  ', check_if_exists=True, sort= False, times=100):
+def get_files(prompt='Enter File Name:  ', check_if_exists=True,
+              sort=False, times=100, empty_input_action="error"):
     '''
     Prompt repeated  'Enter File Name:'  input until user enter 'end'
     if check_if_exists is false it will add files even if they do not exist
     by default list of files are sorted by input order 
     but if sort=True they will be sorted by their name
+    empty_input_action: what to do if user gives an empty input
     '''
     List = set()
     i = 1
     while i <= times:
-        filename = rx.io.wait_for_input(prompt)
-        if filename == 'end':
-            break
+        filename = input(prompt)#rx.io.wait_for_input(prompt)
+        if filename in ('end',""):
+            if  (filename=="end") or (
+                (filename == "") and (empty_input_action=="end")):
+                    break
         pass
         if check_if_exists:
             if rx.files.exists(filename):
