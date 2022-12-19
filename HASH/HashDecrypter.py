@@ -1,5 +1,3 @@
-import argparse
-import hashlib
 import sys
 import os
 
@@ -7,11 +5,9 @@ import rx7 as rx
 
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
-from LIB.Functions import get_files,pause,print_banner
+from LIB.Functions import get_files,print_banner
 from LIB.TAP import Tap
-from LIB import HASHLIB
-
-
+import LIB.Hash as HASHLIB
 
 
 print= rx.style.print

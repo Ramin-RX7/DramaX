@@ -1,6 +1,10 @@
 """
 https://github.com/blackploit/hash-identifier
 """
+"""
+Changes:
+    [20/12/2022]  Added "break" in the last time so the code only executes one time.
+"""
 #!/usr/bin/env python
 # encoding: utf-8
 # Hash Identifier
@@ -593,3 +597,4 @@ while True:
     except KeyboardInterrupt:
         print("\n\n\tBye!")
         exit()
+    break

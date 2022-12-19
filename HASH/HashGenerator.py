@@ -8,7 +8,7 @@ import rx7 as rx
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 from LIB.Functions import pause,print_banner
-from LIB.HASHLIB import HASHES_DICT
+from LIB.Hash import HASHES_DICT
 from LIB.TAP import Tap
 
 

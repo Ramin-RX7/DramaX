@@ -1,14 +1,16 @@
 """
 # TODO:
  #< HASH >#
-    #> HashGenerator:  More Hashes
-    #> Save decrypted hashes in a file
-    ?> HashGenerator output-file shouldn't be plain text
+   #> HashGenerator:  More Hashes
+   #> Save decrypted hashes in a file
+   ?> HashGenerator output-file shouldn't be plain text
 
  #< LIB >#
-    #> Functions:
-        #> Func for y/n inputs
+   #> Functions:
+      #> Func for y/n inputs
 
+ #< MAIN >#
+   #? Change Name to "DrawmaX"
 
 
 

@@ -4,7 +4,7 @@ import argparse
 import rx7 as rx
 
 from LIB.Functions import  wait_for_input, list_lines, get_files, pause
-from LIB.Hash.Hash import  hash_dict_creator, hash_dict_creator_all, sa
+from LIB.Hash.Hash_Old import  hash_dict_creator, hash_dict_creator_all, sa
 
 
 if __name__ == "__main__":
