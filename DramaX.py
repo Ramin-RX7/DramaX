@@ -53,7 +53,7 @@ class Banners:
 
 def Hash_Actions():
     HASH_EXIT=False
-    while not HASH_EXIT:
+    while True:#not HASH_EXIT:
         rx.cls()
         COLORS = print_banner(Banners.HASH)
         print('''
@@ -62,16 +62,19 @@ def Hash_Actions():
        {2}--Hash Generator
        {3}--Hash Type Identifier (1)    (by psypanda)
        {4}--Hash Type Identifier (2)    (by blackploit)
+       {5}--Hash Type Identifier (3)    (by AnimeshShaw)
 
        {A}--Supported Hashes
+
+       {0}--Back
        ''', color=COLORS[1])
 
         hinp = rx.io.selective_input('HASH>  ',ignore_case=True,
-                                    choices = ["1","2" ,"3","4",
+                                    choices = ["1","2" ,"3","4","5",
                                                "A","99","0",  ],
         )
         if   hinp in ('99','0',"exit"):
-            HASH_EXIT=True
+            break#HASH_EXIT=True
         elif hinp == '1':
             rx.terminal.run('python "./HASH/HashDecrypter.py"')
         elif hinp == '2':
@@ -84,6 +87,10 @@ def Hash_Actions():
             if hid := input("Enter Hashed Phrase:  "):
                 rx.cls()
                 rx.terminal.run(f'python "./LIB/Hash/hash-id.py" {hid}')
+        elif hinp == '5':
+            if hid := input("Enter Hashed Phrase:  "):
+                rx.cls()
+                rx.terminal.run(f'python "./LIB/Hash/HashIdentifier.py" {hid}')
 
 
         elif hinp.upper() == "A":
@@ -95,9 +102,9 @@ def Hash_Actions():
             print()
 
 
-        if not HASH_EXIT:
-            pause()
-
+        #if not HASH_EXIT:
+        #    pause()
+        pause()
 
 
 
@@ -105,9 +112,6 @@ def Hash_Actions():
 def CIPHERS():
     rx.cls()
     COLORS = print_banner(Banners.HASH)
-    print('UNDER MAINTAINCE...',color='red')
-    pause()
-    return True
     cipher_options = ""
     i = 1
     for cipher in CIPHERS_LIST:

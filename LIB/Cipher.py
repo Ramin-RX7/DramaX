@@ -3,17 +3,19 @@ import math
 import random
 
 from abc import ABC, abstractmethod#, abstractstaticmethod
-from typing import Union
+from typing import Union,Literal
 from collections import OrderedDict
 
 
-ALL_CHARS = r"""abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 !@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""   # note the space
+# ALL_CHARS = r"""abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ """   # note the space
 LOWERS   = 'abcdefghijklmnopqrstuvwxyz'
 UPPERS   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 DIGITS   = '0123456789'
-SYMBOLS  = r"""!@$%^&*()-=_+[]{};'\:"|,./<>?`~#"""
+PUNCTUATIONS = r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
 SPACE    = ' '
-
+ALL_CHARS = LOWERS+UPPERS+DIGITS+PUNCTUATIONS+SPACE
+import string
+string.ascii_lowercase
 TEXT_LENGTH = 0
 
 CIPHERS_LIST = ('ADFGX','ADFGVX','Atbash','ColumnarTransposition','Autokey',
@@ -21,6 +23,8 @@ CIPHERS_LIST = ('ADFGX','ADFGVX','Atbash','ColumnarTransposition','Autokey',
                 'FourSquare','Gronsfeld','Keyword','Myszkowski','Nihilist',
                 'Playfair','RailFence','rot13','Porta','Transpose','ThreeSquare',
                 'SimpleSubstitution','XOR','Vigenere','TwoSquare','Trifid',)
+
+
 
 class CryptoMath:
 
@@ -53,7 +57,7 @@ class Present:
 '''
 
 class _Cipher(ABC):
-    
+
     class Tools:
         pass
 
@@ -66,6 +70,8 @@ class _Cipher(ABC):
     def decrypt(self):
         '''Help Not Provided or Cipher is Under MainTaince'''
         pass
+
+
 
 
 class _PolybiusSquare:
@@ -124,8 +130,6 @@ class _PolybiusSquare:
 
     def get_rows(self):
         return int(len(self.__alphabet) / self.__side)
-
-
 
 class Polybius:
     """
@@ -193,137 +197,148 @@ class Polybius:
         """
         return Polybius.Tools._encDec(text, key, alphabet, False)
 
+
 # FIXME
-class _ADFGX:
+class _ADFGX_Family:
+    class Tools:
+        @staticmethod
+        def table_creator(alphabet:str|list[str],key:str="",width=0):
+            """
+            alphabet: str|list[str]
+            key: key will be added to the beggining of the table
+            width
+            """
+
+            # remove duplicates of key
+            key = "".join(OrderedDict.fromkeys(key))
+
+            # remove letter of alphabet that are in key
+            alphabet = list(alphabet)
+            for i,letter in enumerate(alphabet):
+                if letter in key:
+                    alphabet[i] = None
+            alphabet = list(filter(None,alphabet))
+
+            # check to see if lengths are equal
+            encrypted = list(key)+alphabet
+            if len(encrypted) != width**2:
+                raise ValueError("Wrong value for alphabet/key/width. \
+                        (width**2 must be equal to len(alphabet+set(key)) )")
+
+            # creating the table
+            table : list[list[str]] = []
+            for i in range(width):
+                table.append([])
+                for j in range(5):
+                    table[i].append(encrypted[5*i + j])
+
+            return table
+
+
     @staticmethod
-    def decrypt(text, key, alphabet, header):
-        """
-        Encryption method
-
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        keysize = len(key)
-        size = len(text)
-        rows = int(math.ceil(size/keysize))
-        reminder = size % keysize
-        keyword = list(key)
-        indices = sorted(range(len(keyword)), key=lambda k: keyword[k])
-
-        myarr = list(indices)
-        lefti = 0
-        righti = 0
-        for key, value in enumerate(indices):
-            righti = lefti
-            righti += rows
-            if reminder > 0 and value > reminder-1:
-                righti -= 1
-            myarr[value] = text[lefti:righti]
-            lefti = righti
-
-        column = 0
-        row = 0
-        res = ''
-        for _ in range(size):
-            res += (myarr[column][row])
-            column += 1
-            if column == keysize:
-                column = 0
-                row += 1
-            
-        try:
-            code = []
-            for char in res:
-                code.append(str(header.index(char)+1))
-        except ValueError:
-            wrchar = bytes(char,'utf-8')
-            raise Exception("Can't find char '" + wrchar + "' of text in the alphabet!")
-
-        code = "".join(code)
-        return Polybius.decrypt(code, alphabet=alphabet)
+    def decrypt(text,key,table="DEFAULT",table_labels=""):
+        pass
     @staticmethod
-    def encrypt(text, key, alphabet, header):
-        """
-        Encryption method
+    def encrypt(text,key:str="",table:list[list[str]]="DEFAULT",
+                when_not_found:Literal["ERROR","PASS"]="PASS",table_label=""):
+        pass
 
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        ans0 = Polybius.encrypt(text, "",alphabet=alphabet)
-        ans = [header[int(char)-1] for char in ans0]
-
-        keyword = list(key)
-        keysize = len(key)
-        size = len(ans)
-        indices = sorted(range(len(keyword)), key=lambda k: keyword[k])
-        row = int(math.ceil(size/keysize))
-        for i in range(row):
-            p = ""
-            for j in range(keysize):
-                myi = i*keysize+j
-                if myi < len(ans):
-                    eee = ans[myi]
-                    p += "".join(eee)
-
-        ans2 = ""
-        for s in indices:
-            ind = s
-            while ind < size:
-                p = ans[ind]
-                ans2 += p
-                ind += keysize
-
-        return ans2
 class ADFGX(_Cipher):
     '''
-    FIXME
+    Uses a table with "ADFGX" labels for rows and columns.
+    Key is a string (usually with characters in given alphabet) (with no repeat in characters)
+      that would be placed in the beginning of the table
+    if "table" argument is not "DEFAULT", it should have the structure below:
+        list[list[str]]
+        if width of table is 5 as an example:
+            (the table should be 5x5)
+        [
+         ['i', 'n', 'r', 'a', 'm'],
+         ['b', 'c', 'd', 'e', 'f'],
+         ['g', 'h', 'k', 'l', 'o'],
+         ['p', 'q', 's', 't', 'u'],
+         ['v', 'w', 'x', 'y', 'z']
+        ]
+        when the table is not default, encrypt/decrypt method would assume you 
+          have injected the key.
+    For easier use, I have implemented table_creator funtion in "ADFGX.Tools" class so
+      you can make tables with custom key and width
     '''
-    @staticmethod
-    def decrypt(text, key, alphabet=ALL_CHARS):
-        """
-        Encryption method
+    class Tools:
+        @staticmethod
+        def table_creator(alphabet:str|list[str],key:str="",width=5):
+            """
+            alphabet: str|list[str]
+            key: key will be added to the beggining of the table
+            width
+            """
 
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        return _ADFGX.decrypt(text, key, alphabet, 'ADFGX')
-    @staticmethod
-    def encrypt(text, key, alphabet=ALL_CHARS):
-        """
-        Encryption method
+            # remove duplicates of key
+            key = "".join(OrderedDict.fromkeys(key))
 
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        return _ADFGX.encrypt(text, key, alphabet, 'ADFGX')
+            # remove letter of alphabet that are in key
+            alphabet = list(alphabet)
+            for i,letter in enumerate(alphabet):
+                if letter in key:
+                    alphabet[i] = None
+            alphabet = list(filter(None,alphabet))
+
+            # check to see if lengths are equal
+            encrypted = list(key)+alphabet
+            if len(encrypted) != width**2:
+                raise ValueError("Wrong value for alphabet/key/width. \
+                        (width**2 must be equal to len(alphabet+set(key)) )")
+
+            # creating the table
+            table : list[list[str]] = []
+            for i in range(width):
+                table.append([])
+                for j in range(5):
+                    table[i].append(encrypted[5*i + j])
+
+            return table
+
+    @staticmethod
+    def decrypt(text,key="",table="DEFAULT"):
+        if table=="DEFAULT":
+            alphabets = list(LOWERS)
+            alphabets.remove("j")
+            table = ADFGX.Tools.table_creator(alphabets,key,5)
+        # pprint(table) 
+
+        table_labels = "ADFGX"
+        decrypted = ""
+        for i in range(int(len(text)/2)):
+            row = table_labels.index(text[2*i])
+            col = table_labels.index(text[2*i +1])
+            decrypted += table[row][col]
+    
+        return decrypted
+    @staticmethod
+    def encrypt(text,key:str="",table:list[list[str]]="DEFAULT",
+                      when_not_found:Literal["ERROR","PASS"]="PASS"):
+        if table=="DEFAULT":
+            alphabets = list(LOWERS)
+            alphabets.remove("j")
+            table = ADFGX.Tools.table_creator(alphabets,key,5)
+        # pprint((table))
+
+        table_label = "ADFGX"
+        encrypted = ""
+        table_enumerate = list(enumerate(table))
+        for letter in text:
+            found = False
+            for i,row in table_enumerate:
+                for j,item in enumerate(row):
+                    if letter == item:
+                        encrypted += table_label[i]+table_label[j]#+" "
+                        found = True
+                        break
+                if found:
+                    break
+            if (not found)  and  when_not_found=="ERROR":
+                raise ValueError(f'letter "{letter}" not found in alphabet+keys')
+        return encrypted
 class ADFGVX(_Cipher):
     '''
     FIXME
@@ -361,6 +376,7 @@ class ADFGVX(_Cipher):
         """
         return _ADFGX.encrypt(text, key, alphabet, 'ADFGVX')
 
+
 class Affine(_Cipher):
     """
     - Case Sensetive
@@ -368,8 +384,23 @@ class Affine(_Cipher):
     - Both keys should be integer 
     - key1 should be relatively prime to len(alphabet)
     - key1 will be converted to  range(1,len(alphabet))
+        means if len(alphabet)==26 and key1==29:
+            key1 = 3
     - key2 will be converted to  range(0,len(alphabet))
 
+
+    Encryption and Decryption methods of Affine Cipher:
+        index:  index of letter in alphabet
+        a:      key1
+        b:      key2
+        len:    length of alphabet
+
+        Encryption:
+            for letter in text:
+                encrypted =  (index*a + b) mod len
+        Decryption:
+            for letter in text:
+                decrypted =  (inverse(a) * (index-b))  mod len
     """
 
     '''
@@ -409,12 +440,23 @@ class Affine(_Cipher):
 
     class Tools:
         @staticmethod
-        def getInverse(key1, alphabet):
-            for i in range(1, len(alphabet)):
-                if ((int(key1)*int(i)) % int(len(alphabet))) == 1:
-                    return i
+        def getInverse(a:int, b:int):
+            """X"""
+            """
+            a must be bigger than b
+            return getInverse(b, a mod b)
+            """
+            """
+            if b==0:
+                return a
+            else:
+                return Affine.Tools.getInverse(b, a%b)
+            #"""
+            for i in range(1, b):
+               if ((a*i) % b) == 1:
+                   return i
             return 0
-
+            #"""
         @staticmethod
         def _EncDec(text, keys, alphabet, Enc):
             '''
@@ -443,16 +485,17 @@ class Affine(_Cipher):
             try:
                 for char in text:
                     if Enc:
-                        alphI = (alphabet.index(char) * key1 + key2) % len(alphabet)
+                        ready =  (alphabet.index(char) * key1  +  key2)  % len(alphabet)
                     else:
-                        aInverse = Affine.Tools.getInverse(key1, alphabet)
-                        alphI = (aInverse * (alphabet.index(char) - key2)) % len(alphabet)
-                    enc = alphabet[alphI]
-                    ans += enc
+                        inverse = Affine.Tools.getInverse(key1, len(alphabet))
+                        ready = (inverse * (alphabet.index(char) - key2)) % len(alphabet)
+                    ans += alphabet[ready]
             except ValueError:
                 raise Exception("Can't find char '" + char + "' of text in alphabet!")
             return ans
 
+            
+            
     @staticmethod
     def encrypt(text, keys, alphabet=ALL_CHARS):
         '''
@@ -475,20 +518,25 @@ class Affine(_Cipher):
         '''
         return Affine.Tools._EncDec(text, keys, alphabet, False)
 
-def atbash(text):
 
+def atbash(text):
     cipher = ''
     for letter in text:
         if letter.lower() in LOWERS:
             cipher +=  LOWERS[25-LOWERS.index(letter.lower())]
         else:
             cipher += letter
-
     return cipher
 class Atbash(_Cipher):
     '''
     It ignores case
     It ignores all characters but english
+
+    Encryption and Decryption method:
+        for letter in text:
+            index = 25-alphabet.index(letter)
+            encrypted = alphabet[index]
+            # decryption also uses the same pattern
     '''
     @staticmethod
     def encrypt(text,*args,**kwargs):
@@ -496,6 +544,7 @@ class Atbash(_Cipher):
     @staticmethod
     def decrypt(text,*args,**kwargs):
         return atbash(text)
+
 
 class Autokey(_Cipher):
     """
@@ -566,6 +615,7 @@ class Autokey(_Cipher):
         """
         return Autokey.Tools._EncDec(text, key, alphabet, -1)
 
+
 class Baconian(_Cipher):
     """
     Baconian Cipher\n
@@ -623,6 +673,7 @@ class Baconian(_Cipher):
             else: 
                 break
         return decipher
+
 
 class Bazeries(_Cipher):
     """
@@ -706,6 +757,7 @@ class Bazeries(_Cipher):
         """
         return Bazeries.Tools._encDec(text, key, alphabet, False)
 
+
 def beaufort(text, key, alphabet=ALL_CHARS):
     ans = ""
     for i in range(len(text)):
@@ -762,6 +814,7 @@ class Beaufort(_Cipher):
         :rtype: string
         """
         return beaufort(text, key, alphabet)
+
 
 class Bifid(_Cipher):
     """
@@ -828,6 +881,7 @@ class Bifid(_Cipher):
             code += even[i] + odd[i]
         return Polybius.decrypt(code,"",alphabet=alphabet)
 
+
 class Caesar(_Cipher):
     """
     The Caesar Cipher
@@ -879,6 +933,7 @@ class Caesar(_Cipher):
         :rtype: string
         """
         return Caesar.Tools._encDec(text, key, alphabet, -1)
+
 
 class Chao(_Cipher):
     """
@@ -948,6 +1003,7 @@ class Chao(_Cipher):
         :rtype: string
         """
         return Chao.Tools._EncDec(text, key, alphabet, False)
+
 
 class ColumnarTransposition(_Cipher):
     """
@@ -1028,6 +1084,7 @@ class ColumnarTransposition(_Cipher):
                 ret += cols[i][j]
         return ret
 
+
 # KEY=???
 class FourSquare(_Cipher):
     """
@@ -1107,6 +1164,7 @@ class FourSquare(_Cipher):
         """
         return FourSquare.Tools._enc(text, key, alphabet, False)
 
+
 #FIXME:!!!
 class Gronsfeld(_Cipher):
     """
@@ -1162,6 +1220,7 @@ class Gronsfeld(_Cipher):
         :rtype: string
         """
         return Gronsfeld.Tools._EncDec(text, key, alphabet, -1)
+
 
 class Keyword(_Cipher):
     """
@@ -1235,6 +1294,7 @@ class Keyword(_Cipher):
         :rtype: string
         """
         return Keyword.Tools._encDec(alphabet, key, text, -1)
+
 
 #KEY=??? (ye dafe mosavi ye dafe motefavet!)
 class Myszkowski(_Cipher):
@@ -1342,6 +1402,7 @@ class Myszkowski(_Cipher):
             ret += ret_arr[i][row]
         return ret
 
+
 class Nihilist(_Cipher):
     """
     The Nihilist Cipher
@@ -1395,6 +1456,7 @@ class Nihilist(_Cipher):
             pair = str(code[i] - int(char))
             dec += Polybius.decrypt(pair,'', alphabet=alphabet)
         return dec
+
 
 class Playfair(_Cipher):
     """
@@ -1525,6 +1587,7 @@ class Playfair(_Cipher):
             dec = dec[:-1]
         return dec
 
+
 def porta(text, key, **kwargs):
     cipher = ""
     count = 0
@@ -1597,6 +1660,7 @@ class Porta(_Cipher):
     @staticmethod
     def decrypt(word, key, **kwargs):
         return porta(word, key)
+
 
 class RailFence(_Cipher):
     '''
@@ -1672,6 +1736,7 @@ class RailFence(_Cipher):
 
         return "".join(result)
 
+
 def rot13(word, **kwargs):
     '''
     Case Sensetive
@@ -1699,6 +1764,7 @@ class Rot13(_Cipher):
     @staticmethod
     def decrypt(word, **kwargs):
         return rot13(word)
+
 
 class SimpleSubstitution(_Cipher):
     """
@@ -1759,6 +1825,7 @@ class SimpleSubstitution(_Cipher):
         :rtype: string
         """
         return SimpleSubstitution.Tools._encDec(text, key, alphabet, -1)
+
 
 class ThreeSquare(_Cipher):
     """
@@ -1844,6 +1911,7 @@ class ThreeSquare(_Cipher):
         """
         return ThreeSquare.Tools._encDec(text, key, alphabet, False)
 
+
 class Transpose(_Cipher):
     '''
     len(word)>key>1
@@ -1874,6 +1942,7 @@ class Transpose(_Cipher):
                 col = 0
                 row += 1
         return ''.join(plaintext)
+
 
 # FIXME
 class Trifid(_Cipher): 
@@ -1974,6 +2043,7 @@ class Trifid(_Cipher):
         code = Trifid.Tools._decode(code0, alphabet)
         return code
 
+
 #FIXME:!!!
 def two_square(text, key, alphabet=ALL_CHARS):
     square1 = _PolybiusSquare(alphabet, key[0])
@@ -2039,6 +2109,7 @@ class TwoSquare(_Cipher):
         :rtype: string
         """
         return two_square(alphabet, text, key)
+
 
 #FIXME:!!!
 class Vic(_Cipher):
@@ -2196,6 +2267,7 @@ class Vigenere(_Cipher):
                 i += 1    
         return res
 
+
 def XOR(word, key):
     for i in range(len(word)): 
         word = (word[:i] + chr(ord(word[i]) ^ ord(key)) + word[i + 1:])
@@ -2210,6 +2282,7 @@ class Xor(_Cipher):
     @staticmethod
     def decrypt(word, key, *args,**kwargs):
         return XOR(word, key)
+
 
 ZigZag = RailFence
 

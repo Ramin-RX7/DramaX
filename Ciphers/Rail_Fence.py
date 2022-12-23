@@ -66,9 +66,9 @@ def decryptRailFence(cipher, key):
         else: 
             row -= 1
     return("".join(result)) 
-  
+
 import os
-while True:
+while False:
     os.system('clear')
     print('''
 
