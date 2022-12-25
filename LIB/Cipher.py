@@ -5,6 +5,7 @@ import random
 from abc import ABC, abstractmethod#, abstractstaticmethod
 from typing import Union,Literal
 from collections import OrderedDict
+from pprint import pprint
 
 
 # ALL_CHARS = r"""abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~ """   # note the space
@@ -202,7 +203,7 @@ class Polybius:
 class _ADFGX_Family:
     class Tools:
         @staticmethod
-        def table_creator(alphabet:str|list[str],key:str="",width=0):
+        def table_creator(alphabet:str|list[str],key:str,width:int):
             """
             alphabet: str|list[str]
             key: key will be added to the beggining of the table
@@ -229,11 +230,10 @@ class _ADFGX_Family:
             table : list[list[str]] = []
             for i in range(width):
                 table.append([])
-                for j in range(5):
-                    table[i].append(encrypted[5*i + j])
+                for j in range(width):
+                    table[i].append(encrypted[width*i + j])
 
             return table
-
 
     @staticmethod
     def decrypt(text,key,table="DEFAULT",table_labels=""):
@@ -266,40 +266,11 @@ class ADFGX(_Cipher):
     '''
     class Tools:
         @staticmethod
-        def table_creator(alphabet:str|list[str],key:str="",width=5):
-            """
-            alphabet: str|list[str]
-            key: key will be added to the beggining of the table
-            width
-            """
-
-            # remove duplicates of key
-            key = "".join(OrderedDict.fromkeys(key))
-
-            # remove letter of alphabet that are in key
-            alphabet = list(alphabet)
-            for i,letter in enumerate(alphabet):
-                if letter in key:
-                    alphabet[i] = None
-            alphabet = list(filter(None,alphabet))
-
-            # check to see if lengths are equal
-            encrypted = list(key)+alphabet
-            if len(encrypted) != width**2:
-                raise ValueError("Wrong value for alphabet/key/width. \
-                        (width**2 must be equal to len(alphabet+set(key)) )")
-
-            # creating the table
-            table : list[list[str]] = []
-            for i in range(width):
-                table.append([])
-                for j in range(5):
-                    table[i].append(encrypted[5*i + j])
-
-            return table
+        def table_creator(alphabet:str|list[str]=LOWERS,key:str="",width:int=5):
+            return _ADFGX_Family.Tools.table_creator(alphabet,key,width)
 
     @staticmethod
-    def decrypt(text,key="",table="DEFAULT"):
+    def decrypt(text:str,key:str="",table="DEFAULT"):
         if table=="DEFAULT":
             alphabets = list(LOWERS)
             alphabets.remove("j")
@@ -315,13 +286,13 @@ class ADFGX(_Cipher):
     
         return decrypted
     @staticmethod
-    def encrypt(text,key:str="",table:list[list[str]]="DEFAULT",
+    def encrypt(text:str,key:str="",table:list[list[str]]="DEFAULT",
                       when_not_found:Literal["ERROR","PASS"]="PASS"):
         if table=="DEFAULT":
             alphabets = list(LOWERS)
             alphabets.remove("j")
             table = ADFGX.Tools.table_creator(alphabets,key,5)
-        # pprint((table))
+        pprint((table))
 
         table_label = "ADFGX"
         encrypted = ""
@@ -340,41 +311,50 @@ class ADFGX(_Cipher):
                 raise ValueError(f'letter "{letter}" not found in alphabet+keys')
         return encrypted
 class ADFGVX(_Cipher):
-    '''
-    FIXME
-    '''
-    @staticmethod
-    def decrypt(text, key, alphabet=ALL_CHARS):
-        """
-        Encryption method
+    class Tools:
+        @staticmethod
+        def table_creator(alphabet:str|list[str]=LOWERS+DIGITS,key:str="",width:int=6):
+            _ADFGX_Family.Tools.table_creator(alphabet,key,width)
 
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        return _ADFGX.decrypt(text, key, alphabet, 'ADFGVX')
     @staticmethod
-    def encrypt(text, key, alphabet=ALL_CHARS):
-        """
-        Encryption method
+    def decrypt(text,key:str="",table="DEFAULT"):
+        if table=="DEFAULT":
+            alphabets = list(LOWERS)+list(DIGITS)
+            table = ADFGX.Tools.table_creator(alphabets,key,6)
+        # pprint(table) 
 
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used, if there is no a value,
-                         English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
-        """
-        return _ADFGX.encrypt(text, key, alphabet, 'ADFGVX')
+        table_labels = "ADFGVX"
+        decrypted = ""
+        for i in range(int(len(text)/2)):
+            row = table_labels.index(text[2*i])
+            col = table_labels.index(text[2*i +1])
+            decrypted += table[row][col]
+
+        return decrypted
+    @staticmethod
+    def encrypt(text,key:str="",table:list[list[str]]="DEFAULT",
+                      when_not_found:Literal["ERROR","PASS"]="PASS"):
+        if table=="DEFAULT":
+            alphabets = list(LOWERS)+list(DIGITS)
+            table = ADFGX.Tools.table_creator(alphabets,key,6)
+        pprint((table))
+
+        table_label = "ADFGVX"
+        encrypted = ""
+        table_enumerate = list(enumerate(table))
+        for letter in text:
+            found = False
+            for i,row in table_enumerate:
+                for j,item in enumerate(row):
+                    if letter == item:
+                        encrypted += table_label[i]+table_label[j]#+" "
+                        found = True
+                        break
+                if found:
+                    break
+            if (not found)  and  when_not_found=="ERROR":
+                raise ValueError(f'letter "{letter}" not found in alphabet+keys')
+        return encrypted
 
 
 class Affine(_Cipher):
