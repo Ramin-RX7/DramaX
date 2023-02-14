@@ -63,12 +63,12 @@ class _Cipher(ABC):
         pass
 
     @abstractmethod
-    def encrypt(self):
+    def encrypt(text:str):
         '''Help Not Provided or Cipher is Under MainTaince'''
         pass
 
     @abstractmethod
-    def decrypt(self):
+    def decrypt(text:str):
         '''Help Not Provided or Cipher is Under MainTaince'''
         pass
 
@@ -224,7 +224,7 @@ class _ADFGX_Family:
             encrypted = list(key)+alphabet
             if len(encrypted) != width**2:
                 raise ValueError("Wrong value for alphabet/key/width. \
-                        (width**2 must be equal to len(alphabet+set(key)) )")
+                        (width**2 must be equal to len(set(alphabet+key)) )")
 
             # creating the table
             table : list[list[str]] = []
@@ -259,7 +259,7 @@ class ADFGX(_Cipher):
          ['p', 'q', 's', 't', 'u'],
          ['v', 'w', 'x', 'y', 'z']
         ]
-        when the table is not default, encrypt/decrypt method would assume you 
+        when the table is not default, encrypt/decrypt method would assume you
           have injected the key.
     For easier use, I have implemented table_creator funtion in "ADFGX.Tools" class so
       you can make tables with custom key and width
@@ -499,7 +499,8 @@ class Affine(_Cipher):
         return Affine.Tools._EncDec(text, keys, alphabet, False)
 
 
-def atbash(text):
+def atbash(text:str):
+    __doc__ = Atbash.__doc__
     cipher = ''
     for letter in text:
         if letter.lower() in LOWERS:
@@ -519,10 +520,10 @@ class Atbash(_Cipher):
             # decryption also uses the same pattern
     '''
     @staticmethod
-    def encrypt(text,*args,**kwargs):
+    def encrypt(text:str, *args, **kwargs):
         return atbash(text)
     @staticmethod
-    def decrypt(text,*args,**kwargs):
+    def decrypt(text:str, *args, **kwargs):
         return atbash(text)
 
 
@@ -620,39 +621,45 @@ class Baconian(_Cipher):
 
 
     @staticmethod
-    def encrypt(text, all_letters=True, **kwargs):
-        Dict = Baconian._baconian_dict
-        if not all_letters:
+    def encrypt(text, all_letters=True,
+                when_not_found:Literal["ERROR","PASS"]="PASS", **kwargs):
+        if all_letters:
+            Dict = Baconian._baconian_dict
+        else:
             Dict = Baconian._baconian_dict_24
 
-        cipher = '' 
-        for letter in text.lower(): 
-            if(letter != ' '):
-                cipher += Dict[letter] 
+        encrypted = ''
+        for char in text.lower(): 
+            if char in Dict.keys():
+                encrypted += Dict[char] 
             else:
-                cipher += ' '
-        return cipher 
+                if when_not_found == "ERROR":
+                    raise ValueError(f'Character "{char} is not in Baconian Dictionary"')
+                encrypted += char
+        return encrypted 
 
     @staticmethod
     def decrypt(text, all_letters=True, **kwargs):
-        Dict = Baconian._baconian_dict
-        if not all_letters:
+        if all_letters:
+            Dict = Baconian._baconian_dict
+        else:
             Dict = Baconian._baconian_dict_24
 
-        decipher = '' 
+        decrypted = '' 
         i = 0
-        while True :
+        while True:
             if i < len(text)-4:
                 substr = text[i:i + 5]
+                #? check to see if it is in Dict.values() or not to raise error
                 if substr[0] != ' ':
-                    decipher += list(Dict.keys())[list(Dict.values()).index(substr)]
+                    decrypted += list(Dict.keys())[list(Dict.values()).index(substr)]
                     i += 5
                 else: 
-                    decipher += ' '
+                    decrypted += ' '
                     i += 1
             else: 
                 break
-        return decipher
+        return decrypted
 
 
 class Bazeries(_Cipher):
@@ -868,51 +875,25 @@ class Caesar(_Cipher):
     """
 
     class Tools:
-        @staticmethod
-        def _encDec(text, key, alphabet, isEncrypt):
-            ans = ""
-            for char in text:
-                try:
-                    alphIndex = alphabet.index(char)
-                except ValueError:
-                    raise Exception("Can't find char '" + char + "' of text in alphabet!")
-                alphIndex = (alphIndex + isEncrypt * key) % len(alphabet)
-                ans += alphabet[alphIndex]
-            return ans
+        pass
 
     @staticmethod
     def encrypt(text, key, alphabet=LOWERS):
         """
-        Encryption method
-
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used,
-                         if there is no a value, English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: encrypted text
-        :rtype: string
         """
-        return Caesar.Tools._encDec(text, key, alphabet, 1)
+        encrypted = ""
+        for character in text:
+            encrypted +=  alphabet[((alphabet.index(character))+key) % len(alphabet)]
+        return encrypted
 
     @staticmethod
     def decrypt(text, key, alphabet=LOWERS):
         """
-        Decryption method
-
-        :param text: Text to decrypt
-        :param key: Decryption key
-        :param alphabet: Alphabet which will be used,
-                         if there is no a value, English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: decrypted text
-        :rtype: string
         """
-        return Caesar.Tools._encDec(text, key, alphabet, -1)
+        decrypted = ""
+        for character in text:
+            decrypted +=  alphabet[((alphabet.index(character))-key) % len(alphabet)]
+        return decrypted
 
 
 class Chao(_Cipher):
@@ -1205,7 +1186,9 @@ class Gronsfeld(_Cipher):
 class Keyword(_Cipher):
     """
     The Keyword Cipher
-    Key should be shuffled of alphabet
+    Keyword will be added to the beginning of alphabet
+      then duplicate characters will be removed
+    Each character in "text" will be set to the corresponding index in new_alphabet
     """
     class Tools:
         '''
@@ -1219,61 +1202,37 @@ class Keyword(_Cipher):
                     pass
             return newstring
         '''
-        @staticmethod
-        def _encDec(alphabet, key, text, isEncrypt):
-            # remove repeats of letters in the key
-            newkey = "".join(OrderedDict.fromkeys(key))
-            # create the substitution string
-            longkey = "".join(OrderedDict.fromkeys(newkey+"".join(alphabet)))
-            # do encryption
-            ans = ""
-            for i in range(len(text)):
-                m = text[i]
-                try:
-                    if isEncrypt == 1:
-                        index = alphabet.index(m)
-                        enc = longkey[index]
-                    else:
-                        index = longkey.index(m)
-                        enc = alphabet[index]
-                except ValueError:
-                    raise Exception("Can't find char '" + m + "' of text in alphabet!")
-                ans += enc
-            return ans
     
-    @staticmethod
     def encrypt(text, key, alphabet=ALL_CHARS):
         """
-        Encryption method
-
-        :param text: Text to encrypt
-        :param key: Encryption key
-        :param alphabet: Alphabet which will be used,
-                         if there is no a value, English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
         """
-        return Keyword.Tools._encDec(alphabet, key, text, 1)
+        new_alphabet = key
+        for character in alphabet:
+            if character not in key:
+                new_alphabet += character
+        encrypted = ""
+        for character in text:
+            try:
+                encrypted += new_alphabet[alphabet.index(character)]
+            except ValueError:
+                encrypted += character
+        return encrypted
 
-    @staticmethod
-    def decrypt(text, key, alphabet=ALL_CHARS):
-        """
-        Decryption method
 
-        :param text: Text to decrypt
-        :param key: Decryption key
-        :param alphabet: Alphabet which will be used,
-                         if there is no a value, English is used
-        :type text: string
-        :type key: integer
-        :type alphabet: string
-        :return: text
-        :rtype: string
+    def decrypt(text,key,alphabet=ALL_CHARS):
         """
-        return Keyword.Tools._encDec(alphabet, key, text, -1)
+        """
+        new_alphabet = key
+        for character in alphabet:
+            if character not in key:
+                new_alphabet += character
+        decrypted = ""
+        for character in text:
+            try:
+                decrypted += alphabet[new_alphabet.index(character)]
+            except ValueError:
+                decrypted += character
+        return decrypted
 
 
 #KEY=??? (ye dafe mosavi ye dafe motefavet!)

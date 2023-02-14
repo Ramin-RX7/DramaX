@@ -8,6 +8,9 @@ CHANGES:
     [20/12/2022]  Commented out "print(USAGE)" in "main()"
     [20/12/2022]  Added "break" in the end of "start_process()" 
                     (so script will only be executed once)
+    [14/02/2023]  "DRAMAX_GIVEN_HASH" variable is added
+                    (when hashidentifier is called from DramaX,
+                     it will be given in global dict)
 """
 #!/usr/bin/env python
 # encoding: utf-8
@@ -168,7 +171,11 @@ def start_process():
             input_hash = argv[1]
             firstrun = False
         else:
-            input_hash = get_input("Enter the Hash : ")
+            try:
+                input_hash = DRAMAX_GIVEN_HASH
+                    # This will be given in global dict when hashidentifier is called from "DramaX"
+            except NameError:
+                input_hash = get_input("Enter the Hash : ")
             # Trim the hash entered and remove the unwanted spaces
             input_hash = input_hash.strip()
 
@@ -218,7 +225,7 @@ def main():
         traceback.print_exc(file=stdout)
 
 
-if __name__ == "__main__":
-    exit(main())
+# if __name__ == "__main__":
+exit(main())
 
 

@@ -1,10 +1,11 @@
-import hashlib
 import os
+import runpy
+
 
 import rx7 as rx
 
 
-from LIB.Cipher import CIPHERS_LIST,CIPHERS_DICT
+from LIB.Ciphers import CIPHERS_LIST,CIPHERS_DICT
 from LIB.Functions import pause,print_banner
 
 
@@ -76,21 +77,16 @@ def Hash_Actions():
         if   hinp in ('99','0',"exit"):
             break#HASH_EXIT=True
         elif hinp == '1':
-            rx.terminal.run('python "./HASH/HashDecrypter.py"')
+            runpy.run_path("./HASH/HashDecrypter.py")
         elif hinp == '2':
-            rx.terminal.run('python "./HASH/HashGenerator.py"')
-        elif hinp == '3':
+            runpy.run_path("./HASH/HashGenerator.py")
+
+        elif hinp in ("3","4","5"):  # Hash Identifiers
+            rx.cls()
             if hid := input("Enter Hashed Phrase:  "):
-                rx.cls()
-                rx.terminal.run(f'python "./LIB/Hash/hashid.py" {hid}')
-        elif hinp == '4':
-            if hid := input("Enter Hashed Phrase:  "):
-                rx.cls()
-                rx.terminal.run(f'python "./LIB/Hash/hash-id.py" {hid}')
-        elif hinp == '5':
-            if hid := input("Enter Hashed Phrase:  "):
-                rx.cls()
-                rx.terminal.run(f'python "./LIB/Hash/HashIdentifier.py" {hid}')
+                hashidentifiers = {"3":"hashid", "4":"hash-id", "5":"HashIdentifier"}
+                runpy.run_path(f"./LIB/Hash/{hashidentifiers[hinp]}.py",
+                               init_globals={"DRAMAX_GIVEN_HASH":hid})
 
 
         elif hinp.upper() == "A":

@@ -1,5 +1,13 @@
 """
-https://github.com/psypanda/hashID
+COPYRIGHT :   https://github.com/psypanda/
+REPOSITORY:   https://github.com/psypanda/hashID
+LICENSE   :   https://github.com/psypanda/hashID/blob/master/LICENSE
+"""
+"""
+CHANGES:
+    [14/02/2023]  "DRAMAX_GIVEN_HASH" variable is added
+                    (when hashidentifier is called from DramaX,
+                     it will be given in global dict)
 """
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
@@ -831,13 +839,17 @@ def main():
             parser.error("Could not open {0}".format(args.output))
 
     if not args.strings or args.strings[0] == "-":
-        while True:
-            line = sys.stdin.readline()
-            if not line:
-                break
+        flag = True
+        while flag:
+            try:
+                line = DRAMAX_GIVEN_HASH
+                flag = False
+            except NameError:
+                line = sys.stdin.readline()
             outfile.write(u"Analyzing '{0}'\n".format(line.strip()))
             writeResult(hashID.identifyHash(line), outfile, args.mode, args.john, args.extended)
             sys.stdout.flush()
+
     else:
         for string in args.strings:
             if os.path.isfile(string):

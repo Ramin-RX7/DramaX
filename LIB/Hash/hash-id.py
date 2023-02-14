@@ -4,6 +4,9 @@ https://github.com/blackploit/hash-identifier
 """
 Changes:
     [20/12/2022]  Added "break" in the last time so the code only executes one time.
+    [14/02/2023]  "DRAMAX_HASH_GIVEN" variable is added
+                    (when hashidentifier is called from DramaX,
+                     it will be given in global dict)
 """
 #!/usr/bin/env python
 # encoding: utf-8
@@ -561,9 +564,12 @@ def WhirlpoolHMAC(hash):
 
 print(logo)
 try:
-    first = str(argv[1])
-except:
-    first = None
+    first = DRAMAX_GIVEN_HASH
+except NameError:
+    try:
+        first = str(argv[1])
+    except IndexError:
+        first = None
 
 while True:
     try:
