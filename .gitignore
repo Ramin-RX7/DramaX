@@ -1,3 +1,6 @@
+config.toml
+
+# /build/
 __pycache__/
 .vscode/
 .mypy_cache/
@@ -6,3 +9,4 @@ mydict.txt
 s
 x.txt
 words.txt
+english.txt

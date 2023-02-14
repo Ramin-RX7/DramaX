@@ -1,6 +1,9 @@
 """
 # TODO:
  #< HASH >#
+   #> Hash Decryptor:
+        siphash,pymmh3 and other hashes
+        Threading
    #> HashGenerator:  More Hashes
    #> Save decrypted hashes in a file
    ?> HashGenerator output-file shouldn't be plain text

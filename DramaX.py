@@ -5,8 +5,9 @@ import runpy
 import rx7 as rx
 
 
-from LIB.Ciphers import CIPHERS_LIST,CIPHERS_DICT
 from LIB.Functions import pause,print_banner
+from LIB.Ciphers import CIPHERS_LIST,CIPHERS_DICT
+from LIB.Hash import HASHES_DICT
 
 
 
@@ -91,7 +92,6 @@ def Hash_Actions():
 
         elif hinp.upper() == "A":
             print("\nList of supported hashes:")
-            from LIB.Hash import HASHES_DICT
             for i,hash in enumerate(list(HASHES_DICT.keys()),1):
                 n = str(i)
                 print(f"    {n if len(n)>1 else '0'+n}) {hash}",end="\n")
@@ -133,19 +133,19 @@ def CIPHERS():
 
 
 
-
+# rx.terminal.run("title DramaX")
 
 def MAIN():
     rx.cls()
     COLOR= print_banner(DRAMAX_LOGO)
     print('''
        {1}--Hash Actions
+       {2}--Create Dictionary
+       {3}--Ciphers
 
        {0}--EXIT\n''',color=COLOR[1])
     
     '''
-       {2}--Create Dictionary
-       {3}--Ciphers
        {6}--Web Hacking (Comming Soon)
        {3}--Password Attacks
        {4}--Wireless Testing

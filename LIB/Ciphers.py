@@ -64,12 +64,12 @@ class _Cipher(ABC):
 
     @abstractmethod
     def encrypt(text:str):
-        '''Help Not Provided or Cipher is Under MainTaince'''
+        '''Help not provided or the cipher is under maintenance'''
         pass
 
     @abstractmethod
     def decrypt(text:str):
-        '''Help Not Provided or Cipher is Under MainTaince'''
+        '''Help not provided or the cipher is under maintenance'''
         pass
 
 
@@ -511,13 +511,14 @@ def atbash(text:str):
 class Atbash(_Cipher):
     '''
     It ignores case
+    
     It ignores all characters but english
 
+    
     Encryption and Decryption method:
         for letter in text:
             index = 25-alphabet.index(letter)
             encrypted = alphabet[index]
-            # decryption also uses the same pattern
     '''
     @staticmethod
     def encrypt(text:str, *args, **kwargs):
@@ -1679,7 +1680,8 @@ class RailFence(_Cipher):
 def rot13(word, **kwargs):
     '''
     Case Sensetive
-    Support Numbers and Symbols But Not Work on Them (Under Maintaince)
+    Ignores Numbers and Symbols
+    (Caesar with key=13)
     '''
     result = ""
     for v in word:
@@ -2224,6 +2226,7 @@ class Xor(_Cipher):
 
 
 ZigZag = RailFence
+
 
 
 CIPHERS_DICT = {name:eval(name) for name in CIPHERS_LIST}
