@@ -164,23 +164,19 @@ def MAIN():
         Hash_Actions()
 
     elif MAIN_INP=='2':
-        os.system('python ".\\DictionaryCreator.py"')
-
+        runpy.run_path("./Dictionary/DictionaryCreator.py")
+        pause()
     elif MAIN_INP=='3':
         CIPHER_EX=False
         while not CIPHER_EX:
             CIPHER_EX=CIPHERS()
 
-    elif MAIN_INP=='6':
-        rx.cls()
-        print('Under Maintaince...')
-        print('Comming Soon...')
-        pause()
+
 
     elif MAIN_INP in ('0','99',"exit"):
         exit()
-    else:
-        MAIN()
+    
+    else:    return
 
 
 while True:

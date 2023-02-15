@@ -1,23 +1,28 @@
 """
 # TODO:
  #< HASH >#
-   #> Hash Decryptor:
-        siphash,pymmh3 and other hashes
-        Threading
-   #> HashGenerator:  More Hashes
-   #> Save decrypted hashes in a file
-   ?> HashGenerator output-file shouldn't be plain text
+    #> Hash Decryptor:
+         siphash,pymmh3 and other hashes
+         Threading
+    #> HashGenerator:  More Hashes
+    #> Save decrypted hashes in a file
+    ?> HashGenerator output-file shouldn't be plain text
+
+ #< DICTIONARY >#
+    #> Write to files after certain amount of words to save up memory
 
  #< LIB >#
    #> Functions:
       #> Func for y/n inputs
 
  #< MAIN >#
-   #? Change Name to "DrawmaX"
+   #X Change Name to "DrawmaX"
 
 
 
+"""
 
+"""
 # NOTE:
  #> one space at the beginnig of lines?
 """

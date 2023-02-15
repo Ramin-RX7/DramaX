@@ -1,13 +1,10 @@
+Links.txt
+test.ipynb
 config.toml
-
 # /build/
-__pycache__/
 .vscode/
-.mypy_cache/
 #test.py
-mydict.txt
 x.txt
-words.txt
 english.txt
 
 
