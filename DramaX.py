@@ -15,6 +15,8 @@ print = rx.style.print
 
 
 
+DRAMAX_DIR = os.path.dirname(__file__)
+
 DRAMAX_LOGO='''
         8888888b.                                         Y88b   d88P
         888  "Y88b                                         Y88b d88P 
@@ -78,9 +80,9 @@ def Hash_Actions():
         if   hinp in ('99','0',"exit"):
             break#HASH_EXIT=True
         elif hinp == '1':
-            runpy.run_path("./HASH/HashDecrypter.py")
+            runpy.run_path(f"{DRAMAX_DIR}/HASH/HashDecrypter.py")
         elif hinp == '2':
-            runpy.run_path("./HASH/HashGenerator.py")
+            runpy.run_path(f"{DRAMAX_DIR}/HASH/HashGenerator.py")
 
         elif hinp in ("3","4","5"):  # Hash Identifiers
             rx.cls()
@@ -164,7 +166,7 @@ def MAIN():
         Hash_Actions()
 
     elif MAIN_INP=='2':
-        runpy.run_path("./Dictionary/DictionaryCreator.py")
+        runpy.run_path(f"{DRAMAX_DIR}/Dictionary/DictionaryCreator.py")
         pause()
     elif MAIN_INP=='3':
         CIPHER_EX=False

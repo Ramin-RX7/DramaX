@@ -3,15 +3,14 @@ import os
 
 import rx7 as rx
 
-
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 from LIB.Functions import get_files,print_banner
 from LIB.TAP import Tap
 import LIB.Hash as HASHLIB
 
 
-print= rx.style.print
 
+print= rx.style.print
 
 
 banner= '''
@@ -26,13 +25,9 @@ banner= '''
         8888Y" 888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
         '''
 
-
-
-
-
-
 rx.cls()
 print_banner(banner)
+
 
 
 if len(sys.argv) > 1:

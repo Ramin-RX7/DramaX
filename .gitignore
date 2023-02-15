@@ -1,13 +1,10 @@
 Links.txt
-test.ipynb
 config.toml
-# /build/
 .vscode/
-#test.py
-x.txt
-english.txt
-
-
+y
+tests/
+*test.*
+# test.ipynb
 
 
 # Byte-compiled / optimized / DLL files

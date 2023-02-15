@@ -7,7 +7,7 @@
 ![Main Menu](./docs/images/MainMenu.png "Main Menu")
 
 
-## Introduction
+# Introduction
 `DramaX` is a tool to help you crack passwords and encypted text easier. It supports different Hash types ([full list](#Types)), many Ciphers ([full list](#List)). You can also make dictionaries with different options.
 
 <br />
@@ -23,7 +23,6 @@ A set of actions are provided related to hashes like `Decrypting` or `Identifyin
   - sha2 (224,256,384,512)
   - sha3 (224,256,384,512)
 
-<br />
 
 ### Hash-Decrypter
 
@@ -51,3 +50,24 @@ Link to original repositories of these hash identifiers:
   - [psypanda/hashID](https://github.com/psypanda/hashID)
   - [blackploit/hash-identifier](https://github.com/blackploit/hash-identifier)
   - [AnimeshShaw/Hash-Algorithm-Identifier](https://github.com/AnimeshShaw/Hash-Algorithm-Identifier)
+
+<br />
+
+
+## Dictionaries
+
+Dictionaries are useful in several cases like measuring password securities, bruteforcing. etc.
+This module provides several functionalities to create dictionaries
+
+### Dictionary Creator
+You can create dictionaries with `DictionaryCreator` tool in this module.
+  - Step 1:
+    - Enter the character list you want your dictionary to contain. *(Note that duplicate characters are **not** skipped)*
+  - Step 2:
+    - Enter maximum length of your dictionary words. It should be and integer higher than 0. 
+  - Step 3:
+    - Now enter the file path you want to save your dictionary
+  - Step 4:
+    - If your dictionary is too large (like more than 50 million words), it is better to use save memory option
+  - Step 5:
+    - Now just wait until all possible combinations are computed and your dictionary file be created

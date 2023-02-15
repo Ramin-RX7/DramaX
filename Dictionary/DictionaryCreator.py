@@ -1,15 +1,17 @@
+import os
 import sys
 import argparse
 
 import rx7 as rx
 
+sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 from LIB import Dictionary
-from LIB.Functions import get_files, pause
+from LIB.Functions import pause
 
 
-# TODO: add write to file directly
 
 print = rx.style.print
+
 
 BANNER = '''
     `7MM"""Yb.              .g8"""bgd  
@@ -62,7 +64,7 @@ if len(sys.argv) > 1:
     SS = args.characters
     LENGTH = args.length
     FILE = args.path
-    save_memory = not args.ignore_memory
+    SAVE_MEMORY = not args.ignore_memory
 
 else:
     SS = rx.io.wait_for_input('Enter Characters of Dictionary:  ')
@@ -82,8 +84,8 @@ else:
         if not replace.lower() in ('y','yes'):
             print('[-] Operation Cancelled By User.', color='red')
             sys.exit()
-    
-    save_memory = rx.io.selective_input('Save Memory? [Yes/No]  ',
+
+    SAVE_MEMORY = rx.io.selective_input('Save Memory? [Yes/No]  ',
                                         {"y":1,"yes":1,"n":0,"no":0},
                                         ignore_case=True)
 # lines below are for test cases
@@ -117,7 +119,7 @@ if MEM*1.5 > int(rx.system.ram_free(False)):
           f' "But you have "{rx.system.ram_free()}")')
     pause()
 
-elif (not save_memory)  and  (MEM*1.5 > int(rx.system.ram_total(False))//2):
+elif (not SAVE_MEMORY)  and  (MEM*1.5 > int(rx.system.ram_total(False))//2):
     print('[*] This Dictionary Needs More than Half of Your Memory',
           color='red')
     sure = rx.io.wait_for_input('Enter "yes" to Start [Yes/No]  ')
@@ -155,7 +157,7 @@ for word in Dictionary.dict_creator_generator(SS, LENGTH):
     if  i % Progress  ==  0:
         print('\r'+'[*] Generating Words:  '+str(i)+'/'+str(TOTAL),
               color='dodger_blue_1', end='')
-    if save_memory:  # will save up 30% memory
+    if SAVE_MEMORY:  # will save up 30% memory
         if sys.getsizeof(DICT)*10 *1.15 > 1_000_000_000:
             rx.write(FILE,'\n'.join(DICT),'a','\n')
             # print(rx.convert_bytes(sys.getsizeof(DICT)*10))
@@ -177,6 +179,7 @@ print()
 # print(sys.getsizeof(DICT))
 # print(rx.convert_bytes(sys.getsizeof(DICT)*10))
 del DICT
+
 pause()
 
 # 4.5 => 3.0
