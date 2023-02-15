@@ -21,7 +21,7 @@ Example usage::
 import sys
 import types
 
-from mypy_extensions import _TypedDictMeta as _TypedDictMeta_Mypy
+from .mypy_extensions import _TypedDictMeta as _TypedDictMeta_Mypy
 
 # See comments in typing_extensions source on why the switch is at 3.9.2
 if (3, 4, 0) <= sys.version_info[:3] < (3, 9, 2):
@@ -54,7 +54,7 @@ if NEW_TYPING:
         Generic, Callable, Union, TypeVar, ClassVar, Tuple, _GenericAlias,
         ForwardRef, NewType,
     )
-    from typing_extensions import Final, Literal
+    from .typing_extensions import Final, Literal
     if sys.version_info[:3] >= (3, 9, 0):
         from typing import _SpecialGenericAlias
         typingGenericAlias = (_GenericAlias, _SpecialGenericAlias, types.GenericAlias)

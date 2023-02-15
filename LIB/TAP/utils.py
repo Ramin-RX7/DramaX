@@ -23,7 +23,7 @@ from typing import (
     Tuple,
     Union,
 )
-from typing_extensions import Literal
+from .typing_extensions import Literal
 from .typing_inspect import get_args as typing_inspect_get_args, get_origin as typing_inspect_get_origin
 
 if sys.version_info >= (3, 10):

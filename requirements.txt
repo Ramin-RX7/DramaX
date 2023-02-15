@@ -1,2 +1,5 @@
+rx7
 xxhash
 mmh3
+# typing-extensions
+# mypy-extensions
