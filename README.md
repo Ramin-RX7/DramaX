@@ -8,7 +8,7 @@
 
 
 # Introduction
-`DramaX` is a tool to help you crack passwords and encypted text easier. It supports different Hash types ([full list](#Types)), many Ciphers ([full list](#List)). You can also make dictionaries with different options.
+`DramaX` is a tool to help you crack passwords and encypted text easier. It supports different Hash types ([full list](#list-of-supported-hashes)), many Ciphers ([full list](#)). You can also make dictionaries with different options.
 
 <br />
 
@@ -26,11 +26,11 @@ A set of actions are provided related to hashes like `Decrypting` or `Identifyin
 
 ### Hash-Decrypter
 
-You can decrypt hashed text with this tool. For supported hashes see [here](#List)
+You can decrypt hashed text with this tool. For supported hashes see [here](#list-of-supported-hashes)
   - Step 1:
     - First you need to enter your hashed text
   - Step 2:
-    - Select the hash method you text is encrypted (if you do not know about the hash type, check [here](#Hash-Identifiers) section)
+    - Select the hash method you text is encrypted (if you do not know about the hash type, check [here](#hash-identifiers) section)
   - Step 3:
     - Now you need to pass `path` of your dictionary files (absolute path is prefered incase you are not sure where is your current working directory)
     - Keep entering you dictionaries. when you are done, enter `end` to go to next stage
@@ -39,7 +39,7 @@ You can decrypt hashed text with this tool. For supported hashes see [here](#Lis
 <!-- <br /> -->
 
 ### Hash-Generator
-This is a very simple tool. Only thing you need to do is to enter the text you want to hash and it will generate the hashed text for all [supported](#List) hashes.
+This is a very simple tool. Only thing you need to do is to enter the text you want to hash and it will generate the hashed text for all [supported](#list-of-supported-hashes) hashes.
 
 <!-- <br /> -->
 

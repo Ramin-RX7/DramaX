@@ -1,0 +1,39 @@
+HASH:
+    ☐ @high @norm siphash,pymmh3 and other hashes
+
+    Hash Decryptor:
+        ☐ @med @norm Threading
+        ☐ @low @easy Save decrypted hashes in a file
+    Hash Generator:
+
+
+
+DICTIONARY:
+
+    ☐ @med @norm Dictionary Size checker (Memory, Time, File, nom of words)
+            (Time is not measurable as it depends on cpu)
+
+    Dictionary Creator:
+        ☐ @high @hard Improve `SAVE_MEMORY` option to save up more memory
+        ? Is it possible to use threading?
+        ☐ @med @easy A way to choose some character collections like `LowerCases` or `Numbers`
+
+
+
+LIB:
+
+    Functions:
+        ✔ Func for y/n inputs @done
+
+
+
+MAIN:
+    ✘ `TODO.txt` => `TODO.md` @cancelled
+    ☐ @med @easy `Getting started` section in `README.md`
+    ☐ @med @easy `Contributing` section in `README.md`
+    ? one space at the beginnig of lines?
+
+
+
+CONFIGS:
+

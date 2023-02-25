@@ -1,14 +1,14 @@
-import getpass, hashlib, os
+# import getpass, hashlib, os
 import rx7 as rx
 
 
 
 print = rx.style.print
 
+
 def pause():
     print()  
     rx.io.getpass('Press Enter to Continue')
-
 
 
 def list_lines(filename):
@@ -61,3 +61,16 @@ def print_banner(banner:str,colors='auto'):
     chosen_color_group = rx.random.choose(list(colors.values()))
     print(banner,color=chosen_color_group[0])
     return chosen_color_group
+
+
+def yesno_input(prompt,default=None):
+    # error= not bool(default)
+    if default==False:
+        default_text = "[y/N]"
+    elif default == None:
+        default_text = "[y/n]"
+    else:
+        default_text = "[Y/n]"
+    return rx.io.selective_input(f"{prompt} {default_text}?  ",
+                                 ['y','yes','n','no'], default,
+                                 True,True)

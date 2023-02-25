@@ -14,12 +14,12 @@ print = rx.style.print
 
 
 BANNER = '''
-    `7MM"""Yb.              .g8"""bgd  
-     MM    `Yb.           .dP'     `M  
-     MM     `Mb           dM'       `  
-     MM      MM           MM           
-     MM     ,MP           MM.          
-     MM    ,dP'           `Mb.     ,' 
+    `7MM"""Yb.              .g8"""bgd
+     MM    `Yb.           .dP'     `M
+     MM     `Mb           dM'       `
+     MM      MM           MM
+     MM     ,MP           MM.
+     MM    ,dP'           `Mb.     ,'
     .JMMmmmdP' ictionary   `"bmmmd' reator
 
     '''
@@ -42,11 +42,11 @@ if len(sys.argv) > 1:
         allow_abbrev=False,
     )
     parser.add_argument('-c','--characters',
-                        required=True, 
+                        required=True,
                         help='List of characters to use in Dictionary'
                         )
     parser.add_argument('-l','--length',
-                        metavar='LENGTH', required=True, type=int, 
+                        metavar='LENGTH', required=True, type=int,
                         help='Max Words Length of Dictionary'
                         )
     parser.add_argument('path',metavar='PATH',
@@ -97,14 +97,14 @@ else:
 
 TOTAL = 0       # nom of words
 ALL_CHARS = 0   # nom of all chars
-MEM = 0  
+MEM = 0
     # str:  empty:49    +1 per additional character (49+total length of characters)
     #list:  empty:56    +8 per additional item in a list ( 56 + 8*total length of characters )
 for i in range(1, LENGTH+1):
     wwil = len(SS)**i  # words with i length
     TOTAL += wwil
     ALL_CHARS += len(SS)**i * (i+2)
-    
+
     mem_str = 49 + i
     moil = 8*wwil + mem_str*wwil  # memory of i length
     MEM +=  moil
@@ -178,6 +178,7 @@ print(f'[*] (Address:  {rx.files.abspath(FILE)})',
 print()
 # print(sys.getsizeof(DICT))
 # print(rx.convert_bytes(sys.getsizeof(DICT)*10))
+pause()
 del DICT
 
 pause()

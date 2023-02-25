@@ -27,9 +27,11 @@ DRAMAX_LOGO='''
         888  .d88P 888    888  888 888  888  888 888  888  d88P Y88b 
         8888888P"  888    "Y888888 888  888  888 "Y888888 d88P   Y88b
 '''
-COLORS= {'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
+COLORS= {
+         'Yellow':['yellow','gold_1'], 'Blue':['blue','dodger_blue_2'],
          'Red':['red','red_1'],        'Green':['green','green_3a'],
-         'Classic':['grey_46','default']}
+         'Classic':['grey_46','default']
+}
 
 
 class Banners:
