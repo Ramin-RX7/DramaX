@@ -23,7 +23,8 @@ HASHES_DICT = {
     'sha3_384': hashlib.sha3_384,
     'sha3_512': hashlib.sha3_512,
 
-    "auto": None
+    "auto":  "auto",
+    "None":  None
 }
 
 
@@ -43,8 +44,8 @@ def decrypt(hash : str,
             type_: str,
             files:Iterable = None,
             generator:Callable = None,
-            quiet:bool = False
-            ):
+            quiet:bool = False,
+            **kwargs):
 
     if not (files or generator):
         raise ValueError("Either 'files' or 'generator' parameter should be passed to function")
@@ -58,50 +59,58 @@ def decrypt(hash : str,
     if type_ not in HASHES_DICT.keys():
         raise ValueError("Could not find given hash type in the list.")
     enc_func = HASHES_DICT[type_]
-    if not enc_func:
+    if enc_func == "auto":
         print("Auto hash detection is not implemented yet",color="red")
         print('You can use "DramaX::Hash::Detect Hash Type" to see possible result')
         return None
 
 
 
+    if method == Generator:
+        files = [Generator]
 
-    if method == Iterable:
-        for File in files:
-            i = 0
-            lst = list_lines(File)
-            ln = len(lst)
-            basename = os.path.basename(File)
-            for Word in lst:
-                if print_status:
-                    i += 1
-                    if i % 100 == 0:
-                        sys.stdout.write(
-                            f'\rWorking on words of "{basename}" :  {i}/{ln}'
-                        )
-                result = enc_func(bytes(Word, 'utf-8')).hexdigest()
-                if result == hash:
-                    if print_status:
-                        sys.stdout.write(
-                            f'\rWorking on words of "{basename}" :  {rx.style(i,"green")}/{ln}'
-                        )
-                        print()
-                    return Word
+    for File in files:
+        i = 0
+        if method == Iterable:
+            dict_ = list_lines(File)
+            def f():
+                return dict_
+            length = len(dict_)
+        elif method == Generator:
+            f = generator
+            length = kwargs["length"]
+        # lst = list_lines(File)
+        # ln = len(lst)
+        basename = os.path.basename(File)
+        for Word in f():
             if print_status:
-                sys.stdout.write(
-                    f'\rWorking on words of "{basename}" :  {i}/{ln}'
-                )
-                rx.style.print(f'\n[*] Not Found in "{basename}"\n',
-                            'blue')
-
-    elif method == Generator:
-        for Word in generator():
-            result = enc_func(bytes(Word, 'utf-8')).hexdigest()
+                i += 1
+                if i % 100 == 0:
+                    sys.stdout.write(
+                        f'\rWorking on words of "{basename}" :  {i}/{length}'
+                    )
+            if enc_func:
+                result = enc_func(bytes(Word, 'utf-8')).hexdigest()
+            else:
+                result = Word
             if result == hash:
-                return Word
+                break
+        else:
+            print()
+            r"""
+            rx.style.print(f'\n[*] Not Found in "{basename}"\n',
+                        'blue')
+            """
+            return None
 
-
+        if print_status:
+            sys.stdout.write(
+                f'\rWorking on words of "{basename}" :  {i}/{length}'
+            )
+            print()
+        return Word
     return None
+
 
 
 import more_itertools, threading

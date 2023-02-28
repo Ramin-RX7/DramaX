@@ -9,7 +9,6 @@ punctuation = r"""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""
 
 
 def dict_creator_generator(SS,LENGTH):
-    
     for current in range(LENGTH):
         a = [i for i in SS]
         for _ in range(current):

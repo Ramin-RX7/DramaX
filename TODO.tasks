@@ -3,23 +3,32 @@
     ☐ @high @norm siphash,pymmh3 and other hashes
 
     Hash Decryptor:
-        ✔ @med @norm Threading
         ☐ Display decrypted words count in threading (Then replacing `decrypt()` with `decrypt_threading()`)
         ☐ @low @easy Save decrypted hashes in a file =>
              @low how the words will be stored so the search would be faster
+        ☐ @high @easy RainbowTable: Decrypt with rainbow table file
+        ☐ @high @easy BruteForce: Decrypt with in-time dictionary creator
+        ☐ @med @hard Decrypter with `generator` can not work with threads
     Hash Generator:
+        ? Save them in the decrypted hashes file
+        ☐ link -> Dictionary:HashDictionary
 
 
 
 [DICTIONARY]
 
-    ☐ @med @norm Dictionary Size checker (Memory, Time, File, nom of words)
+    ☐ @low @norm Dictionary Size checker (Memory, Time, File, nom of words)
             (Time is not measurable as it depends on cpu)
 
     Dictionary Creator:
         ☐ @high @hard Improve `SAVE_MEMORY` option to save up more memory
         ? Is it possible to use threading?
         ☐ @med @easy A way to choose some character collections like `LowerCases` or `Numbers`
+        ☐ @med @easy HashDictionary Creator:
+            input should be a:
+                1. File
+                2. normal DictionaryCreator input
+            All the values will then be converted to given hash and saved in a file
 
 
 
@@ -63,5 +72,3 @@
         Skipping unacceptable characters: boolean
         default_language: str
             tries to use the cipher that is implemented in this language (if exists)
-
-

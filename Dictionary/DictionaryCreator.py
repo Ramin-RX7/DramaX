@@ -108,7 +108,7 @@ for i in range(1, LENGTH+1):
     mem_str = 49 + i
     moil = 8*wwil + mem_str*wwil  # memory of i length
     MEM +=  moil
-print(ALL_CHARS)
+# print(ALL_CHARS)
 
 
 
