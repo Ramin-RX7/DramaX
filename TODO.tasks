@@ -1,14 +1,17 @@
-HASH:
+[HASH]
+
     ☐ @high @norm siphash,pymmh3 and other hashes
 
     Hash Decryptor:
-        ☐ @med @norm Threading
-        ☐ @low @easy Save decrypted hashes in a file
+        ✔ @med @norm Threading
+        ☐ Display decrypted words count in threading (Then replacing `decrypt()` with `decrypt_threading()`)
+        ☐ @low @easy Save decrypted hashes in a file =>
+             @low how the words will be stored so the search would be faster
     Hash Generator:
 
 
 
-DICTIONARY:
+[DICTIONARY]
 
     ☐ @med @norm Dictionary Size checker (Memory, Time, File, nom of words)
             (Time is not measurable as it depends on cpu)
@@ -20,20 +23,45 @@ DICTIONARY:
 
 
 
-LIB:
+[CIPHERS]
+    Interface:
+        ☐ all ciphers having a documentation for usage. e.g:
+            acceptable characters: abcdefghijklmnopqrstuvwxyz
+            key1 rules:            only integers
+            ...
+
+
+
+[LIB]
 
     Functions:
         ✔ Func for y/n inputs @done
 
 
 
-MAIN:
+[MAIN]
+
     ✘ `TODO.txt` => `TODO.md` @cancelled
     ☐ @med @easy `Getting started` section in `README.md`
     ☐ @med @easy `Contributing` section in `README.md`
     ? one space at the beginnig of lines?
+    ☐ @low @easy A showcase gif for each module and tool
 
 
 
-CONFIGS:
+[CONFIGS]
+    Adding a menu to DramaX for changing configs inside of app.
+
+    Language:
+        Set a default language (for ciphers for example) so the code would run with that language code
+        It is important that all different implementations return/output the same thing
+            ? What is the best way for apps to be able to use different languages:
+                1. Having a dictionary (json). e.g:
+                    "ciphers":"./Ciphers/Rust/ciphers.exe"
+                    then passing the args like: "vigenere myText myKey123"
+    Ciphers:
+        Skipping unacceptable characters: boolean
+        default_language: str
+            tries to use the cipher that is implemented in this language (if exists)
+
 

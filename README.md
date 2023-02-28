@@ -15,7 +15,7 @@
 # Modules
 
 ## Hash Actions
-A set of actions are provided related to hashes like `Decrypting` or `Identifying`. 
+A set of actions are provided related to hashes like `Decrypting` or `Identifying`.
 
 #### List of supported hashes:
   - md5
@@ -34,7 +34,7 @@ You can decrypt hashed text with this tool. For supported hashes see [here](#lis
   - Step 3:
     - Now you need to pass `path` of your dictionary files (absolute path is prefered incase you are not sure where is your current working directory)
     - Keep entering you dictionaries. when you are done, enter `end` to go to next stage
-    - Now DramaX starts searching for your word 
+    - Now DramaX starts searching for your word
 
 <!-- <br /> -->
 
@@ -64,10 +64,19 @@ You can create dictionaries with `DictionaryCreator` tool in this module.
   - Step 1:
     - Enter the character list you want your dictionary to contain. *(Note that duplicate characters are **not** skipped)*
   - Step 2:
-    - Enter maximum length of your dictionary words. It should be and integer higher than 0. 
+    - Enter maximum length of your dictionary words. It should be and integer higher than 0.
   - Step 3:
     - Now enter the file path you want to save your dictionary
   - Step 4:
     - If your dictionary is too large (like more than 50 million words), it is better to use save memory option
   - Step 5:
     - Now just wait until all possible combinations are computed and your dictionary file be created
+
+
+<br />
+<br />
+
+
+## Contributing:
+###  - There are quite a few tasks in [`Todo.tasks`](https://github.com/Ramin-RX7/VSCode-Todo/blob/main/TODO.tasks) you can help doing them.
+###  - One of the main things that need to be done is implementation of ciphers in other languages (since python is slow). Preferred languages are `rust` and `c++`.
