@@ -1,4 +1,10 @@
-# import getpass, hashlib, os
+import sys, re
+if(sys.platform == "win32"):
+    import ctypes
+    from ctypes import wintypes
+else:
+    import termios
+
 import rx7 as rx
 
 
@@ -7,7 +13,7 @@ print = rx.style.print
 
 
 def pause():
-    print()  
+    print()
     rx.io.getpass('Press Enter to Continue')
 
 
@@ -23,20 +29,23 @@ def list_lines(filename):
 def get_files(prompt='Enter File Name:  ', check_if_exists=True,
               sort=False, times=100, empty_input_action="error"):
     '''
-    Prompt repeated  'Enter File Name:'  input until user enter 'end'
-    if check_if_exists is false it will add files even if they do not exist
-    by default list of files are sorted by input order 
-    but if sort=True they will be sorted by their name
-    empty_input_action: what to do if user gives an empty input
+    Prompt repeated  'Enter File Name:'  input until user enter '' or 'end'
+
+    if `check_if_exists` is false it will add files even if they do not exist
+
+    by default list of files are sorted by input order
+
+    but if `sort=True` they will be sorted by their name
+
+    `empty_input_action`: what to do if user gives an empty input
     '''
     List = set()
     i = 1
     while i <= times:
         filename = input(prompt)#rx.io.wait_for_input(prompt)
-        if filename in ('end',""):
-            if  (filename=="end") or (
-                (filename == "") and (empty_input_action=="end")):
-                    break
+        if (filename=="end") or (
+                                (filename == "") and (empty_input_action=="end")):
+            break
         pass
         if check_if_exists:
             if rx.files.exists(filename):
@@ -74,3 +83,45 @@ def yesno_input(prompt,default=None):
     return rx.io.selective_input(f"{prompt} {default_text}?  ",
                                  ['y','yes','n','no'], default,
                                  True,True)
+
+
+def cursorPos():
+    if(sys.platform == "win32"):
+        OldStdinMode = ctypes.wintypes.DWORD()
+        OldStdoutMode = ctypes.wintypes.DWORD()
+        kernel32 = ctypes.windll.kernel32
+        kernel32.GetConsoleMode(kernel32.GetStdHandle(-10), ctypes.byref(OldStdinMode))
+        kernel32.SetConsoleMode(kernel32.GetStdHandle(-10), 0)
+        kernel32.GetConsoleMode(kernel32.GetStdHandle(-11), ctypes.byref(OldStdoutMode))
+        kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+    else:
+        OldStdinMode = termios.tcgetattr(sys.stdin)
+        _ = termios.tcgetattr(sys.stdin)
+        _[3] = _[3] & ~(termios.ECHO | termios.ICANON)
+        termios.tcsetattr(sys.stdin, termios.TCSAFLUSH, _)
+    try:
+        _ = ""
+        sys.stdout.write("\x1b[6n")
+        sys.stdout.flush()
+        while not (_ := _ + sys.stdin.read(1)).endswith('R'):
+            True
+        res = re.match(r".*\[(?P<y>\d*);(?P<x>\d*)R", _)
+    finally:
+        if(sys.platform == "win32"):
+            kernel32.SetConsoleMode(kernel32.GetStdHandle(-10), OldStdinMode)
+            kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), OldStdoutMode)
+        else:
+            termios.tcsetattr(sys.stdin, termios.TCSAFLUSH, OldStdinMode)
+    if(res):
+        return (int(res.group("x")), int(res.group("y")))
+    return (-1, -1)
+
+
+def clear_lines(n):
+    # for _ in range(n):
+        # UP = "\x1B[1A"
+        # CLR = "\x1B[0K"
+        # print(end='\x1B[1A\x1b[2K')
+        # sys.stdout.flush()
+    output = '\x1B[1A\x1b[2K'*n
+    print(end=output)

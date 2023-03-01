@@ -5,7 +5,7 @@ import rx7 as rx
 from typing import Literal
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
-from LIB.Functions import get_files,print_banner
+from LIB.Functions import (get_files,print_banner,cursorPos,clear_lines)
 from LIB.TAP import Tap
 import LIB.Hash as HASHLIB
 from LIB import Dictionary
@@ -13,6 +13,11 @@ from LIB import Dictionary
 
 print= rx.style.print
 
+written_lines = 0
+def print_var(key,value):
+    global written_lines
+    written_lines+=1
+    print(f"{key}:  {value}")
 
 banner= '''
                           88  88    db    .dP"Y8 88  88
@@ -25,10 +30,9 @@ banner= '''
         8I  dY 88""   Yb      88"Yb     l8l    88"""    88   88""   88"Yb
         8888Y" 888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
         '''
-
+written_lines+=11
 rx.cls()
 print_banner(banner)
-
 
 
 if len(sys.argv) > 1:
@@ -54,9 +58,12 @@ else:
     Threads = 1
     # """
     Hash = rx.io.wait_for_input("Enter Hashed String:  ")
+    clear_lines(cursorPos()[1] - (written_lines+1))
+    print_var("Hash",Hash)
+    written_lines +=1
     print()
     print("Choose decrypting method:")
-    print("""
+    print("""\
           1. Words list files
           2. Hash  list files
           3. Live Dictionary Creator
@@ -64,9 +71,16 @@ else:
     method = rx.io.selective_input("Decrypting Mathod: ", ["1","2","3"])
     if method in ("1","2"):
         print("Enter your Dictionary files path below.")
-        print('  (enter "end" to finish)')
+        print('  (Press enter with empty input to end)')
         Files = get_files(empty_input_action='end')
-        Threads = int(rx.io.selective_input("Enter Nunber of threads: ",
+        clear_lines(cursorPos()[1] - (written_lines))
+        if method == "1":
+            print_var("Word List Files","[...]")
+        else:
+            print_var("Hash List Files","[...]")
+        # written_lines +=1
+        print()
+        Threads = int(rx.io.selective_input("Enter Number of threads: ",
                                             [str(i) for i in range(8)]))
     elif method in ("3"):
         SS = rx.io.wait_for_input('Enter Characters of Dictionary:  ')
@@ -79,19 +93,25 @@ else:
             except:
                 print('Length Should be an integer and higher than 0')
         def dictionary_generator():
-            yield Dictionary.dict_creator_generator(SS,LENGTH)
+            return Dictionary.dict_creator_generator(SS,LENGTH)
         Threads = 1
+    clear_lines(cursorPos()[1] - (written_lines))
+    print_var("Threads",Threads)
+    written_lines +=1
+
     #"""
     if method == "2":
         Type = "None"
     else:
-        print("Enter Hash Type from list below:")
+        print("\nEnter Hash Type from list below:")
         options = {}
         for i,hash in enumerate(list(HASHLIB.HASHES_DICT.keys()),1):
             options[str(i)] = hash
-            print(f"    {i}) {hash}",end="")
+            print(f"    {i}. {hash}",end="")
         print()
         Type = rx.io.selective_input("Enter Hash Type: ",options)
+        clear_lines(cursorPos()[1] - (written_lines))
+        print_var("Type",Type)
     Quiet = False
 
 
@@ -127,6 +147,7 @@ if DECRYPTED:
     #print(DECRYPTED[1])
     print(f'\n[*] Operation Finnished Successfully in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', color='dodger_blue_1')
 else:
+    print(f'\n[*] Operation Finnished in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', color='dodger_blue_1')
     print(f'\n[-] Could not find any words from given list that matches to "{Hash}"',color='red')
 print()
 # pause()

@@ -76,12 +76,11 @@ def decrypt(hash : str,
             def f():
                 return dict_
             length = len(dict_)
+            basename = os.path.basename(File)
         elif method == Generator:
             f = generator
             length = kwargs["length"]
-        # lst = list_lines(File)
-        # ln = len(lst)
-        basename = os.path.basename(File)
+            basename = "given dictionary"
         for Word in f():
             if print_status:
                 i += 1
@@ -96,12 +95,7 @@ def decrypt(hash : str,
             if result == hash:
                 break
         else:
-            print()
-            r"""
-            rx.style.print(f'\n[*] Not Found in "{basename}"\n',
-                        'blue')
-            """
-            return None
+            Word = None
 
         if print_status:
             sys.stdout.write(
@@ -134,7 +128,7 @@ def decrypt_thread(hash : str,
     if type_ not in HASHES_DICT.keys():
         raise ValueError("Could not find given hash type in the list.")
     enc_func = HASHES_DICT[type_]
-    if not enc_func:
+    if enc_func == "auto":
         print("Auto hash detection is not implemented yet",color="red")
         print('You can use "DramaX::Hash::Detect Hash Type" to see possible result')
         return None
@@ -142,7 +136,10 @@ def decrypt_thread(hash : str,
 
     def thread_dec(words_list):
         for Word in words_list:
-            result = enc_func(bytes(Word, 'utf-8')).hexdigest()
+            if enc_func:
+                result = enc_func(bytes(Word, 'utf-8')).hexdigest()
+            else:
+                result = Word
             if result == hash:
                 return Word
 
