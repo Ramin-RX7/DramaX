@@ -1,23 +1,20 @@
 import sys
 import os
-
-import rx7 as rx
 from typing import Literal
 
+import rx7 as rx
+from tabulate import tabulate
+
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
+import LIB.Hash as HASHLIB
 from LIB.Functions import (get_files,print_banner,cursorPos,clear_lines)
 from LIB.TAP import Tap
-import LIB.Hash as HASHLIB
 from LIB import Dictionary
 
 
 print= rx.style.print
 
-written_lines = 0
-def print_var(key,value):
-    global written_lines
-    written_lines+=1
-    print(f"{key}:  {value}")
+
 
 banner= '''
                           88  88    db    .dP"Y8 88  88
@@ -30,10 +27,29 @@ banner= '''
         8I  dY 88""   Yb      88"Yb     l8l    88"""    88   88""   88"Yb
         8888Y" 888888  YboodP 88  Yb    d8b    88       88   888888 88  Yb
         '''
-written_lines+=11
+
+
+
+FIXED_LINES = 0
+FIXED_LINES +=  len(banner.splitlines()) + 1
+
 rx.cls()
 print_banner(banner)
 
+OPTIONS = []
+def clear_lines(n):
+    n = cursorPos()[1] - FIXED_LINES
+    output = '\x1B[1A\x1b[2K'*n
+    print(end=output)
+def update_table(key,value):
+    clear_lines(0)
+    global OPTIONS
+    OPTIONS.append((key,value))
+    print(tabulate(
+        OPTIONS,
+        headers=("OPTION","VALUE"),
+        tablefmt="rounded_grid"
+    ))
 
 if len(sys.argv) > 1:
     class SimpleArgumentParser(Tap):
@@ -58,9 +74,7 @@ else:
     Threads = 1
     # """
     Hash = rx.io.wait_for_input("Enter Hashed String:  ")
-    clear_lines(cursorPos()[1] - (written_lines+1))
-    print_var("Hash",Hash)
-    written_lines +=1
+    update_table("Hash",Hash)
     print()
     print("Choose decrypting method:")
     print("""\
@@ -73,12 +87,7 @@ else:
         print("Enter your Dictionary files path below.")
         print('  (Press enter with empty input to end)')
         Files = get_files(empty_input_action='end')
-        clear_lines(cursorPos()[1] - (written_lines))
-        if method == "1":
-            print_var("Word List Files","[...]")
-        else:
-            print_var("Hash List Files","[...]")
-        # written_lines +=1
+        update_table("Dictionaries", Files)
         print()
         Threads = int(rx.io.selective_input("Enter Number of threads: ",
                                             [str(i) for i in range(8)]))
@@ -95,25 +104,22 @@ else:
         def dictionary_generator():
             return Dictionary.dict_creator_generator(SS,LENGTH)
         Threads = 1
-    clear_lines(cursorPos()[1] - (written_lines))
-    print_var("Threads",Threads)
-    written_lines +=1
+    update_table("Threads",Threads)
 
     #"""
     if method == "2":
         Type = "None"
     else:
         print("\nEnter Hash Type from list below:")
-        options = {}
+        opts = {}
         for i,hash in enumerate(list(HASHLIB.HASHES_DICT.keys()),1):
-            options[str(i)] = hash
+            opts[str(i)] = hash
             print(f"    {i}. {hash}",end="")
         print()
-        Type = rx.io.selective_input("Enter Hash Type: ",options)
-        clear_lines(cursorPos()[1] - (written_lines))
-        print_var("Type",Type)
+        Type = rx.io.selective_input("Enter Hash Type: ",opts)
+    update_table("Hash Type",Type)
     Quiet = False
-
+rx.io.getpass("Press Enter to Start the operation")
 
 
 

@@ -4,7 +4,7 @@ import os
 import rx7 as rx
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
-from LIB.Functions import pause,print_banner
+from LIB.Functions import print_banner,clear_lines
 from LIB.Hash import HASHES_DICT
 from LIB.TAP import Tap
 
@@ -17,11 +17,11 @@ BANNER = '''
                      88  88    db    .dP"Y8 88  88
                      88  88   dPYb   `Ybo." 88  88
                      888888  dP__Yb  o.`Y8b 888888
-                     88  88 dP""""Yb 8bodP' 88  88                  
+                     88  88 dP""""Yb 8bodP' 88  88
 
      dP""b8 888888 88b 88 888888 88""Yb    db   888888 dP"Yb  88""Yb
     dP   `" 88__   88Yb88 88__   88__dP   dPYb    88  dP   Yb 88__dP
-    Yb  "88 88""   88 Y88 88""   88"Yb   dP__Yb   88  Yb   dP 88"Yb 
+    Yb  "88 88""   88 Y88 88""   88"Yb   dP__Yb   88  Yb   dP 88"Yb
      YboodP 888888 88  Y8 888888 88  Yb dP""""Yb  88   YbodP  88  Yb
     '''
 
@@ -69,8 +69,9 @@ if len(sys.argv) > 1:
 else:
     rx.cls()
     print_banner(BANNER)
-    inp= input('Enter String to Create Hashes:  ')
-    if inp=='exit':
+    inp= input('\nEnter String to Create Hashes:  ')
+    if inp in ('exit',''):
         exit()
-    elif inp:
-        print_hashes(inp)
+    clear_lines(1)
+    print(f"Input text:  {rx.style(inp,'blue',style='bold')}\n")
+    print_hashes(inp)

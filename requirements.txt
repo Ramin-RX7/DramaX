@@ -1,4 +1,5 @@
 rx7
+tabulate
 xxhash
 mmh3
 # typing-extensions

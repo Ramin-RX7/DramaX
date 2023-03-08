@@ -1,13 +1,15 @@
 [HASH]
 
-    ☐ @high @norm siphash,pymmh3 and other hashes
+    ☐ @high @norm blake2,siphash,pymmh3 and other hashes
 
     Hash Decryptor:
         ☐ Display decrypted words count in threading (Then replacing `decrypt()` with `decrypt_threading()`)
+            Save each thread current word count to a dictionary to see if they are syncronized
+                if they are, then we can have one part of the list in main thread and multiply word count to n
         ☐ @low @easy Save decrypted hashes in a file =>
              @low how the words will be stored so the search would be faster
-        ☐ @high @easy RainbowTable: Decrypt with rainbow table file
-        ☐ @high @easy BruteForce: Decrypt with in-time dictionary creator
+        ✔ @high @easy RainbowTable: Decrypt with rainbow table file
+        ✔ @high @easy BruteForce: Decrypt with in-time dictionary creator
         ☐ @med @hard Decrypter with `generator` can not work with threads
     Hash Generator:
         ? Save them in the decrypted hashes file
@@ -52,7 +54,7 @@
 
     ✘ `TODO.txt` => `TODO.md` @cancelled
     ☐ @med @easy `Getting started` section in `README.md`
-    ☐ @med @easy `Contributing` section in `README.md`
+    ✔ @med @easy `Contributing` section in `README.md`
     ? one space at the beginnig of lines?
     ☐ @low @easy A showcase gif for each module and tool
 
