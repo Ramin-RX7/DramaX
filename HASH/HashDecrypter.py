@@ -7,13 +7,31 @@ from tabulate import tabulate
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 import LIB.Hash as HASHLIB
-from LIB.Functions import (get_files,print_banner,cursorPos,clear_lines)
+from LIB.Functions import (get_files,print_banner,cursorPos,tabulate_table)
 from LIB.TAP import Tap
 from LIB import Dictionary
 
 
 print= rx.style.print
 
+
+
+FIXED_LINES = 0
+TABLE = tabulate_table(headers=["OPTION","VALUE"], tablefmt="rounded_grid")
+
+def clear_lines(n=None):
+    if not n:
+        n = cursorPos()[1] - FIXED_LINES
+    output = '\x1B[1A\x1b[2K'*n
+    print(end=output)
+
+def update_table(key=None,value=None):
+    global TABLE
+    if any([key,value]):
+        TABLE.add_row([key,value])
+    clear_lines()
+    print(TABLE)
+    print()
 
 
 banner= '''
@@ -29,27 +47,10 @@ banner= '''
         '''
 
 
-
-FIXED_LINES = 0
-FIXED_LINES +=  len(banner.splitlines()) + 1
-
 rx.cls()
 print_banner(banner)
+FIXED_LINES +=  len(banner.splitlines()) + 1
 
-OPTIONS = []
-def clear_lines(n):
-    n = cursorPos()[1] - FIXED_LINES
-    output = '\x1B[1A\x1b[2K'*n
-    print(end=output)
-def update_table(key,value):
-    clear_lines(0)
-    global OPTIONS
-    OPTIONS.append((key,value))
-    print(tabulate(
-        OPTIONS,
-        headers=("OPTION","VALUE"),
-        tablefmt="rounded_grid"
-    ))
 
 if len(sys.argv) > 1:
     class SimpleArgumentParser(Tap):
@@ -75,7 +76,6 @@ else:
     # """
     Hash = rx.io.wait_for_input("Enter Hashed String:  ")
     update_table("Hash",Hash)
-    print()
     print("Choose decrypting method:")
     print("""\
           1. Words list files
@@ -88,7 +88,6 @@ else:
         print('  (Press enter with empty input to end)')
         Files = get_files(empty_input_action='end')
         update_table("Dictionaries", Files)
-        print()
         Threads = int(rx.io.selective_input("Enter Number of threads: ",
                                             [str(i) for i in range(8)]))
     elif method in ("3"):
@@ -119,41 +118,54 @@ else:
         Type = rx.io.selective_input("Enter Hash Type: ",opts)
     update_table("Hash Type",Type)
     Quiet = False
-rx.io.getpass("Press Enter to Start the operation")
 
 
 
-rx.cls()
-print_banner(banner)
-# print(banner,color='gold_3b')
-print()
-print(f'Hash: ', end='') ; print(Hash,color='green')
-print(f'Type: ', end='') ; print(Type,color='green')
-print()
-print(f'[*] Operation started at:  "{rx.DateTime.now()}"', color='dodger_blue_1')
-print()
+# rx.io.getpass("Press Enter to Start the operation")
+update_table()
+rx.style.log_info(f'[*] Operation started at:  "{rx.DateTime.now()}"', add_time=False)
 
-T= rx.record()
+T = rx.record()
 if method in ("1","2"):
     if Threads == 1:
-        DECRYPTED= HASHLIB.decrypt(Hash, Type, files=Files, quiet=Quiet)
+        DECRYPTED =  HASHLIB.decrypt(Hash, Type, files=Files, quiet=Quiet)
     else:
-        DECRYPTED= HASHLIB.decrypt_thread(Hash, Type, files=Files, quiet=Quiet, threads_count=Threads)
+        DECRYPTED =  HASHLIB.decrypt_thread(Hash, Type, files=Files, quiet=Quiet, threads_count=Threads)
 elif method in ("3"):
     TOTAL = 0
     for i in range(1, LENGTH+1):
         TOTAL += len(SS)**i
-    DECRYPTED= HASHLIB.decrypt(Hash, Type, generator=dictionary_generator, quiet=Quiet, length=TOTAL)
+    DECRYPTED =  HASHLIB.decrypt(Hash, Type, generator=dictionary_generator, quiet=Quiet, length=TOTAL)
+
+duration = round(T.lap(),3)
+min, sec  = divmod(duration, 60)
+hour, min = divmod(min, 60)
+day, hour = divmod(hour, 24)
+formatted_duration = f"{sec} seconds"
+if min:
+    formatted_duration = f"{min} minutes and "+formatted_duration
+if hour:
+    formatted_duration = f"{hour} hours and "+formatted_duration
+if day:
+    formatted_duration = f"{day} days and "+formatted_duration
 
 
 if DECRYPTED:
-    print('[+] Found',color='green')
-    print('Decrypted String is:  ', end='')
+    rx.style.log_success('[+] Found', add_time=False)
+    print('[+] Decrypted String is:  ', end='')
     print(DECRYPTED, color='green')
-    #print(DECRYPTED[1])
-    print(f'\n[*] Operation Finnished Successfully in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', color='dodger_blue_1')
+    rx.style.log_info(
+        f'[*] Operation Finnished Successfully in {formatted_duration}  ({rx.DateTime.now()})',
+        add_time=False
+    )
 else:
-    print(f'\n[*] Operation Finnished in {round(T.lap(),3)} seconds  ({rx.DateTime.now()})', color='dodger_blue_1')
-    print(f'\n[-] Could not find any words from given list that matches to "{Hash}"',color='red')
+    rx.style.log_info(
+        f'[*] Operation Finnished in "{formatted_duration}"  ({rx.DateTime.now()})',
+        add_time=False
+    )
+    rx.style.log_error(
+        f'[-] Could not find any words from given list that matches to "{Hash}"',
+        add_time=False
+    )
 print()
 # pause()
