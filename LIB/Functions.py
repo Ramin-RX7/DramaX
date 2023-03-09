@@ -6,6 +6,7 @@ else:
     import termios
 
 import rx7 as rx
+from tabulate import tabulate
 
 
 
@@ -125,3 +126,47 @@ def clear_lines(n):
         # sys.stdout.flush()
     output = '\x1B[1A\x1b[2K'*n
     print(end=output)
+
+
+class tabulate_table:
+    def __init__(self, data:list=[], **kwargs) -> None:
+        self._data = data
+        self._options = kwargs
+
+    def add_row(self, row):
+        # self.data = self.data + type(self.data)([row])
+        self._data = tabulate_table._add(self._data, row)
+
+    def add_col(self, col, header=None):
+        for i,item in enumerate(col):
+            # self.data[i] = self.data[i] + type(self.data[i])(item)
+            self._data[i] = tabulate_table._add(self._data[i], item)
+        if header:
+            # self.options["headers"] = self.options["headers"] + type(self.options["headers"])(header)
+            self._options["headers"] = tabulate_table._add(self._options["headers"], header)
+
+    def shape(self):
+        try:
+            cols = (self._options["headers"])
+        except:
+            if len(self.data):
+                cols = len(self._data[0])
+            else:
+                cols = 0
+        return (len(self.data), cols)
+
+    @staticmethod
+    def _add(dataset, item):
+        return dataset + type(dataset)([item])
+
+    @classmethod
+    def merge(cls, first, second):
+        return cls(first.data+second.data)
+
+    def set_option(self, **kwargs):
+        self._options = {**self._options, **kwargs}
+
+    def __str__(self) -> str:
+        return tabulate(self._data, **self._options)
+    def __repr__(self) -> str:
+        return tabulate(self._data, **self._options)
