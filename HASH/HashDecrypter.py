@@ -7,7 +7,7 @@ from tabulate import tabulate
 
 sys.path.append(os.path.split(os.path.dirname(__file__))[0])
 import LIB.Hash as HASHLIB
-from LIB.Functions import (get_files,print_banner,cursorPos,tabulate_table)
+from LIB.Functions import (get_files,print_banner,cursorPos,tabulate_table,pause)
 from LIB.TAP import Tap
 from LIB import Dictionary
 
@@ -17,7 +17,9 @@ print= rx.style.print
 
 
 FIXED_LINES = 0
-TABLE = tabulate_table(headers=["OPTION","VALUE"], tablefmt="rounded_grid")
+TABLE = tabulate_table(
+    headers=[rx.style("OPTION",style="bold"),rx.style("VALUE",style="bold")],
+    tablefmt="rounded_grid")
 
 def clear_lines(n=None):
     if not n:
@@ -26,9 +28,9 @@ def clear_lines(n=None):
     print(end=output)
 
 def update_table(key=None,value=None):
-    global TABLE
+    global TABLE#,theme_dark,theme_light
     if any([key,value]):
-        TABLE.add_row([key,value])
+        TABLE.add_row([rx.style(key,theme_dark),rx.style(value,theme_light)])
     clear_lines()
     print(TABLE)
     print()
@@ -48,7 +50,7 @@ banner= '''
 
 
 rx.cls()
-print_banner(banner)
+theme_light,theme_dark = print_banner(banner)
 FIXED_LINES +=  len(banner.splitlines()) + 1
 
 
@@ -121,8 +123,8 @@ else:
 
 
 
-# rx.io.getpass("Press Enter to Start the operation")
 update_table()
+# rx.io.getpass("Press Enter to Start the operation")
 rx.style.log_info(f'[*] Operation started at:  "{rx.DateTime.now()}"', add_time=False)
 
 T = rx.record()

@@ -28,10 +28,8 @@ BANNER = '''
 # if __name__ == "__main__":
 rx.cls()
 print(BANNER,color='gold_3b')
-print('BECAREFULL WHEN USING THIS PROGRAM TO CREATE LARGE DICTIONARIES'
-      '(MORE THAN 50M WORDS)!',
-      color='red', style='bold')
-print('DO NOT TRY THIS FOR LARGE NUMBER OF WORDS (MORE THAN 100M WORDS)!',
+print('BE REALLY CAREFUL WHEN USING THIS PROGRAM TO CREATE LARGE DICTIONARIES'
+      '(MORE THAN 25M WORDS)!',
       color='red', style='bold')
 print()
 
@@ -80,13 +78,13 @@ else:
 
     if rx.files.exists(FILE):
         print('[*] File Already Exists.', color='dodger_blue_1')
-        replace = rx.io.wait_for_input('Replace File? [Yes/No]  ')
+        replace = rx.io.wait_for_input('Replace File? [y/N]  ')
         if not replace.lower() in ('y','yes'):
             print('[-] Operation Cancelled By User.', color='red')
             sys.exit()
 
-    SAVE_MEMORY = rx.io.selective_input('Save Memory? [Yes/No]  ',
-                                        {"y":1,"yes":1,"n":0,"no":0},
+    SAVE_MEMORY = rx.io.selective_input('Save Memory? [y/N]  ',
+                                        {"y":True,"yes":True, "n":False,"no":False},
                                         ignore_case=True)
 # lines below are for test cases
 # SS = "1234567890q"
@@ -174,14 +172,13 @@ print('[+] Dictionary File Has Been Created Successfully.',
       color='green')
 print(f'[*] (Address:  {rx.files.abspath(FILE)})',
       color='dodger_blue_1')
-
 print()
+
 # print(sys.getsizeof(DICT))
 # print(rx.convert_bytes(sys.getsizeof(DICT)*10))
-pause()
+# pause()
 del DICT
-
-pause()
+# pause()
 
 # 4.5 => 3.0
 # 3.5 => 2.5

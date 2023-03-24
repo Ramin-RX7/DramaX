@@ -55,7 +55,9 @@ if __name__ == "__main__":
             words_file_name  = get_files('Words  File Name:  ', times=1)[0]
             hashed_file_name = wait_for_input('Output File Name:  ')
             #encryption_type  = wait_for_input('Encryption Type:   ')
-            encryption_type  = rx.io.selective_input('Encryption Type:   ',list(sa.keys()),error=True)
+            encryption_type  = rx.io.selective_input(
+                                        'Encryption Type:   ',
+                                        list(sa.keys()),error=True)
 
         # get words from file
         words_list = list_lines(words_file_name)
